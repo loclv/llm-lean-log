@@ -23,8 +23,8 @@
 		"test": "bun test",
 		"test:watch": "bun test --watch",
 		"test:coverage": "bun test --coverage",
-		"publish:core": "bun run --filter llm-lean-log-core publish",
-		"publish:cli": "bun run --filter llm-lean-log-cli publish"
+		"publish:core": "cd packages/core && bun publish",
+		"publish:cli": "cd packages/cli && bun publish"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
