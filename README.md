@@ -93,6 +93,36 @@ llm-lean-log tags ./logs/example.csv tag1 tag2
 llm-lean-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
+## Ask AI agent (LLMs) to write a log
+
+> use llm-lean-log-cli to save last chat logs / talk above
+
+## Ask AI agent (LLMs) to read a log
+
+> read last chat logs from "./logs/example.csv" and tell me what should I do next
+
+Example LLMs's response:
+
+```text
+Based on the last entry in ./logs/example.csv and the current state of your repository, here is what you should do next:
+
+### Current Status
+
+The last task completed was "Make llm-lean-log packages public". This involved:
+
+- Updating package.json for both llm-lean-log-core and llm-lean-log-cli with repository info, files, and publishConfig.
+- Adding LICENSE and README.md files.
+- Configuring the CLI as an executable.
+- Creating the guide at docs/public.md.
+
+### Recommended Next Steps
+
+1. Perform a Dry Run
+Before pushing to NPM, ensure that the files being packaged are correct. Run this from the root:
+
+...
+```
+
 ## 🛠️ Development
 
 - Added CLI tool for managing logs
