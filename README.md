@@ -167,6 +167,22 @@ etc...
 
 This is a efficient way to read logs for LLMs. Save time, tokens and energy. Because LLMs no need to read long CSV files before LLMs can write a log at the end of the log.
 
+## Visualizer for humans
+
+Install `llml-vis` (llm-lean-log-visualizer` package) globally:
+
+```bash
+bun add -g llml-vis
+```
+
+Run visualizer:
+
+```bash
+llml-vis ./logs/example.csv
+# or
+llml-vis
+```
+
 ## 🛠️ Development
 
 - Added CLI tool for managing logs
@@ -244,6 +260,9 @@ bun cli help
 This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
 
 ## 📖 Additional information
+
+- Publish docs: `./docs/publish.sh`
+- Release docs: `./docs/release.sh`
 
 ### 💻 Use with VS Code base editor
 

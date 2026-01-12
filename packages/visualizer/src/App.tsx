@@ -86,7 +86,8 @@ function App() {
 			log.problem?.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			log.solution?.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			log.tags?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			log.files?.toLowerCase().includes(searchTerm.toLowerCase()),
+			log.files?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			log["tech-stack"]?.toLowerCase().includes(searchTerm.toLowerCase()),
 	);
 
 	return (

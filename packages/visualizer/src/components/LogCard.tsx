@@ -5,6 +5,7 @@ import {
 	CheckCircle2,
 	Cpu,
 	FileCode,
+	Layers,
 	MessageSquare,
 	Tag,
 } from "lucide-react";
@@ -131,22 +132,60 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 							<strong style={{ fontSize: "0.875rem" }}>Files</strong>
 						</div>
 						<div className="flex flex-wrap gap-2">
-							{entry.files.split(",").map((file) => (
-								<span
-									key={file}
-									className="badge"
-									style={{
-										background: "var(--bg-tertiary)",
-										color: "var(--text-secondary)",
-										border: "1px solid var(--border-color)",
-										fontSize: "0.75rem",
-										padding: "2px 8px",
-										borderRadius: "6px",
-									}}
-								>
-									{file.trim()}
-								</span>
-							))}
+							{entry.files
+								.split(",")
+								.map((f) => f.trim())
+								.filter(Boolean)
+								.map((file) => (
+									<span
+										key={file}
+										className="badge"
+										style={{
+											background: "var(--bg-tertiary)",
+											color: "var(--text-secondary)",
+											border: "1px solid var(--border-color)",
+											fontSize: "0.75rem",
+											padding: "2px 8px",
+											borderRadius: "6px",
+										}}
+									>
+										{file.trim()}
+									</span>
+								))}
+						</div>
+					</div>
+				)}
+
+				{entry["tech-stack"] && (
+					<div className="flex flex-col gap-2">
+						<div
+							className="flex items-center gap-2"
+							style={{ color: "var(--accent-secondary, #a855f7)" }}
+						>
+							<Layers size={16} />
+							<strong style={{ fontSize: "0.875rem" }}>Tech Stack</strong>
+						</div>
+						<div className="flex flex-wrap gap-2">
+							{entry["tech-stack"]
+								.split(",")
+								.map((t) => t.trim())
+								.filter(Boolean)
+								.map((tech) => (
+									<span
+										key={tech}
+										className="badge"
+										style={{
+											background: "var(--bg-tertiary)",
+											color: "var(--text-secondary)",
+											border: "1px solid var(--border-color)",
+											fontSize: "0.75rem",
+											padding: "2px 8px",
+											borderRadius: "6px",
+										}}
+									>
+										{tech.trim()}
+									</span>
+								))}
 						</div>
 					</div>
 				)}

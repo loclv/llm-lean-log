@@ -9,6 +9,7 @@ export interface LogEntry {
 	model?: string;
 	"log-created-modal"?: string;
 	files?: string;
+	"tech-stack"?: string;
 }
 
 export interface ParsedCode {
