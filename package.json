@@ -22,7 +22,9 @@
 		"lint": "biome lint",
 		"test": "bun test",
 		"test:watch": "bun test --watch",
-		"test:coverage": "bun test --coverage"
+		"test:coverage": "bun test --coverage",
+		"publish:core": "bun run --filter llm-lean-log-core publish",
+		"publish:cli": "bun run --filter llm-lean-log-cli publish"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
