@@ -3,6 +3,14 @@
 	"version": "0.1.0",
 	"private": true,
 	"description": "Logging for LLMs, but we cut the fat. A CSV-based logging format optimized for LLM token usage.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/loclv/llm-lean-log.git"
+	},
+	"bugs": {
+		"url": "https://github.com/loclv/llm-lean-log/issues"
+	},
+	"homepage": "https://github.com/loclv/llm-lean-log#readme",
 	"workspaces": [
 		"packages/*"
 	],

@@ -2,16 +2,44 @@
 	"name": "@llm-lean-log/cli",
 	"version": "0.1.0",
 	"description": "CLI tool for llm-lean-log",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/loclv/llm-lean-log.git",
+		"directory": "packages/cli"
+	},
+	"bugs": {
+		"url": "https://github.com/loclv/llm-lean-log/issues"
+	},
+	"homepage": "https://github.com/loclv/llm-lean-log/tree/main/packages/cli#readme",
+	"main": "src/index.ts",
 	"module": "src/index.ts",
 	"type": "module",
+	"bin": {
+		"llm-lean-log": "src/index.ts"
+	},
+	"files": [
+		"src",
+		"README.md",
+		"LICENSE"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"start": "bun run src/index.ts"
 	},
 	"dependencies": {
-		"@llm-lean-log/core": "*"
+		"@llm-lean-log/core": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
 	},
+	"keywords": [
+		"llm",
+		"logging",
+		"cli",
+		"csv",
+		"token-optimization"
+	],
 	"license": "MIT"
 }

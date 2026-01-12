@@ -2,8 +2,26 @@
 	"name": "@llm-lean-log/core",
 	"version": "0.1.0",
 	"description": "Core library for llm-lean-log",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/loclv/llm-lean-log.git",
+		"directory": "packages/core"
+	},
+	"bugs": {
+		"url": "https://github.com/loclv/llm-lean-log/issues"
+	},
+	"homepage": "https://github.com/loclv/llm-lean-log/tree/main/packages/core#readme",
+	"main": "src/index.ts",
 	"module": "src/index.ts",
 	"type": "module",
+	"files": [
+		"src",
+		"README.md",
+		"LICENSE"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"test": "bun test",
 		"example": "bun run example.ts"
@@ -14,5 +32,12 @@
 	"peerDependencies": {
 		"typescript": "^5.9.3"
 	},
+	"keywords": [
+		"llm",
+		"logging",
+		"core",
+		"csv",
+		"token-optimization"
+	],
 	"license": "MIT"
 }
