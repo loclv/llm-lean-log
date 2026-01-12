@@ -59,6 +59,40 @@ Here are visual examples of the CSV logs format:
   - Each row is a log entry.
   - No new lines, or use `\n`, just use comma - `,`, dot - `.`, semicolon - `;` to separate information.
 
+## Another problems
+
+CSV format is sometimes hard to read since it's not human-friendly, too long lines, no code-blocks support.
+
+### Solution
+
+Use `@llm-lean-log/cli` CLI tool for viewing logs in a more human-friendly way.
+
+```bash
+bun add -g @llm-lean-log/cli
+```
+
+## 💻 Usage
+
+```bash
+# List all log entries
+llm-lean-log list
+
+# Show statistics
+llm-lean-log stats
+
+# View detailed entry at index
+llm-lean-log view 0
+
+# Search logs
+llm-lean-log search "query"
+
+# Filter by tags
+llm-lean-log tags tag1 tag2
+
+# Add a new log entry
+llm-lean-log add "Fix bug" --tags=bug,fix --problem="Problem description"
+```
+
 ## 🛠️ Development
 
 - Added CLI tool for managing logs
