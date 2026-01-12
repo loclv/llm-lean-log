@@ -13,6 +13,7 @@ import {
 	visualizeStats,
 	visualizeTable,
 } from "llm-lean-log-core";
+import pkg from "../package.json";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -49,7 +50,9 @@ Commands:
     --action=<text>     Action taken
     --model=<name>      Model name
   
-  help                  Show this help message
+  help, -h, --help      Show this help message
+  
+  -v, -V, --version     Show version number
 
 Examples:
   llml list ./logs/example.csv
@@ -156,6 +159,11 @@ async function main() {
 		case "--help":
 		case "-h":
 			console.log(helpText);
+			break;
+		case "-v":
+		case "-V":
+		case "--version":
+			console.log(pkg.version);
 			break;
 
 		default:
