@@ -68,7 +68,7 @@ Here are visual examples of the CSV logs format:
 To install dependencies:
 
 ```bash
-bun install
+bun i
 ```
 
 ### 🚀 Running the Application
