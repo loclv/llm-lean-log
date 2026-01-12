@@ -23,7 +23,8 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"type": "tsc --noEmit"
 	},
 	"dependencies": {
 		"framer-motion": "^12.26.1",
