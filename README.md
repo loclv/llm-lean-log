@@ -134,7 +134,8 @@ The last task completed was "Make llm-lean-log packages public". This involved:
 1. Perform a Dry Run
 Before pushing to NPM, ensure that the files being packaged are correct. Run this from the root:
 
-...
+etc...
+
 ```
 
 This is a efficient way to read logs for LLMs. Save time, tokens and energy. Because LLMs no need to read long CSV files before LLMs can write a log at the end of the log.
@@ -142,8 +143,8 @@ This is a efficient way to read logs for LLMs. Save time, tokens and energy. Bec
 ## 🛠️ Development
 
 - Added CLI tool for managing logs
-- Added CSV export functionality
 - Added search and filter capabilities
+- Added beautiful React-based Web Visualizer with code highlighting, view more at [Web Visualizer](./packages/visualizer/README.md).
 
 To install dependencies:
 

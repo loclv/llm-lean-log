@@ -18,6 +18,7 @@
 	"scripts": {
 		"dev": "bun run --filter llm-lean-log-core example",
 		"cli": "bun run packages/cli/src/index.ts",
+		"web:dev": "bun run --filter llm-lean-log-visualizer dev",
 		"fmt": "biome format --write .",
 		"lint": "biome lint",
 		"test": "bun test",
