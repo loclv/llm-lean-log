@@ -2,6 +2,10 @@
 
 > 📦 Core library for llm-lean-log - Logging for LLMs, but we cut the fat.
 
+`llm-lean-log` is a format for logging that is optimized for LLM token usage, using a simple CSV-based structure.
+
+For more information, see the [main repository](https://github.com/loclv/llm-lean-log).
+
 This package contains the core logic for parsing, saving, and visualizing logs in the `llm-lean-log` format.
 
 ## 🚀 Installation
