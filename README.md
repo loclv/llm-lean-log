@@ -31,6 +31,18 @@ Here are visual examples of the CSV logs format:
   - `problem`: description of the problem, context of the log. (required)
   - `solution`: description of the solution, method to fix the problem. (optional)
   - `action`: run command, action (web search, etc.) that was taken to fix the problem. (optional)
+    - running command format: `text {language}`\`code-block\``
+      - Example of row value:
+
+        ```text
+        run bash`bun i`; then start dev server bash`bun dev`; update constants in "src/constants.ts": ts`const MY_CONSTANT = 'new value';`
+        ```
+
+      - Language is optional, but recommended for better parsing.
+      - Why?
+        - Better parsing and understanding of the code.
+        - Learn from Markdown code blocks format, so humans can read and understand the code.
+
   - `created-at`: when the log was created. (required).
     - Format: `YYYY-MM-DDTHH:mm:ssZ` (ISO 8601)
       - Example: `2025-10-15T12:34:56Z`
@@ -43,6 +55,9 @@ Here are visual examples of the CSV logs format:
     - Example: `gpt-4o-mini`
   - `log-created-modal`: model that was used to create the log (optional).
     - Example: `gpt-4o-mini`
+- Row:
+  - Each row is a log entry.
+  - No new lines, or use `\n`, just use comma - `,`, dot - `.`, semicolon - `;` to separate information.
 
 ## 🛠️ Development
 

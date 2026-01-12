@@ -45,7 +45,7 @@ async function main() {
 		solution:
 			"Increased pool size from 10 to 50 and added connection timeout handling",
 		action:
-			"Modified database.config.ts: pool.max = 50, pool.idleTimeoutMillis = 30000",
+			"Modified database.config.ts: ts`pool.max = 50, pool.idleTimeoutMillis = 30_000`",
 		model: "gpt-4-turbo",
 	});
 
@@ -67,7 +67,7 @@ async function main() {
 			"Server memory usage grows continuously when WebSocket connections are active",
 		solution:
 			"Fixed event listener cleanup in disconnect handler to prevent memory leaks",
-		action: "Added removeAllListeners() call in websocket.disconnect()",
+		action: "Added `removeAllListeners()` call in `websocket.disconnect()`",
 		model: "gpt-4",
 	});
 
