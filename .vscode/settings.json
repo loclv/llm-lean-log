@@ -1,0 +1,12 @@
+{
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[ts]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"cSpell.words": ["TOON"]
+}

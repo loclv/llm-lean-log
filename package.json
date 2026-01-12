@@ -1,0 +1,29 @@
+{
+	"name": "llm-lean-log",
+	"version": "0.1.0",
+	"description": "Logging for LLMs, but we cut the fat. A CSV-based logging format optimized for LLM token usage.",
+	"module": "src/index.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "bun run index.ts",
+		"fmt": "biome format --write ."
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.9.3"
+	},
+	"keywords": [
+		"llm",
+		"logging",
+		"csv",
+		"token-optimization",
+		"ai"
+	],
+	"engines": {
+		"bun": ">=1.3",
+		"npm": "please-use-bun"
+	},
+	"license": "MIT"
+}
