@@ -33,6 +33,8 @@ async function main() {
 		solution:
 			"Added token refresh logic in the auth middleware to automatically renew tokens before expiration",
 		action: "Updated auth.ts middleware and added refresh endpoint",
+		files: "src/middleware/auth.ts, src/routes/auth.routes.ts",
+		"tech-stack": "typescript, express, jwt",
 		model: "claude-3.5-sonnet",
 		"log-created-modal": "gpt-4",
 	});
@@ -46,6 +48,8 @@ async function main() {
 			"Increased pool size from 10 to 50 and added connection timeout handling",
 		action:
 			"Modified database.config.ts: ts`pool.max = 50, pool.idleTimeoutMillis = 30_000`",
+		files: "src/config/database.config.ts",
+		"tech-stack": "typescript, postgresql, node.js",
 		model: "gpt-4-turbo",
 	});
 
@@ -57,6 +61,9 @@ async function main() {
 			"Implemented theme toggle using CSS variables and localStorage for persistence",
 		action:
 			"Created theme.ts utility and updated global.css with dark mode variables",
+		files:
+			"src/utils/theme.ts, styles/global.css, src/components/ThemeToggle.tsx",
+		"tech-stack": "typescript, react, tailwindcss",
 		model: "claude-3.5-sonnet",
 	});
 
@@ -68,6 +75,8 @@ async function main() {
 		solution:
 			"Fixed event listener cleanup in disconnect handler to prevent memory leaks",
 		action: "Added `removeAllListeners()` call in `websocket.disconnect()`",
+		files: "src/handlers/websocket.handler.ts",
+		"tech-stack": "typescript, socket.io, node.js",
 		model: "gpt-4",
 	});
 
@@ -78,6 +87,8 @@ async function main() {
 		solution: "Implemented lazy loading and WebP format with fallback to JPEG",
 		action:
 			"Added next/image component and configured image optimization in next.config.js",
+		files: "next.config.js, src/components/ImageGallery.tsx",
+		"tech-stack": "typescript, next.js, react",
 		model: "claude-3.5-sonnet",
 	});
 
@@ -88,6 +99,8 @@ async function main() {
 		solution: "Migrated entire codebase to TypeScript with strict mode enabled",
 		action:
 			"Converted all .js files to .ts, added type definitions, configured tsconfig.json",
+		files: "tsconfig.json, package.json, src/**/*",
+		"tech-stack": "typescript, node.js",
 		model: "gpt-4-turbo",
 	});
 
