@@ -31,10 +31,18 @@ Here are visual examples of the CSV logs format:
   - `problem`: description of the problem, context of the log. (required)
   - `solution`: description of the solution, method to fix the problem. (optional)
   - `action`: run command, action (web search, etc.) that was taken to fix the problem. (optional)
-  - `created-at`: when the log was created. (required)
+  - `created-at`: when the log was created. (required).
+    - Format: `YYYY-MM-DDTHH:mm:ssZ` (ISO 8601)
+      - Example: `2025-10-15T12:34:56Z`
+      - Readable for humans, machines and LLMs.
   - `updated-at`: when the log was updated (optional).
+    - Format: `YYYY-MM-DDTHH:mm:ssZ` (ISO 8601)
+      - Example: `2025-10-15T12:34:56Z`
+      - Readable for humans, machines and LLMs.
   - `model`: model that was used (optional).
+    - Example: `gpt-4o-mini`
   - `log-created-modal`: model that was used to create the log (optional).
+    - Example: `gpt-4o-mini`
 
 ## 🛠️ Development
 
