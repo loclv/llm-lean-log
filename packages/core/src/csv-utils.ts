@@ -128,47 +128,65 @@ export function logEntriesToCSV(entries: LogEntry[]): string {
  * Parse CSV string to log entries
  */
 export function csvToLogEntries(csv: string): LogEntry[] {
-	const lines = csv.split("\n");
-	if (lines.length === 0) return [];
+	if (!csv.trim()) return [];
 
-	const headerLine = lines[0];
-	if (!headerLine) return [];
+	const entries: LogEntry[] = [];
+	let currentField = "";
+	let inQuotes = false;
+	let fields: string[] = [];
+	let fileHeaders: string[] = [];
+	let isHeaderRow = true;
 
-	// Parse headers from the first line
-	const fileHeaders = headerLine.split(",").map((h) => h.trim());
+	for (let i = 0; i < csv.length; i++) {
+		const char = csv[i];
+		const nextChar = csv[i + 1];
 
-	// Skip header
-	const dataLines = lines.slice(1);
+		if (char === '"') {
+			if (inQuotes && nextChar === '"') {
+				currentField += '"';
+				i++;
+			} else {
+				inQuotes = !inQuotes;
+			}
+		} else if (char === "," && !inQuotes) {
+			fields.push(unescapeCSVField(currentField));
+			currentField = "";
+		} else if ((char === "\n" || char === "\r") && !inQuotes) {
+			// Handle CRLF
+			if (char === "\r" && nextChar === "\n") {
+				i++;
+			}
 
-	return dataLines
-		.map((row) => {
-			if (!row.trim()) return null;
+			fields.push(unescapeCSVField(currentField));
+			currentField = "";
 
-			// Simple CSV parser that handles quoted fields
-			const fields: string[] = [];
-			let currentField = "";
-			let inQuotes = false;
-
-			for (let i = 0; i < row.length; i++) {
-				const char = row[i];
-				const nextChar = row[i + 1];
-
-				if (char === '"') {
-					if (inQuotes && nextChar === '"') {
-						currentField += '"';
-						i++;
-					} else {
-						inQuotes = !inQuotes;
+			if (isHeaderRow) {
+				fileHeaders = fields.map((h) => h.trim());
+				isHeaderRow = false;
+			} else {
+				const entry: Partial<LogEntry> = {};
+				fileHeaders.forEach((header, index) => {
+					const value = fields[index]?.trim();
+					if (value) {
+						// @ts-expect-error - dynamic header mapping
+						entry[header] = value;
 					}
-				} else if (char === "," && !inQuotes) {
-					fields.push(unescapeCSVField(currentField));
-					currentField = "";
-				} else {
-					currentField += char;
+				});
+
+				if (entry.name && entry["created-at"]) {
+					entries.push(entry as LogEntry);
 				}
 			}
-			fields.push(unescapeCSVField(currentField));
+			fields = [];
+		} else {
+			currentField += char;
+		}
+	}
 
+	// Handle last field if not ending with newline
+	if (currentField || fields.length > 0) {
+		fields.push(unescapeCSVField(currentField));
+		if (!isHeaderRow) {
 			const entry: Partial<LogEntry> = {};
 			fileHeaders.forEach((header, index) => {
 				const value = fields[index]?.trim();
@@ -177,9 +195,11 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 					entry[header] = value;
 				}
 			});
+			if (entry.name && entry["created-at"]) {
+				entries.push(entry as LogEntry);
+			}
+		}
+	}
 
-			if (!entry.name || !entry["created-at"]) return null;
-			return entry as LogEntry;
-		})
-		.filter((entry): entry is LogEntry => entry !== null);
+	return entries;
 }
