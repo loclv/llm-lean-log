@@ -21,6 +21,10 @@ Here are visual examples of the CSV logs format:
 - Best performance of LLMs token usage. This is pure tabular data, so CSV is smaller than `TOON` for flat tables. Refer to <https://github.com/toon-format/toon?tab=readme-ov-file#when-not-to-use-toon>.
 - There are many best practices for system logging, but they are not optimized for LLMs token usage.
 - Clean, predictable and simple format for LLMs to read past seasons of logs.
+- When LLMs write logs, should be use by a CLI tool to save logs, so LLMs no need to edit CSV file itself and it's saving time, tokens and energy.
+  - We need a efficient way to save logs for LLMs.
+- When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
+  - We need a efficient way to read logs for humans.
 
 ## ✅ Solution
 
@@ -95,7 +99,13 @@ llm-lean-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem 
 
 ## Ask AI agent (LLMs) to write a log
 
-> use llm-lean-log-cli to save last chat logs / talk above
+Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-log-cli` CLI tool globally.
+
+```bash
+bun add -g llm-lean-log-cli
+```
+
+> use `llm-lean-log` CLI tool to save last chat logs / talk above
 
 ## Ask AI agent (LLMs) to read a log
 
@@ -122,6 +132,8 @@ Before pushing to NPM, ensure that the files being packaged are correct. Run thi
 
 ...
 ```
+
+This is a efficient way to read logs for LLMs. Save time, tokens and energy. Because LLMs no need to read long CSV files before LLMs can write a log at the end of the log.
 
 ## 🛠️ Development
 
