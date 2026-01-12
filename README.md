@@ -19,16 +19,19 @@ Here are visual examples of the CSV logs format:
 - 🐥 `markdown` is not optimized for LLMs token usage, only for human readability.
 - 🐥 `json` is not optimized for LLMs token usage, only for machine readability.
 - 🐥 Best performance of LLMs token usage. This is pure tabular data, so CSV is smaller than `TOON` for flat tables. Refer to <https://github.com/toon-format/toon?tab=readme-ov-file#when-not-to-use-toon>.
-- 🐥 There are many best practices for system logging, but they are not optimized for LLMs token usage.
+- 🐥 There are many best practices for system logging, but they are not optimized for LLMs token usage and missing data structure for understanding the context of the log chat.
+  - For example, log level WARNING is using for system logger, but what LLMs need to know?
 - 🐥 Clean, predictable and simple format for LLMs to read past seasons of logs.
 - 🐥 When LLMs write logs, should be use by a CLI tool to save logs, so LLMs no need to edit CSV file itself and it's saving time, tokens and energy.
   - We need a efficient way to save logs for LLMs.
 - 🐥 When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
   - We need a efficient way to read logs for humans.
+- 🌳 A local first, full control data storage for logs, not dependent on external services like Cursor, Windsurf, TUI client, etc.
+- 🐥 Very long, long and long conversation history, but LLMs can summarize it in a few lines and save important information only.
 
 ## ✅ Solution
 
-- 🌸 Format is a simple tabular data - CSV.
+- 🪴 Create a simple, single, flat, CSV data format file for logs.
 - 🌟 Headers are logger important fields:
   - `name`: main content of the log (short). (required)
   - `tags`: tags to categorize the log, comma separated. Example: `error,api,auth`. (optional)
@@ -86,6 +89,8 @@ bun add -g llm-lean-log-cli
 ```
 
 ## 💻 Usage
+
+`llm-lean-log-cli`'s bin name is `llml`.
 
 ```bash
 # List all log entries
