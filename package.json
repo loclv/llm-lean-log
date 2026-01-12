@@ -1,11 +1,15 @@
 {
 	"name": "llm-lean-log",
 	"version": "0.1.0",
+	"private": true,
 	"description": "Logging for LLMs, but we cut the fat. A CSV-based logging format optimized for LLM token usage.",
-	"module": "src/index.ts",
+	"workspaces": [
+		"packages/*"
+	],
 	"type": "module",
 	"scripts": {
-		"dev": "bun run index.ts",
+		"dev": "bun run --filter @llm-lean-log/core example",
+		"cli": "bun run packages/cli/src/index.ts",
 		"fmt": "biome format --write .",
 		"lint": "biome lint",
 		"test": "bun test",

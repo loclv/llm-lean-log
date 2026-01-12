@@ -1,0 +1,17 @@
+{
+	"name": "@llm-lean-log/cli",
+	"version": "0.1.0",
+	"description": "CLI tool for llm-lean-log",
+	"module": "src/index.ts",
+	"type": "module",
+	"scripts": {
+		"start": "bun run src/index.ts"
+	},
+	"dependencies": {
+		"@llm-lean-log/core": "*"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"license": "MIT"
+}

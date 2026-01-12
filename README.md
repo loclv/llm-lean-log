@@ -76,7 +76,7 @@ bun i
 🌱 Create example logs and run visualizer:
 
 ```bash
-bun run index.ts
+bun dev
 ```
 
 💻 CLI Usage:
@@ -84,6 +84,9 @@ bun run index.ts
 ```bash
 # List all log entries
 bun cli list
+
+# List all log entries (compact view)
+bun cli ls -c
 ```
 
 ```bash

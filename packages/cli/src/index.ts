@@ -12,7 +12,7 @@ import {
 	visualizeEntry,
 	visualizeStats,
 	visualizeTable,
-} from "./src";
+} from "@llm-lean-log/core";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -52,12 +52,12 @@ Commands:
   help                  Show this help message
 
 Examples:
-  bun cli.ts list ./logs/example.csv
-  bun cli.ts stats
-  bun cli.ts view 0
-  bun cli.ts search "memory"
-  bun cli.ts tags error api
-  bun cli.ts add "Fix bug" --tags=bug,fix --problem="Bug description"
+  bun cli list ./logs/example.csv
+  bun cli stats
+  bun cli view 0
+  bun cli search "memory"
+  bun cli tags error api
+  bun cli add "Fix bug" --tags=bug,fix --problem="Bug description"
 `;
 
 async function main() {
@@ -152,6 +152,7 @@ async function main() {
 			console.log("Log entry added successfully");
 			break;
 		}
+		case "help":
 		case "--help":
 		case "-h":
 			console.log(helpText);
