@@ -23,11 +23,12 @@ Here are visual examples of the CSV logs format:
   - For example, log level WARNING is using for system logger, but what LLMs need to know?
 - 🐥 Clean, predictable and simple format for LLMs to read past seasons of logs.
 - 🐥 When LLMs write logs, should be use by a CLI tool to save logs, so LLMs no need to edit CSV file itself and it's saving time, tokens and energy.
-  - We need a efficient way to save logs for LLMs.
+  - 🌳 We need a efficient way to save logs for LLMs.
 - 🐥 When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
-  - We need a efficient way to read logs for humans.
+  - 🌳 We need a efficient way to read logs for humans.
 - 🌳 A local first, full control data storage for logs, not dependent on external services like Cursor, Windsurf, TUI client, etc.
-- 🐥 Very long, long and long conversation history, but LLMs can summarize it in a few lines and save important information only.
+- 🐥 Very long, long and long conversation history, but LLMs can summarize it in a few words and save important information only.
+  - 🌳 Do not save all conversation history, only save important information.
 
 ## ✅ Solution
 
