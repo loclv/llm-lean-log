@@ -43,6 +43,7 @@ function App() {
 		setIsDragging(false);
 	}, []);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: handleFileUpload changes on every re-render and should not be used as a hook dependency
 	const onDrop = useCallback((e: React.DragEvent) => {
 		e.preventDefault();
 		setIsDragging(false);
@@ -176,16 +177,20 @@ function App() {
 									outline: "none",
 									transition: "border-color 0.2s",
 								}}
-								onFocus={(e) =>
-									(e.target.style.borderColor = "var(--accent-primary)")
-								}
-								onBlur={(e) =>
-									(e.target.style.borderColor = "var(--border-color)")
-								}
+								onFocus={(e) => {
+									e.target.style.borderColor = "var(--accent-primary)";
+								}}
+								onBlur={(e) => {
+									e.target.style.borderColor = "var(--border-color)";
+								}}
 							/>
 						</div>
 						<div className="flex gap-2">
-							<button className="btn btn-secondary" onClick={() => setLogs([])}>
+							<button
+								className="btn btn-secondary"
+								type="button"
+								onClick={() => setLogs([])}
+							>
 								<Trash2 size={18} />
 								Clear
 							</button>

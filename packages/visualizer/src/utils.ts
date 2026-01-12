@@ -50,7 +50,8 @@ export const formatDate = (dateStr: string): string => {
 	if (!dateStr) return "";
 	try {
 		return new Date(dateStr).toLocaleString();
-	} catch (_e) {
+	} catch (err) {
+		console.error("Failed to parse date:", dateStr, err);
 		return dateStr;
 	}
 };
