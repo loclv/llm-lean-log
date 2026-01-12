@@ -1,11 +1,11 @@
-# @llm-lean-log/cli
+# llm-lean-log-cli
 
 > 💻 CLI tool for llm-lean-log - Logging for LLMs, but we cut the fat.
 
 ## 🚀 Installation
 
 ```bash
-bun add -g @llm-lean-log/cli
+bun add -g llm-lean-log-cli
 ```
 
 ## 💻 Usage
@@ -32,7 +32,7 @@ llm-lean-log add "Fix bug" --tags=bug,fix --problem="Problem description"
 
 ## Ask AI agent (LLMs) to write a log
 
-> use @llm-lean-log/cli to save last chat logs / talk above
+> use llm-lean-log-cli to save last chat logs / talk above
 
 ## Ask AI agent (LLMs) to read a log
 
@@ -45,9 +45,9 @@ Based on the last entry in ./logs/example.csv and the current state of your repo
 
 ### Current Status
 
-The last task completed was "Make @llm-lean-log packages public". This involved:
+The last task completed was "Make llm-lean-log packages public". This involved:
 
-- Updating package.json for both @llm-lean-log/core and @llm-lean-log/cli with repository info, files, and publishConfig.
+- Updating package.json for both llm-lean-log-core and llm-lean-log-cli with repository info, files, and publishConfig.
 - Adding LICENSE and README.md files.
 - Configuring the CLI as an executable.
 - Creating the guide at docs/public.md.

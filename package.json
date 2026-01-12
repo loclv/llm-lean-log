@@ -16,7 +16,7 @@
 	],
 	"type": "module",
 	"scripts": {
-		"dev": "bun run --filter @llm-lean-log/core example",
+		"dev": "bun run --filter llm-lean-log-core example",
 		"cli": "bun run packages/cli/src/index.ts",
 		"fmt": "biome format --write .",
 		"lint": "biome lint",

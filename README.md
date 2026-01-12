@@ -65,10 +65,10 @@ CSV format is sometimes hard to read since it's not human-friendly, too long lin
 
 ### Solution
 
-Use `@llm-lean-log/cli` CLI tool for viewing logs in a more human-friendly way.
+Use `llm-lean-log-cli` CLI tool for viewing logs in a more human-friendly way.
 
 ```bash
-bun add -g @llm-lean-log/cli
+bun add -g llm-lean-log-cli
 ```
 
 ## 💻 Usage

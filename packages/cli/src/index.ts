@@ -12,7 +12,7 @@ import {
 	visualizeEntry,
 	visualizeStats,
 	visualizeTable,
-} from "@llm-lean-log/core";
+} from "llm-lean-log-core";
 
 const args = process.argv.slice(2);
 const command = args[0];

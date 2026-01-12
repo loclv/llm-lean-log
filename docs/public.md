@@ -17,6 +17,6 @@ Note: You may need to update the version in `package.json` before publishing.
 Once published, users will be able to install the CLI globally:
 
 ```bash
-bun add -g @llm-lean-log/cli
+bun add -g llm-lean-log-cli
 llm-lean-log --help
 ```

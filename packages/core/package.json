@@ -1,5 +1,5 @@
 {
-	"name": "@llm-lean-log/core",
+	"name": "llm-lean-log-core",
 	"version": "0.1.0",
 	"description": "Core library for llm-lean-log",
 	"repository": {
@@ -11,11 +11,12 @@
 		"url": "https://github.com/loclv/llm-lean-log/issues"
 	},
 	"homepage": "https://github.com/loclv/llm-lean-log/tree/main/packages/core#readme",
-	"main": "src/index.ts",
-	"module": "src/index.ts",
+	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"type": "module",
 	"files": [
-		"src",
+		"dist",
 		"README.md",
 		"LICENSE"
 	],
@@ -23,6 +24,8 @@
 		"access": "public"
 	},
 	"scripts": {
+		"build": "bun build src/index.ts --outdir dist --target node --splitting && tsc --emitDeclarationOnly",
+		"prepublishOnly": "bun run build",
 		"test": "bun test",
 		"example": "bun run example.ts"
 	},

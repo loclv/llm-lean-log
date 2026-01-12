@@ -1,5 +1,5 @@
 {
-	"name": "@llm-lean-log/cli",
+	"name": "llm-lean-log-cli",
 	"version": "0.1.0",
 	"description": "CLI tool for llm-lean-log",
 	"repository": {
@@ -29,7 +29,7 @@
 		"start": "bun run src/index.ts"
 	},
 	"dependencies": {
-		"@llm-lean-log/core": "workspace:*"
+		"llm-lean-log-core": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
