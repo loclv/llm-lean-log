@@ -24,9 +24,9 @@
 		"test": "bun test",
 		"test:watch": "bun test --watch",
 		"test:coverage": "bun test --coverage",
-		"publish:core": "cd packages/core && bun publish",
-		"publish:cli": "cd packages/cli && bun publish",
-		"publish:vis": "cd packages/visualizer && bun publish"
+		"pub:core": "cd packages/core && bun publish",
+		"pub:cli": "cd packages/cli && bun publish",
+		"pub:vis": "cd packages/visualizer && bun publish"
 	},
 	"devDependencies": {
 		"bun-types": "latest"
