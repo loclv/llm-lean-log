@@ -18,17 +18,18 @@
 	"scripts": {
 		"dev": "bun run --filter llm-lean-log-core example",
 		"cli": "bun run packages/cli/src/index.ts",
-		"web:dev": "bun run --filter llm-lean-log-visualizer dev",
+		"web:dev": "bun run --filter llml-vis dev",
 		"fmt": "biome format --write .",
 		"lint": "biome lint",
 		"test": "bun test",
 		"test:watch": "bun test --watch",
 		"test:coverage": "bun test --coverage",
 		"publish:core": "cd packages/core && bun publish",
-		"publish:cli": "cd packages/cli && bun publish"
+		"publish:cli": "cd packages/cli && bun publish",
+		"publish:vis": "cd packages/visualizer && bun publish"
 	},
 	"devDependencies": {
-		"@types/bun": "latest"
+		"bun-types": "latest"
 	},
 	"peerDependencies": {
 		"typescript": "^5.9.3"

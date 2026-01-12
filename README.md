@@ -16,20 +16,20 @@ Here are visual examples of the CSV logs format:
 
 ## ❌ Problems
 
-- `markdown` is not optimized for LLMs token usage, only for human readability.
-- `json` is not optimized for LLMs token usage, only for machine readability.
-- Best performance of LLMs token usage. This is pure tabular data, so CSV is smaller than `TOON` for flat tables. Refer to <https://github.com/toon-format/toon?tab=readme-ov-file#when-not-to-use-toon>.
-- There are many best practices for system logging, but they are not optimized for LLMs token usage.
-- Clean, predictable and simple format for LLMs to read past seasons of logs.
-- When LLMs write logs, should be use by a CLI tool to save logs, so LLMs no need to edit CSV file itself and it's saving time, tokens and energy.
+- 🐥 `markdown` is not optimized for LLMs token usage, only for human readability.
+- 🐥 `json` is not optimized for LLMs token usage, only for machine readability.
+- 🐥 Best performance of LLMs token usage. This is pure tabular data, so CSV is smaller than `TOON` for flat tables. Refer to <https://github.com/toon-format/toon?tab=readme-ov-file#when-not-to-use-toon>.
+- 🐥 There are many best practices for system logging, but they are not optimized for LLMs token usage.
+- 🐥 Clean, predictable and simple format for LLMs to read past seasons of logs.
+- 🐥 When LLMs write logs, should be use by a CLI tool to save logs, so LLMs no need to edit CSV file itself and it's saving time, tokens and energy.
   - We need a efficient way to save logs for LLMs.
-- When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
+- 🐥 When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
   - We need a efficient way to read logs for humans.
 
 ## ✅ Solution
 
-- Format is a simple tabular data - CSV.
-- Headers are logger important fields:
+- 🌸 Format is a simple tabular data - CSV.
+- 🌟 Headers are logger important fields:
   - `name`: main content of the log (short). (required)
   - `tags`: tags to categorize the log, comma separated. Example: `error,api,auth`. (optional)
   - `problem`: description of the problem, context of the log. (required)
@@ -109,9 +109,17 @@ Ask LLMs to write a log by prompt:
 
 > use `llml add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"` CLI tool to save last chat logs / talk above
 
+Or simpler for user but less efficient for LLMs:
+
+> use llml CLI to save chat log above
+
 ## Ask AI agent (LLMs) to read a log
 
-Ask LLMs to read a log by prompt:
+Ask LLMs to read last log only by prompt (efficient for LLMs):
+
+> run `llml view ./logs/example.csv --last` CLI and read output
+
+Ask LLMs to read all logs by prompt (less efficient for LLMs):
 
 > read last chat logs from "./logs/example.csv" and tell me what should I do next
 
@@ -152,7 +160,7 @@ To install dependencies:
 bun i
 ```
 
-### 🚀 Running the Application
+### 🌈 Running the Application
 
 🌱 Create example logs and run visualizer:
 

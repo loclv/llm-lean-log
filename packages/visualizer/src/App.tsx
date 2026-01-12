@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Search, Trash2, Upload } from "lucide-react";
 import Papa from "papaparse";
 import type React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LogCard } from "./components/LogCard";
 import type { LogEntry } from "./types";
 
@@ -13,6 +13,31 @@ function App() {
 	const [logs, setLogs] = useState<LogEntry[]>([]);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isDragging, setIsDragging] = useState(false);
+
+	/**
+	 * Fetches logs from the API if available.
+	 */
+	useEffect(() => {
+		fetch("/api/logs")
+			.then((res) => {
+				if (res.ok) return res.text();
+				throw new Error("No initial data");
+			})
+			.then((text) => {
+				if (text) {
+					Papa.parse(text, {
+						header: true,
+						skipEmptyLines: true,
+						complete: (results) => {
+							setLogs(results.data as LogEntry[]);
+						},
+					});
+				}
+			})
+			.catch(() => {
+				// Silently fail if API is not available or returns error
+			});
+	}, []);
 
 	/**
 	 * Handles CSV file parsing and state update.
