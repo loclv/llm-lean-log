@@ -75,22 +75,22 @@ bun add -g llm-lean-log-cli
 
 ```bash
 # List all log entries
-llm-lean-log list
+llm-lean-log list ./logs/example.csv
 
 # Show statistics
-llm-lean-log stats
+llm-lean-log stats ./logs/example.csv
 
 # View detailed entry at index
-llm-lean-log view 0
+llm-lean-log view ./logs/example.csv 0
 
 # Search logs
-llm-lean-log search "query"
+llm-lean-log search ./logs/example.csv "query"
 
 # Filter by tags
-llm-lean-log tags tag1 tag2
+llm-lean-log tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
-llm-lean-log add "Fix bug" --tags=bug,fix --problem="Problem description"
+llm-lean-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
 ## 🛠️ Development
