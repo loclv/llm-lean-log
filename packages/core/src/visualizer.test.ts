@@ -30,6 +30,8 @@ describe("Visualizer Highlight", () => {
 		expect(output).toContain("const x: number = 1;");
 	});
 
+	// The character \x1b represents the ESC (Escape) control character
+	// biome-ignore lint/suspicious/noControlCharactersInRegex: intentional to strip ANSI codes
 	const stripAnsi = (str: string) => str.replace(/\x1b\[[0-9;]*m/g, "");
 
 	it("should handle custom code blocks", () => {
