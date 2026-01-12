@@ -3,6 +3,7 @@
  * Displays logs in a human-readable format
  */
 
+import { highlight } from "cli-highlight";
 import type { LogEntry } from "./types";
 
 interface VisualizerOptions {
@@ -12,6 +13,8 @@ interface VisualizerOptions {
 	maxWidth?: number;
 	/** Color output */
 	colors?: boolean;
+	/** Enable syntax highlighting for code blocks */
+	highlight?: boolean;
 }
 
 // ANSI color codes
@@ -52,13 +55,110 @@ function formatDate(dateStr: string): string {
 }
 
 /**
+ * Detects and highlights code blocks in text
+ */
+function highlightText(text: string, useColors: boolean): string {
+	if (!useColors) return text;
+
+	let result = text;
+
+	// 1. Markdown code blocks: ```lang\ncode\n```
+	const codeBlockRegex = /```(\w+)?\n([\s\S]*?)\n```/g;
+	if (codeBlockRegex.test(text)) {
+		codeBlockRegex.lastIndex = 0;
+		result = result.replace(codeBlockRegex, (match, lang, code) => {
+			try {
+				return highlight(code.trim(), {
+					language: lang || "typescript",
+					ignoreIllegals: true,
+				});
+			} catch (_e) {
+				return match;
+			}
+		});
+	}
+
+	// 2. Custom code blocks: lang`code` (as seen in some examples)
+	const customBlockRegex =
+		/\b(ts|js|json|bash|sql|html|css|py|python|sh)`([^`]+)`/gi;
+	if (customBlockRegex.test(result)) {
+		customBlockRegex.lastIndex = 0;
+		result = result.replace(customBlockRegex, (match, lang, code) => {
+			const languageMap: Record<string, string> = {
+				ts: "typescript",
+				js: "javascript",
+				py: "python",
+				sh: "bash",
+			};
+			try {
+				return highlight(code, {
+					language: languageMap[lang.toLowerCase()] || lang.toLowerCase(),
+					ignoreIllegals: true,
+				});
+			} catch (_e) {
+				return match;
+			}
+		});
+	}
+
+	// 3. Heuristic: If the whole text looks like a code block (starts with common keywords)
+	const codeKeywords = [
+		"import ",
+		"export ",
+		"function ",
+		"const ",
+		"class ",
+		"interface ",
+		"type ",
+		"public ",
+		"private ",
+		"async ",
+	];
+	const trimmed = text.trim();
+	if (
+		result === text && // Only if we haven't already replaced blocks
+		codeKeywords.some((kw) => trimmed.startsWith(kw))
+	) {
+		try {
+			return highlight(text, { language: "typescript", ignoreIllegals: true });
+		} catch (_e) {
+			return text;
+		}
+	}
+
+	// 4. Inline code blocks: `code` (only if long enough or contains code-like chars)
+	const inlineCodeRegex = /`([^`\n]{3,})`/g;
+	if (inlineCodeRegex.test(result)) {
+		inlineCodeRegex.lastIndex = 0;
+		result = result.replace(inlineCodeRegex, (match, code) => {
+			// Only highlight if it looks slightly like code or is long
+			if (code.length > 10 || /[:;{}[\]()=]/.test(code)) {
+				try {
+					return highlight(code, { ignoreIllegals: true });
+				} catch (_e) {
+					return match;
+				}
+			}
+			return match;
+		});
+	}
+
+	return result;
+}
+
+/**
  * Visualize log entries in a table format
  */
 export function visualizeTable(
 	entries: LogEntry[],
 	options: VisualizerOptions = {},
 ): string {
-	const { compact = false, maxWidth = 50, colors: useColors = true } = options;
+	const {
+		compact = false,
+		maxWidth = 50,
+		colors: useColors = true,
+		highlight: useHighlight = true,
+	} = options;
 
 	if (entries.length === 0) {
 		return colorize("No log entries found.", "gray", useColors);
@@ -82,25 +182,28 @@ export function visualizeTable(
 
 		// Problem
 		if (entry.problem && !compact) {
+			const text = truncate(entry.problem, maxWidth);
 			lines.push(
 				colorize("  Problem: ", "yellow", useColors) +
-					truncate(entry.problem, maxWidth),
+					(useHighlight ? highlightText(text, useColors) : text),
 			);
 		}
 
 		// Solution
 		if (entry.solution && !compact) {
+			const text = truncate(entry.solution, maxWidth);
 			lines.push(
 				colorize("  Solution: ", "green", useColors) +
-					truncate(entry.solution, maxWidth),
+					(useHighlight ? highlightText(text, useColors) : text),
 			);
 		}
 
 		// Action
 		if (entry.action && !compact) {
+			const text = truncate(entry.action, maxWidth);
 			lines.push(
 				colorize("  Action: ", "magenta", useColors) +
-					truncate(entry.action, maxWidth),
+					(useHighlight ? highlightText(text, useColors) : text),
 			);
 		}
 
@@ -138,7 +241,7 @@ export function visualizeEntry(
 	entry: LogEntry,
 	options: VisualizerOptions = {},
 ): string {
-	const { colors: useColors = true } = options;
+	const { colors: useColors = true, highlight: useHighlight = true } = options;
 
 	const lines: string[] = [];
 
@@ -154,19 +257,25 @@ export function visualizeEntry(
 
 	if (entry.problem) {
 		lines.push(colorize("Problem:", "yellow", useColors));
-		lines.push(entry.problem);
+		lines.push(
+			useHighlight ? highlightText(entry.problem, useColors) : entry.problem,
+		);
 		lines.push("");
 	}
 
 	if (entry.solution) {
 		lines.push(colorize("Solution:", "green", useColors));
-		lines.push(entry.solution);
+		lines.push(
+			useHighlight ? highlightText(entry.solution, useColors) : entry.solution,
+		);
 		lines.push("");
 	}
 
 	if (entry.action) {
 		lines.push(colorize("Action:", "magenta", useColors));
-		lines.push(entry.action);
+		lines.push(
+			useHighlight ? highlightText(entry.action, useColors) : entry.action,
+		);
 		lines.push("");
 	}
 
