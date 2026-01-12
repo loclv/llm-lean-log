@@ -4,6 +4,7 @@ import {
 	Calendar,
 	CheckCircle2,
 	Cpu,
+	FileCode,
 	MessageSquare,
 	Tag,
 } from "lucide-react";
@@ -119,6 +120,36 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 						</p>
 					)}
 				</div>
+
+				{entry.files && (
+					<div className="flex flex-col gap-2">
+						<div
+							className="flex items-center gap-2"
+							style={{ color: "var(--accent-primary)" }}
+						>
+							<FileCode size={16} />
+							<strong style={{ fontSize: "0.875rem" }}>Files</strong>
+						</div>
+						<div className="flex flex-wrap gap-2">
+							{entry.files.split(",").map((file) => (
+								<span
+									key={file}
+									className="badge"
+									style={{
+										background: "var(--bg-tertiary)",
+										color: "var(--text-secondary)",
+										border: "1px solid var(--border-color)",
+										fontSize: "0.75rem",
+										padding: "2px 8px",
+										borderRadius: "6px",
+									}}
+								>
+									{file.trim()}
+								</span>
+							))}
+						</div>
+					</div>
+				)}
 
 				<div
 					className="flex justify-between items-center mt-4"

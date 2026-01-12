@@ -21,4 +21,8 @@ export interface LogEntry {
 	model?: string;
 	/** Model that was used to create the log (optional). */
 	"log-created-modal"?: string;
+	/** List of files that were modified, created, deleted or must be read (optional). */
+	files?: string;
+	/** List of technologies that were used (optional). */
+	"tech-stack"?: string;
 }

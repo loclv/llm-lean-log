@@ -38,6 +38,7 @@ Commands:
   stats                 Show log statistics
   
   view <index>          View detailed entry at index
+    --last              Show the last log entry
   
   search <query>        Search logs by name, problem, or solution
   
@@ -48,6 +49,8 @@ Commands:
     --problem=<text>    Problem description
     --solution=<text>   Solution description
     --action=<text>     Action taken
+    --files=<files>     Comma-separated files
+    --tech-stack=<tech> Comma-separated tech stack
     --model=<name>      Model name
   
   help, -h, --help      Show this help message
@@ -80,12 +83,22 @@ async function main() {
 		}
 
 		case "view": {
-			const index = parseInt(args[paramStart] || "0", 10);
-			if (Number.isNaN(index) || index < 0) {
+			const isLast = args.includes("--last");
+			const index = isLast
+				? entries.length - 1
+				: parseInt(args[paramStart] || "0", 10);
+
+			if (entries.length === 0) {
+				console.error("Error: No log entries found");
+				process.exit(1);
+			}
+
+			if (Number.isNaN(index)) {
 				console.error("Error: Please provide a valid entry index");
 				process.exit(1);
 			}
-			if (index >= entries.length) {
+
+			if (index >= entries.length || index < 0) {
 				console.error(
 					`Error: Index ${index} out of range (0-${entries.length - 1})`,
 				);
@@ -148,6 +161,8 @@ async function main() {
 				tags: findFlag("--tags"),
 				solution: findFlag("--solution"),
 				action: findFlag("--action"),
+				files: findFlag("--files"),
+				"tech-stack": findFlag("--tech-stack"),
 				model: findFlag("--model"),
 			});
 

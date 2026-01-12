@@ -116,7 +116,9 @@ export function searchLogs(entries: LogEntry[], query: string): LogEntry[] {
 		return (
 			entry.name.toLowerCase().includes(lowerQuery) ||
 			entry.problem?.toLowerCase().includes(lowerQuery) ||
-			entry.solution?.toLowerCase().includes(lowerQuery)
+			entry.solution?.toLowerCase().includes(lowerQuery) ||
+			entry.files?.toLowerCase().includes(lowerQuery) ||
+			entry["tech-stack"]?.toLowerCase().includes(lowerQuery)
 		);
 	});
 }

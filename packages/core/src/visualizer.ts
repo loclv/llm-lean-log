@@ -207,6 +207,18 @@ export function visualizeTable(
 			);
 		}
 
+		// Files
+		if (entry.files && !compact) {
+			const text = truncate(entry.files, maxWidth);
+			lines.push(colorize("  Files: ", "cyan", useColors) + text);
+		}
+
+		// Tech Stack
+		if (entry["tech-stack"] && !compact) {
+			const text = truncate(entry["tech-stack"], maxWidth);
+			lines.push(colorize("  Tech Stack: ", "blue", useColors) + text);
+		}
+
 		// Metadata
 		const metadata: string[] = [];
 		metadata.push(
@@ -276,6 +288,18 @@ export function visualizeEntry(
 		lines.push(
 			useHighlight ? highlightText(entry.action, useColors) : entry.action,
 		);
+		lines.push("");
+	}
+
+	if (entry.files) {
+		lines.push(colorize("Files:", "cyan", useColors));
+		lines.push(entry.files);
+		lines.push("");
+	}
+
+	if (entry["tech-stack"]) {
+		lines.push(colorize("Tech Stack:", "blue", useColors));
+		lines.push(entry["tech-stack"]);
 		lines.push("");
 	}
 
@@ -354,6 +378,28 @@ export function visualizeStats(
 		);
 		sortedModels.forEach(([model, count]) => {
 			lines.push(`  ${model}: ${count}`);
+		});
+		lines.push("");
+	}
+
+	// Tech stack distribution
+	const techCounts = new Map<string, number>();
+	entries.forEach((entry) => {
+		if (entry["tech-stack"]) {
+			entry["tech-stack"].split(",").forEach((tech) => {
+				const trimmedTech = tech.trim();
+				techCounts.set(trimmedTech, (techCounts.get(trimmedTech) || 0) + 1);
+			});
+		}
+	});
+
+	if (techCounts.size > 0) {
+		lines.push(colorize("Tech Stack Distribution:", "cyan", useColors));
+		const sortedTech = Array.from(techCounts.entries()).sort(
+			(a, b) => b[1] - a[1],
+		);
+		sortedTech.forEach(([tech, count]) => {
+			lines.push(`  ${tech}: ${count}`);
 		});
 		lines.push("");
 	}

@@ -12,6 +12,8 @@ export const CSV_HEADERS = [
 	"problem",
 	"solution",
 	"action",
+	"files",
+	"tech-stack",
 	"created-at",
 	"updated-at",
 	"model",
@@ -127,11 +129,57 @@ export function logEntriesToCSV(entries: LogEntry[]): string {
  */
 export function csvToLogEntries(csv: string): LogEntry[] {
 	const lines = csv.split("\n");
+	if (lines.length === 0) return [];
+
+	const headerLine = lines[0];
+	if (!headerLine) return [];
+
+	// Parse headers from the first line
+	const fileHeaders = headerLine.split(",").map((h) => h.trim());
 
 	// Skip header
 	const dataLines = lines.slice(1);
 
 	return dataLines
-		.map(csvRowToLogEntry)
+		.map((row) => {
+			if (!row.trim()) return null;
+
+			// Simple CSV parser that handles quoted fields
+			const fields: string[] = [];
+			let currentField = "";
+			let inQuotes = false;
+
+			for (let i = 0; i < row.length; i++) {
+				const char = row[i];
+				const nextChar = row[i + 1];
+
+				if (char === '"') {
+					if (inQuotes && nextChar === '"') {
+						currentField += '"';
+						i++;
+					} else {
+						inQuotes = !inQuotes;
+					}
+				} else if (char === "," && !inQuotes) {
+					fields.push(unescapeCSVField(currentField));
+					currentField = "";
+				} else {
+					currentField += char;
+				}
+			}
+			fields.push(unescapeCSVField(currentField));
+
+			const entry: Partial<LogEntry> = {};
+			fileHeaders.forEach((header, index) => {
+				const value = fields[index]?.trim();
+				if (value) {
+					// @ts-expect-error - dynamic header mapping
+					entry[header] = value;
+				}
+			});
+
+			if (!entry.name || !entry["created-at"]) return null;
+			return entry as LogEntry;
+		})
 		.filter((entry): entry is LogEntry => entry !== null);
 }

@@ -46,6 +46,16 @@ Here are visual examples of the CSV logs format:
       - Why?
         - Better parsing and understanding of the code.
         - Learn from Markdown code blocks format, so humans can read and understand the code.
+  - `files`: list of files that were modified, created, deleted or must be read (optional).
+    - Example: `src/index.ts,src/constants.ts`
+    - Why?
+      - Better understanding of the code, context of the log.
+    - Format: comma separated list of files.
+  - `tech-stack`: list of technologies that were used (optional).
+    - Example: `elysia,drizzle,sqlite,turso`
+    - Why?
+      - Better understanding of the code, context of the log.
+    - Format: comma separated list of technologies.
 
   - `created-at`: when the log was created. (required).
     - Format: `YYYY-MM-DDTHH:mm:ssZ` (ISO 8601)
@@ -86,6 +96,9 @@ llml stats ./logs/example.csv
 
 # View detailed entry at index
 llml view ./logs/example.csv 0
+
+# View the last log entry
+llml view ./logs/example.csv --last
 
 # Search logs
 llml search ./logs/example.csv "query"
@@ -190,6 +203,9 @@ Screenshots:
 ```bash
 # View detailed entry at index
 bun cli view 0
+
+# View the last log entry
+bun cli view --last
 ```
 
 Screenshots:

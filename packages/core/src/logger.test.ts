@@ -486,6 +486,21 @@ describe("searchLogs", () => {
 
 		expect(result1).toEqual(result2);
 	});
+	test("should search by files (case insensitive)", () => {
+		const entriesWithFiles: LogEntry[] = [
+			...mockEntries,
+			{
+				name: "File related",
+				problem: "Problem with file",
+				files: "src/index.ts,src/utils.ts",
+				"created-at": "2024-01-04T00:00:00.000Z",
+			},
+		];
+		const result = searchLogs(entriesWithFiles, "utils.ts");
+
+		expect(result).toHaveLength(1);
+		expect(result[0]?.name).toBe("File related");
+	});
 });
 
 describe("loadLogs", () => {

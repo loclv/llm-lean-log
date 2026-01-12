@@ -8,6 +8,7 @@ export interface LogEntry {
 	"updated-at"?: string;
 	model?: string;
 	"log-created-modal"?: string;
+	files?: string;
 }
 
 export interface ParsedCode {

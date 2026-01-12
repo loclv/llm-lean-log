@@ -8,5 +8,5 @@
 	"[ts]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
-	"cSpell.words": ["llml", "TOON"]
+	"cSpell.words": ["elysia", "llml", "TOON", "turso"]
 }
