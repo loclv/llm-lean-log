@@ -2,6 +2,10 @@
 
 > 💻 CLI tool for llm-lean-log - Logging for LLMs, but we cut the fat.
 
+`llm-lean-log` is a format for logging that is optimized for LLM token usage, using a simple CSV-based structure.
+
+For more information, see the [main repository](https://github.com/loclv/llm-lean-log).
+
 ## 🚀 Installation
 
 ```bash
@@ -60,11 +64,18 @@ Before pushing to NPM, ensure that the files being packaged are correct. Run thi
 ...
 ```
 
-## 📖 About
+## 📖 Additional information
 
-`llm-lean-log` is a format for logging that is optimized for LLM token usage, using a simple CSV-based structure.
+This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
 
-For more information, see the [main repository](https://github.com/loclv/llm-lean-log).
+### 💻 Use with VS Code base editor
+
+- Install recommended extensions from `.vscode/extensions.json`, which includes:
+  - `DavidAnson.vscode-markdownlint` - Markdown linting
+  - `biomejs.biome` - Code formatting and linting
+  - `oven-sh.bun` - Bun runtime support
+  - `jeff-hykin.better-csv-syntax` - CSV syntax highlighting (with color coding)
+  - `YoavBls.pretty-ts-errors` - Pretty TypeScript errors
 
 ## 📄 License
 
