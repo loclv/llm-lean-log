@@ -26,9 +26,9 @@ const logFile: string = hasLogFile ? secondArg : "./logs/example.csv";
 // Get the index where actual parameters start
 const paramStart = hasLogFile ? 2 : 1;
 
-const helpText = `llm-lean-log CLI
+const helpText = `llml CLI
 
-Usage: bun cli.ts <command> [logfile] [options]
+Usage: llml <command> [logfile] [options]
 
 Commands:
   list, ls              List all log entries
@@ -52,12 +52,12 @@ Commands:
   help                  Show this help message
 
 Examples:
-  bun cli list ./logs/example.csv
-  bun cli stats
-  bun cli view 0
-  bun cli search "memory"
-  bun cli tags error api
-  bun cli add "Fix bug" --tags=bug,fix --problem="Bug description"
+  llml list ./logs/example.csv
+  llml stats
+  llml view 0
+  llml search "memory"
+  llml tags error api
+  llml add "Fix bug" --tags=bug,fix --problem="Bug description"
 `;
 
 async function main() {

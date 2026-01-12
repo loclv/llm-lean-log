@@ -79,22 +79,22 @@ bun add -g llm-lean-log-cli
 
 ```bash
 # List all log entries
-llm-lean-log list ./logs/example.csv
+llml list ./logs/example.csv
 
 # Show statistics
-llm-lean-log stats ./logs/example.csv
+llml stats ./logs/example.csv
 
 # View detailed entry at index
-llm-lean-log view ./logs/example.csv 0
+llml view ./logs/example.csv 0
 
 # Search logs
-llm-lean-log search ./logs/example.csv "query"
+llml search ./logs/example.csv "query"
 
 # Filter by tags
-llm-lean-log tags ./logs/example.csv tag1 tag2
+llml tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
-llm-lean-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+llml add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
 ## Ask AI agent (LLMs) to write a log
@@ -105,9 +105,13 @@ Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-lo
 bun add -g llm-lean-log-cli
 ```
 
-> use `llm-lean-log` CLI tool to save last chat logs / talk above
+Ask LLMs to write a log by prompt:
+
+> use `llml add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"` CLI tool to save last chat logs / talk above
 
 ## Ask AI agent (LLMs) to read a log
+
+Ask LLMs to read a log by prompt:
 
 > read last chat logs from "./logs/example.csv" and tell me what should I do next
 

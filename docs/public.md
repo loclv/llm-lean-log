@@ -18,5 +18,5 @@ Once published, users will be able to install the CLI globally:
 
 ```bash
 bun add -g llm-lean-log-cli
-llm-lean-log --help
+llml --help
 ```

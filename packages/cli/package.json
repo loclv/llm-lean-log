@@ -1,6 +1,6 @@
 {
 	"name": "llm-lean-log-cli",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "CLI tool for llm-lean-log",
 	"repository": {
 		"type": "git",
@@ -15,7 +15,7 @@
 	"module": "src/index.ts",
 	"type": "module",
 	"bin": {
-		"llm-lean-log": "src/index.ts"
+		"llml": "src/index.ts"
 	},
 	"files": [
 		"src",
