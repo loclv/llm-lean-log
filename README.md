@@ -86,7 +86,7 @@ Here are visual examples of the CSV logs format:
       - Readable for humans, machines and LLMs.
   - `model`: model that was used (optional).
     - Example: `gpt-4o-mini`
-  - `log-created-agent`: model that was used to create the log (optional).
+  - `created-by-agent`: model that was used to create the log (optional).
     - Example: `gpt-4o-mini`
 - Row:
   - Each row is a log entry.

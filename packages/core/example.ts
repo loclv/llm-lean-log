@@ -39,7 +39,7 @@ async function main() {
 			files: "src/middleware/auth.ts, src/routes/auth.routes.ts",
 			"tech-stack": "typescript, express, jwt",
 			model: "claude-3.5-sonnet",
-			"log-created-agent": "gpt-4",
+			"created-by-agent": "gpt-4",
 		}),
 	);
 

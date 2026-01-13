@@ -96,7 +96,7 @@ describe("updateLogEntry", () => {
 			tags: "updated,tag",
 			action: "New action",
 			model: "gpt-4",
-			"log-created-agent": "claude-3",
+			"created-by-agent": "claude-3",
 		};
 
 		const result = updateLogEntry(mockEntries, 0, updates);
@@ -104,7 +104,7 @@ describe("updateLogEntry", () => {
 		expect(result[0]?.tags).toBe("updated,tag");
 		expect(result[0]?.action).toBe("New action");
 		expect(result[0]?.model).toBe("gpt-4");
-		expect(result[0]?.["log-created-agent"]).toBe("claude-3");
+		expect(result[0]?.["created-by-agent"]).toBe("claude-3");
 	});
 
 	test("should handle empty updates object", () => {

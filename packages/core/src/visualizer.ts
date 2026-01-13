@@ -314,8 +314,8 @@ export function visualizeEntry(
 		lines.push(`  Model: ${entry.model}`);
 	}
 
-	if (entry["log-created-agent"]) {
-		lines.push(`  Log Created By: ${entry["log-created-agent"]}`);
+	if (entry["created-by-agent"]) {
+		lines.push(`  Log Created By: ${entry["created-by-agent"]}`);
 	}
 
 	return lines.join("\n");

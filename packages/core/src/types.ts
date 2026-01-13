@@ -30,5 +30,5 @@ export interface LogEntry {
 	/** Model that was used (optional). */
 	model?: string;
 	/** Model that was used to create the log (optional). */
-	"log-created-agent"?: string;
+	"created-by-agent"?: string;
 }

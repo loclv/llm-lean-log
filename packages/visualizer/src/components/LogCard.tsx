@@ -207,13 +207,13 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 								<span>{entry.model}</span>
 							</div>
 						)}
-						{entry["log-created-agent"] && (
+						{entry["created-by-agent"] && (
 							<div
 								className="flex items-center gap-1"
 								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
 							>
 								<MessageSquare size={14} />
-								<span>{entry["log-created-agent"]}</span>
+								<span>{entry["created-by-agent"]}</span>
 							</div>
 						)}
 					</div>

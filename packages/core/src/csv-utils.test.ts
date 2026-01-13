@@ -24,7 +24,7 @@ describe("csv-utils", () => {
 		"created-at": "2024-01-01T00:00:00.000Z",
 		"updated-at": "2024-01-01T00:00:00.000Z",
 		model: "gpt-4",
-		"log-created-agent": "true",
+		"created-by-agent": "true",
 	};
 
 	const mockEntry2: LogEntry = {
@@ -49,7 +49,7 @@ describe("csv-utils", () => {
 				"created-at": "2024-01-01",
 			};
 			const row = logEntryToCSVRow(entry);
-			// CSV order: id,name,tags,problem,solution,action,files,tech-stack,causeIds,effectIds,created-at,updated-at,model,log-created-agent
+			// CSV order: id,name,tags,problem,solution,action,files,tech-stack,causeIds,effectIds,created-at,updated-at,model,created-by-agent
 			expect(row).toBe(
 				'test-escape,"Test, ""quoted""",,Test problem,,,,,,,2024-01-01,,,',
 			);
