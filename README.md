@@ -215,7 +215,7 @@ bun i
 🌱 Create example logs and run visualizer:
 
 ```bash
-bun dev
+bun example
 ```
 
 💻 CLI Usage:

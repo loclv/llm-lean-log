@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "bun run --filter llm-lean-log-core example",
+		"example": "bun run --filter llm-lean-log-core example",
 		"cli": "bun run packages/cli/src/index.ts",
 		"web:dev": "bun run --filter llml-vis dev",
 		"fmt": "biome format --write .",

@@ -26,105 +26,131 @@ async function main() {
 	// Add example log entries
 	console.log("📝 Creating example log entries...\n");
 
-	entries = addLogEntry(
-		entries,
-		createLogEntry({
-			name: "API Authentication Error",
-			tags: "error,api,auth",
-			problem:
-				"Users unable to login due to JWT token expiration not being handled correctly",
-			solution:
-				"Added token refresh logic in the auth middleware to automatically renew tokens before expiration",
-			action: "Updated auth.ts middleware and added refresh endpoint",
-			files: "src/middleware/auth.ts, src/routes/auth.routes.ts",
-			"tech-stack": "typescript, express, jwt",
-			model: "claude-3.5-sonnet",
-			"created-by-agent": "gpt-4",
-		}),
-	);
+	// Mock UUIDs for predictable graph relationships
+	const mockIds = {
+		authError: "auth-error-001",
+		dbInvestigation: "db-investigation-002",
+		darkMode: "dark-mode-003",
+		memoryLeak: "memory-leak-004",
+		imageOptimization: "image-optimization-005",
+		typescriptMigration: "typescript-migration-006",
+	};
 
-	entries = addLogEntry(
-		entries,
-		createLogEntry({
-			name: "Database Connection Pool Exhausted",
-			tags: "error,database,performance",
-			problem:
-				"Application crashes during high traffic due to database connection pool being exhausted",
-			solution:
-				"Increased pool size from 10 to 50 and added connection timeout handling",
-			action:
-				"Modified database.config.ts: ts`pool.max = 50, pool.idleTimeoutMillis = 30_000`",
-			files: "src/config/database.config.ts",
-			"tech-stack": "typescript, postgresql, node.js",
-			model: "gpt-4-turbo",
-		}),
-	);
+	// Initial problem
+	const authError = createLogEntry({
+		id: mockIds.authError,
+		name: "API Authentication Error",
+		tags: "error,api,auth",
+		problem:
+			"Users unable to login due to JWT token expiration not being handled correctly",
+		solution:
+			"Added token refresh logic in the auth middleware to automatically renew tokens before expiration",
+		action: "Updated auth.ts middleware and added refresh endpoint",
+		files: "src/middleware/auth.ts, src/routes/auth.routes.ts",
+		"tech-stack": "typescript, express, jwt",
+		model: "claude-3.5-sonnet",
+		"created-by-agent": "gpt-4",
+		effectIds: mockIds.dbInvestigation,
+	});
 
-	entries = addLogEntry(
-		entries,
-		createLogEntry({
-			name: "Implement Dark Mode",
-			tags: "feature,ui,enhancement",
-			problem:
-				"Users requested dark mode for better viewing experience at night",
-			solution:
-				"Implemented theme toggle using CSS variables and localStorage for persistence",
-			action:
-				"Created theme.ts utility and updated global.css with dark mode variables",
-			files:
-				"src/utils/theme.ts, styles/global.css, src/components/ThemeToggle.tsx",
-			"tech-stack": "typescript, react, tailwindcss",
-			model: "claude-3.5-sonnet",
-		}),
-	);
+	entries = addLogEntry(entries, authError);
 
-	entries = addLogEntry(
-		entries,
-		createLogEntry({
-			name: "Memory Leak in WebSocket Handler",
-			tags: "bug,websocket,memory",
-			problem:
-				"Server memory usage grows continuously when WebSocket connections are active",
-			solution:
-				"Fixed event listener cleanup in disconnect handler to prevent memory leaks",
-			action: "Added `removeAllListeners()` call in `websocket.disconnect()`",
-			files: "src/handlers/websocket.handler.ts",
-			"tech-stack": "typescript, socket.io, node.js",
-			model: "gpt-4",
-		}),
-	);
+	// Investigation caused by auth error
+	const dbInvestigation = createLogEntry({
+		id: mockIds.dbInvestigation,
+		name: "Database Connection Pool Exhausted",
+		tags: "error,database,performance",
+		problem:
+			"Application crashes during high traffic due to database connection pool being exhausted",
+		solution:
+			"Increased pool size from 10 to 50 and added connection timeout handling",
+		action:
+			"Modified database.config.ts: ts`pool.max = 50, pool.idleTimeoutMillis = 30_000`",
+		files: "src/config/database.config.ts",
+		"tech-stack": "typescript, postgresql, node.js",
+		model: "gpt-4-turbo",
+		causeIds: mockIds.authError,
+		effectIds: `${mockIds.memoryLeak},${mockIds.authError}`,
+	});
 
-	entries = addLogEntry(
-		entries,
-		createLogEntry({
-			name: "Optimize Image Loading",
-			tags: "performance,optimization,images",
-			problem: "Page load time is slow due to large unoptimized images",
-			solution:
-				"Implemented lazy loading and WebP format with fallback to JPEG",
-			action:
-				"Added next/image component and configured image optimization in next.config.js",
-			files: "next.config.js, src/components/ImageGallery.tsx",
-			"tech-stack": "typescript, next.js, react",
-			model: "claude-3.5-sonnet",
-		}),
-	);
+	entries = addLogEntry(entries, dbInvestigation);
 
-	entries = addLogEntry(
-		entries,
-		createLogEntry({
-			name: "TypeScript Migration Complete",
-			tags: "refactor,typescript,milestone",
-			problem: "Codebase was in JavaScript making it hard to catch type errors",
-			solution:
-				"Migrated entire codebase to TypeScript with strict mode enabled",
-			action:
-				"Converted all .js files to .ts, added type definitions, configured tsconfig.json",
-			files: "tsconfig.json, package.json, src/**/*",
-			"tech-stack": "typescript, node.js",
-			model: "gpt-4-turbo",
-		}),
-	);
+	// Feature request (independent cause)
+	const darkMode = createLogEntry({
+		id: mockIds.darkMode,
+		name: "Implement Dark Mode",
+		tags: "feature,ui,enhancement",
+		problem: "Users requested dark mode for better viewing experience at night",
+		solution:
+			"Implemented theme toggle using CSS variables and localStorage for persistence",
+		action:
+			"Created theme.ts utility and updated global.css with dark mode variables",
+		files:
+			"src/utils/theme.ts, styles/global.css, src/components/ThemeToggle.tsx",
+		"tech-stack": "typescript, react, tailwindcss",
+		model: "claude-3.5-sonnet",
+		effectIds: mockIds.imageOptimization,
+	});
+
+	entries = addLogEntry(entries, darkMode);
+
+	// Bug discovered during database investigation
+	const memoryLeak = createLogEntry({
+		id: mockIds.memoryLeak,
+		name: "Memory Leak in WebSocket Handler",
+		tags: "bug,websocket,memory",
+		problem:
+			"Server memory usage grows continuously when WebSocket connections are active",
+		solution:
+			"Fixed event listener cleanup in disconnect handler to prevent memory leaks",
+		action: "Added `removeAllListeners()` call in `websocket.disconnect()`",
+		files: "src/handlers/websocket.handler.ts",
+		"tech-stack": "typescript, socket.io, node.js",
+		model: "gpt-4",
+		causeIds: mockIds.dbInvestigation,
+		effectIds: `${mockIds.typescriptMigration},${mockIds.dbInvestigation}`,
+	});
+
+	entries = addLogEntry(entries, memoryLeak);
+
+	// Performance improvement (caused by dark mode implementation)
+	const imageOptimization = createLogEntry({
+		id: mockIds.imageOptimization,
+		name: "Optimize Image Loading",
+		tags: "performance,optimization,images",
+		problem: "Page load time is slow due to large unoptimized images",
+		solution: "Implemented lazy loading and WebP format with fallback to JPEG",
+		action:
+			"Added next/image component and configured image optimization in next.config.js",
+		files: "next.config.js, src/components/ImageGallery.tsx",
+		"tech-stack": "typescript, next.js, react",
+		model: "claude-3.5-sonnet",
+		causeIds: mockIds.darkMode,
+		effectIds: `${mockIds.typescriptMigration},${mockIds.darkMode}`,
+	});
+
+	entries = addLogEntry(entries, imageOptimization);
+
+	// Final milestone (caused by multiple fixes)
+	const typescriptMigration = createLogEntry({
+		id: mockIds.typescriptMigration,
+		name: "TypeScript Migration Complete",
+		tags: "refactor,typescript,milestone",
+		problem: "Codebase was in JavaScript making it hard to catch type errors",
+		solution: "Migrated entire codebase to TypeScript with strict mode enabled",
+		action:
+			"Converted all .js files to .ts, added type definitions, configured tsconfig.json",
+		files: "tsconfig.json, package.json, src/**/*",
+		"tech-stack": "typescript, node.js",
+		model: "gpt-4-turbo",
+		causeIds: `${mockIds.authError},${mockIds.memoryLeak},${mockIds.imageOptimization}`,
+		effectIds: "", // Final milestone, no effects
+	});
+
+	entries = addLogEntry(entries, typescriptMigration);
+
+	// Effect relationships are now set during createLogEntry calls above
+	// This ensures effectIds are properly saved to the CSV file
 
 	console.log(`✅ Created ${entries.length} log entries\n`);
 
@@ -167,6 +193,18 @@ async function main() {
 			"Added token refresh logic with exponential backoff retry mechanism",
 	});
 	console.log("✅ Entry updated\n");
+
+	// Show graph relationships
+	console.log("🔗 Graph Relationships:");
+	console.log(`  Auth Error → Database Investigation (cause: ${authError.id})`);
+	console.log(
+		`  Database Investigation → Memory Leak (cause: ${dbInvestigation.id})`,
+	);
+	console.log(`  Dark Mode → Image Optimization (cause: ${darkMode.id})`);
+	console.log(
+		`  Multiple causes → TypeScript Migration (${typescriptMigration.id})`,
+	);
+	console.log("\n");
 
 	// Save to file
 	await saveLogs(LOG_FILE, entries);
