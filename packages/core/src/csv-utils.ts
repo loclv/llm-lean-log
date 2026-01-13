@@ -17,6 +17,7 @@ export const CSV_HEADERS = [
 	"tech-stack",
 	"causeIds",
 	"effectIds",
+	"last-commit-short-sha",
 	"created-at",
 	"updated-at",
 	"model",

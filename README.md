@@ -76,6 +76,12 @@ Here are visual examples of the CSV logs format:
       - Better understanding of the log.
     - Format: comma separated list of other log IDs.
 
+  - `last-commit-short-sha`: last git commit short SHA of the log (optional).
+    - Example: `a1b2c3d`
+    - Why not updated git commit?
+      - git commit is usually updated before when LLMs write logs.
+    - Format: short SHA of the last commit.
+
   - `created-at`: when the log was created. (required).
     - Format: `YYYY-MM-DDTHH:mm:ssZ` (ISO 8601)
       - Example: `2025-10-15T12:34:56Z`

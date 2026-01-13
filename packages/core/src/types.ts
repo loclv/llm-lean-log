@@ -23,6 +23,8 @@ export interface LogEntry {
 	causeIds?: string;
 	/** Effect log ID of the log (optional). Format: comma separated list of other log IDs */
 	effectIds?: string;
+	/** Last git commit short SHA of the log (optional). Example: a1b2c3d */
+	"last-commit-short-sha"?: string;
 	/** When the log was created. (required) */
 	"created-at": string;
 	/** When the log was updated (optional). */

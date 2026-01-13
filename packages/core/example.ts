@@ -51,6 +51,7 @@ async function main() {
 		model: "claude-3.5-sonnet",
 		"created-by-agent": "gpt-4",
 		effectIds: mockIds.dbInvestigation,
+		"last-commit-short-sha": "a1b2c3d",
 	});
 
 	entries = addLogEntry(entries, authError);
@@ -71,6 +72,7 @@ async function main() {
 		model: "gpt-4-turbo",
 		causeIds: mockIds.authError,
 		effectIds: `${mockIds.memoryLeak},${mockIds.authError}`,
+		"last-commit-short-sha": "b2c3d4e",
 	});
 
 	entries = addLogEntry(entries, dbInvestigation);
@@ -109,6 +111,7 @@ async function main() {
 		model: "gpt-4",
 		causeIds: mockIds.dbInvestigation,
 		effectIds: `${mockIds.typescriptMigration},${mockIds.dbInvestigation}`,
+		"last-commit-short-sha": "c3d4e5f",
 	});
 
 	entries = addLogEntry(entries, memoryLeak);
