@@ -171,7 +171,7 @@ l-log search ./logs/example.csv "query" --human
 # Filter by tags
 l-log tags ./logs/example.csv tag1 tag2 --human
 
-# Add a new log entry
+# Add a new log entry, if not specify log file, it will use `./logs/example.csv` log file
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 

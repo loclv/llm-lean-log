@@ -61,9 +61,9 @@ l-log tags ./logs/example.csv tag1 tag2 --human
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
-## Ask AI agent (LLMs) to write a log
+## 🤖 Ask AI agent (LLMs) to write a log
 
-> use `l-log` to save last chat logs / talk above
+> use l-log CLI to save chat log above
 
 ## Ask AI agent (LLMs) to read a log
 

@@ -15,18 +15,6 @@ import {
 } from "llm-lean-log-core";
 import pkg from "../package.json";
 
-const args = process.argv.slice(2);
-const command = args[0];
-
-// Check if second argument is a file (ends with .csv) or a parameter
-const isLogFile = (arg: string) => arg.endsWith(".csv");
-const secondArg = args[1];
-const hasLogFile = secondArg && isLogFile(secondArg);
-const logFile: string = hasLogFile ? secondArg : "./logs/example.csv";
-
-// Get the index where actual parameters start
-const paramStart = hasLogFile ? 2 : 1;
-
 const helpText = `l-log CLI
 
 Usage: l-log <command> [logfile] [options]
@@ -57,21 +45,44 @@ Commands:
     --files=<files>     Comma-separated files
     --tech-stack=<tech> Comma-separated tech stack
     --model=<name>      Model name
+    --id=<id>           Log ID (optional)
+    --causeIds=<ids>    Comma-separated cause log IDs
+    --effectIds=<ids>   Comma-separated effect log IDs
+    --last-commit-short-sha=<sha> Last git commit short SHA
+    --created-at=<time> Creation time (ISO 8601)
+    --updated-at=<time> Update time (ISO 8601)
+    --created-by-agent=<name> Agent model name
   
   help, -h, --help      Show this help message
   
   -v, -V, --version     Show version number
 
-Examples:
-  l-log list ./logs/example.csv --human
-  l-log stats --human
-  l-log view 0 --human
-  l-log search "memory" --human
-  l-log tags error api --human
-  l-log add "Fix bug" --tags=bug,fix --problem="Bug description"
+Examples for LLMs:
+  l-log list ./logs/example.csv
+  l-log stats
+  l-log view 0
+  l-log view --last
+  l-log search "memory"
+  l-log tags error api
+  l-log add ./logs/chat1.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,file2.ts" --tech-stack="ts,react" --model="gpt-4o"
 `;
 
-async function main() {
+/**
+ * Main function for the CLI
+ */
+export async function main() {
+	const args = process.argv.slice(2);
+	const command = args[0];
+
+	// Check if second argument is a file (ends with .csv) or a parameter
+	const isLogFile = (arg: string) => arg?.endsWith(".csv");
+	const secondArg = args[1];
+	const hasLogFile = secondArg && isLogFile(secondArg);
+	const logFile: string = hasLogFile ? secondArg : "./logs/example.csv";
+
+	// Get the index where actual parameters start
+	const paramStart = hasLogFile ? 2 : 1;
+
 	let entries = await loadLogs(logFile);
 	const isHuman = args.includes("--human");
 	const llm = !isHuman;
@@ -173,6 +184,13 @@ async function main() {
 				files: findFlag("--files"),
 				"tech-stack": findFlag("--tech-stack"),
 				model: findFlag("--model"),
+				id: findFlag("--id"),
+				causeIds: findFlag("--causeIds"),
+				effectIds: findFlag("--effectIds"),
+				"last-commit-short-sha": findFlag("--last-commit-short-sha"),
+				"created-at": findFlag("--created-at"),
+				"updated-at": findFlag("--updated-at"),
+				"created-by-agent": findFlag("--created-by-agent"),
 			});
 
 			await saveLogs(logFile, entries);
@@ -202,7 +220,9 @@ async function main() {
 	}
 }
 
-main().catch((error) => {
-	console.error("Error:", error.message);
-	process.exit(1);
-});
+if (import.meta.main) {
+	main().catch((error) => {
+		console.error("Error:", error.message);
+		process.exit(1);
+	});
+}
