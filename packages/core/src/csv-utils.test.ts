@@ -119,6 +119,13 @@ describe("csv-utils", () => {
 			expect(entry?.name).toBe('Name with "quotes"');
 		});
 
+		it("should parse multiple escaped quotes and maintain them correctly", () => {
+			const entry = csvRowToLogEntry(
+				'test-id4,"""quote1"" and ""quote2""",,Problem,,,,,,,,2024-01-01,,,',
+			);
+			expect(entry?.name).toBe('"quote1" and "quote2"');
+		});
+
 		it("should return null for empty or invalid rows", () => {
 			expect(csvRowToLogEntry("")).toBeNull();
 			expect(csvRowToLogEntry("   ")).toBeNull();
@@ -251,6 +258,56 @@ describe("csv-utils", () => {
 			const entries = csvToLogEntries(csv);
 			expect(entries).toHaveLength(1);
 			expect(entries[0].id).toBe("id1");
+		});
+
+		it("should throw error if required headers are missing in last row (no newline)", () => {
+			const csv = "id,name,problem";
+			expect(() => csvToLogEntries(csv)).toThrow(
+				"CSV is missing required headers: created-at",
+			);
+		});
+
+		it("should handle weird unclosed quotes cases in last row (coverage for line 202-208 and 49)", () => {
+			// This string ends without a newline
+			// We use a non-required field to test the quote stripping bug in unescapeCSVField
+			const csv =
+				'id,name,problem,created-at,tags\ntest-1,Entry 1,Prob 1,2024-01-01,"""quoted"""';
+			const entries = csvToLogEntries(csv);
+			expect(entries).toHaveLength(1);
+			// The original string was "\"quoted\"", escape produced "\"\"\"quoted\"\"\""
+			// Parser correctly gives "\"quoted\""
+			expect(entries[0].tags).toBe('"quoted"');
+		});
+
+		it("should handle \\r as line separator", () => {
+			const csv = "id,name,problem,created-at\rid1,Name1,Prob1,2024-01-01";
+			const entries = csvToLogEntries(csv);
+			expect(entries).toHaveLength(1);
+			expect(entries[0].id).toBe("id1");
+		});
+
+		it("should handle rows with fewer fields than headers", () => {
+			const csv = "id,name,problem,created-at\nid1,Name1";
+			const entries = csvToLogEntries(csv);
+			expect(entries).toHaveLength(0); // Should be filtered out due to missing problem and created-at
+		});
+
+		it("should handle rows with more fields than headers", () => {
+			const csv =
+				"id,name,problem,created-at\nid1,Name1,Prob1,2024-01-01,Extra1,Extra2";
+			const entries = csvToLogEntries(csv);
+			expect(entries).toHaveLength(1);
+			expect(entries[0].id).toBe("id1");
+		});
+
+		it("should skip last row if missing required fields", () => {
+			const csv = "id,name,problem,created-at\nid1,Name1,Prob1"; // Missing created-at
+			const entries = csvToLogEntries(csv);
+			expect(entries).toHaveLength(0);
+		});
+
+		it("should handle CSV with only a newline", () => {
+			expect(csvToLogEntries("\n")).toEqual([]);
 		});
 	});
 

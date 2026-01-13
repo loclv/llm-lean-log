@@ -42,14 +42,7 @@ function escapeCSVField(value: string | undefined): string {
  * Unescape CSV field value
  */
 function unescapeCSVField(value: string): string {
-	if (!value) return "";
-
-	// Remove surrounding quotes if present
-	if (value.startsWith('"') && value.endsWith('"')) {
-		return value.slice(1, -1).replace(/""/g, '"');
-	}
-
-	return value;
+	return value || "";
 }
 
 /**
