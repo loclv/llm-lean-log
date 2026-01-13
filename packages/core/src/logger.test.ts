@@ -18,11 +18,13 @@ describe("updateLogEntry", () => {
 	// Test data setup
 	const mockEntries: LogEntry[] = [
 		{
+			id: "test-entry-1",
 			name: "Test Entry 1",
 			problem: "Problem 1",
 			"created-at": "2024-01-01T00:00:00.000Z",
 		},
 		{
+			id: "test-entry-2",
 			name: "Test Entry 2",
 			problem: "Problem 2",
 			solution: "Solution 2",
@@ -30,6 +32,7 @@ describe("updateLogEntry", () => {
 			"created-at": "2024-01-02T00:00:00.000Z",
 		},
 		{
+			id: "test-entry-3",
 			name: "Test Entry 3",
 			problem: "Problem 3",
 			"created-at": "2024-01-03T00:00:00.000Z",
@@ -258,6 +261,7 @@ describe("createLogEntry", () => {
 describe("addLogEntry", () => {
 	const mockEntries: LogEntry[] = [
 		{
+			id: "existing-entry-id",
 			name: "Existing Entry",
 			problem: "Existing Problem",
 			"created-at": "2024-01-01T00:00:00.000Z",
@@ -320,24 +324,28 @@ describe("addLogEntry", () => {
 describe("filterByTags", () => {
 	const mockEntries: LogEntry[] = [
 		{
+			id: "filter-entry-1",
 			name: "Entry 1",
 			problem: "Problem 1",
 			tags: "error,api",
 			"created-at": "2024-01-01T00:00:00.000Z",
 		},
 		{
+			id: "filter-entry-2",
 			name: "Entry 2",
 			problem: "Problem 2",
 			tags: "feature,ui",
 			"created-at": "2024-01-02T00:00:00.000Z",
 		},
 		{
+			id: "filter-entry-3",
 			name: "Entry 3",
 			problem: "Problem 3",
 			tags: "bug,api",
 			"created-at": "2024-01-03T00:00:00.000Z",
 		},
 		{
+			id: "filter-entry-4",
 			name: "Entry 4",
 			problem: "Problem 4",
 			"created-at": "2024-01-04T00:00:00.000Z", // No tags
@@ -383,6 +391,7 @@ describe("filterByTags", () => {
 		const entriesWithEmptyTags = [
 			...mockEntries,
 			{
+				id: "filter-entry-5",
 				name: "Entry 5",
 				problem: "Problem 5",
 				tags: "",
@@ -396,8 +405,9 @@ describe("filterByTags", () => {
 	});
 
 	test("should handle tags with extra spaces", () => {
-		const entriesWithSpaces = [
+		const entriesWithSpaces: LogEntry[] = [
 			{
+				id: "spaces-entry-1",
 				name: "Entry 1",
 				problem: "Problem 1",
 				tags: " error , api ",
@@ -415,17 +425,20 @@ describe("filterByTags", () => {
 describe("searchLogs", () => {
 	const mockEntries: LogEntry[] = [
 		{
+			id: "search-entry-1",
 			name: "Authentication Error",
 			problem: "User cannot login to system",
 			solution: "Reset user password",
 			"created-at": "2024-01-01T00:00:00.000Z",
 		},
 		{
+			id: "search-entry-2",
 			name: "Database Connection",
 			problem: "Cannot connect to database",
 			"created-at": "2024-01-02T00:00:00.000Z",
 		},
 		{
+			id: "search-entry-3",
 			name: "API Response",
 			problem: "API returns null data",
 			solution: "Check API endpoint configuration",
@@ -490,6 +503,7 @@ describe("searchLogs", () => {
 		const entriesWithFiles: LogEntry[] = [
 			...mockEntries,
 			{
+				id: "test-file-related-id",
 				name: "File related",
 				problem: "Problem with file",
 				files: "src/index.ts,src/utils.ts",
@@ -521,6 +535,7 @@ describe("loadLogs", () => {
 describe("saveLogs", () => {
 	const mockEntries: LogEntry[] = [
 		{
+			id: "save-entry-1",
 			name: "Test Entry",
 			problem: "Test Problem",
 			"created-at": "2024-01-01T00:00:00.000Z",

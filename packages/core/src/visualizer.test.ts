@@ -4,6 +4,7 @@ import { visualizeEntry } from "./visualizer";
 
 describe("Visualizer Highlight", () => {
 	const mockEntry: LogEntry = {
+		id: "1",
 		name: "Test Entry",
 		tags: "test",
 		problem: "```typescript\nconst x: number = 1;\n```",
