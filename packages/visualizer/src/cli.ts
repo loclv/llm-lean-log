@@ -15,7 +15,7 @@ if (csvPath) {
 }
 
 /**
- * Serves the llml-vis.
+ * Serves the l-log-vis.
  */
 const server = Bun.serve({
 	port: PORT,
@@ -51,7 +51,7 @@ const server = Bun.serve({
 	},
 });
 
-console.log(`\n🌈 llml-vis running at: http://localhost:${server.port}`);
+console.log(`\n🌈 l-log-vis running at: http://localhost:${server.port}`);
 if (csvPath) {
 	console.log(`📊 Visualizing: ${csvPath}`);
 }

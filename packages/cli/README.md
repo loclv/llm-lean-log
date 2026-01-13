@@ -16,27 +16,27 @@ bun add -g llm-lean-log-cli
 
 ```bash
 # List all log entries
-llml list ./logs/example.csv
+l-log list ./logs/example.csv
 
 # Show statistics
-llml stats ./logs/example.csv
+l-log stats ./logs/example.csv
 
 # View detailed entry at index
-llml view ./logs/example.csv 0
+l-log view ./logs/example.csv 0
 
 # Search logs
-llml search ./logs/example.csv "query"
+l-log search ./logs/example.csv "query"
 
 # Filter by tags
-llml tags ./logs/example.csv tag1 tag2
+l-log tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
-llml add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
 ## Ask AI agent (LLMs) to write a log
 
-> use `llml` to save last chat logs / talk above
+> use `l-log` to save last chat logs / talk above
 
 ## Ask AI agent (LLMs) to read a log
 

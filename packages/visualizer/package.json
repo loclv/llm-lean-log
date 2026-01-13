@@ -1,5 +1,5 @@
 {
-	"name": "llml-vis",
+	"name": "l-log-vis",
 	"version": "0.1.0",
 	"description": "A beautiful visualizer for LLM interaction logs",
 	"repository": {
@@ -13,7 +13,7 @@
 	"homepage": "https://github.com/loclv/llm-lean-log/tree/main/packages/visualizer#readme",
 	"type": "module",
 	"bin": {
-		"llml-vis": "./src/cli.ts"
+		"l-log-vis": "./src/cli.ts"
 	},
 	"files": [
 		"dist",

@@ -15,7 +15,7 @@
 	"module": "src/index.ts",
 	"type": "module",
 	"bin": {
-		"llml": "src/index.ts"
+		"l-log": "src/index.ts"
 	},
 	"files": [
 		"src",

@@ -112,29 +112,29 @@ bun add -g llm-lean-log-cli
 
 ## 💻 Usage
 
-`llm-lean-log-cli`'s bin name is `llml`.
+`llm-lean-log-cli`'s bin name is `l-log`.
 
 ```bash
 # List all log entries
-llml list ./logs/example.csv
+l-log list ./logs/example.csv
 
 # Show statistics
-llml stats ./logs/example.csv
+l-log stats ./logs/example.csv
 
 # View detailed entry at index
-llml view ./logs/example.csv 0
+l-log view ./logs/example.csv 0
 
 # View the last log entry
-llml view ./logs/example.csv --last
+l-log view ./logs/example.csv --last
 
 # Search logs
-llml search ./logs/example.csv "query"
+l-log search ./logs/example.csv "query"
 
 # Filter by tags
-llml tags ./logs/example.csv tag1 tag2
+l-log tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
-llml add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
 ## Ask AI agent (LLMs) to write a log
@@ -147,17 +147,17 @@ bun add -g llm-lean-log-cli
 
 Ask LLMs to write a log by prompt:
 
-> use `llml add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"` CLI tool to save last chat logs / talk above
+> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"` CLI tool to save last chat logs / talk above
 
 Or simpler for user but less efficient for LLMs:
 
-> use llml CLI to save chat log above
+> use l-log CLI to save chat log above
 
 ## Ask AI agent (LLMs) to read a log
 
 Ask LLMs to read last log only by prompt (efficient for LLMs):
 
-> run `llml view ./logs/example.csv --last` CLI and read output
+> run `l-log view ./logs/example.csv --last` CLI and read output
 
 Ask LLMs to read all logs by prompt (less efficient for LLMs):
 
@@ -190,18 +190,18 @@ This is a efficient way to read logs for LLMs. Save time, tokens and energy. Bec
 
 ## Visualizer for humans
 
-Install `llml-vis` (llm-lean-log-visualizer` package) globally:
+Install `l-log-vis` (llm-lean-log-visualizer` package) globally:
 
 ```bash
-bun add -g llml-vis
+bun add -g l-log-vis
 ```
 
 Run visualizer:
 
 ```bash
-llml-vis ./logs/example.csv
+l-log-vis ./logs/example.csv
 # or
-llml-vis
+l-log-vis
 ```
 
 ## 🛠️ Development

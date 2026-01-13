@@ -5,7 +5,7 @@
 	"scripts": {
 		"example": "bun run --filter llm-lean-log-core example",
 		"cli": "bun run packages/cli/src/index.ts",
-		"web:dev": "bun run --filter llml-vis dev",
+		"web:dev": "bun run --filter l-log-vis dev",
 		"fmt": "biome format --write .",
 		"lint": "biome lint",
 		"test": "bun test",

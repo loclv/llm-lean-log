@@ -27,9 +27,9 @@ const logFile: string = hasLogFile ? secondArg : "./logs/example.csv";
 // Get the index where actual parameters start
 const paramStart = hasLogFile ? 2 : 1;
 
-const helpText = `llml CLI
+const helpText = `l-log CLI
 
-Usage: llml <command> [logfile] [options]
+Usage: l-log <command> [logfile] [options]
 
 Commands:
   list, ls              List all log entries
@@ -58,12 +58,12 @@ Commands:
   -v, -V, --version     Show version number
 
 Examples:
-  llml list ./logs/example.csv
-  llml stats
-  llml view 0
-  llml search "memory"
-  llml tags error api
-  llml add "Fix bug" --tags=bug,fix --problem="Bug description"
+  l-log list ./logs/example.csv
+  l-log stats
+  l-log view 0
+  l-log search "memory"
+  l-log tags error api
+  l-log add "Fix bug" --tags=bug,fix --problem="Bug description"
 `;
 
 async function main() {
