@@ -1,5 +1,9 @@
 # ☘️ llm-lean-log
 
+Starting from my day-to-day coding needs, I wanted a tool to log chat sessions with AI agents so I could use them as personal reference material or as project documentation. While browsing developer groups, I also noticed a growing demand for syncing chat logs across multiple machines and keeping long-term history.
+
+That’s how `llm-lean-log-cli` was born: a tool for reading and writing chat history optimized for minimal token usage — which means fewer tokens, and therefore lower cost.
+
 > 📝 Logging for LLMs, but we cut the fat.
 
 `llm-lean-log` is a format for logging that is optimized for LLMs token usage, cause and effect relationships based on CSV Data.

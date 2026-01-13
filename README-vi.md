@@ -1,8 +1,44 @@
 # ☘️ llm-lean-log
 
+Xuất phát từ nhu cầu hàng ngày coding, mình muốn có 1 tool để ghi Chat log với AI Agent để làm tài liệu tra cứu cho bản thân hoặc docs của dự án. Mình lướt thấy trong các group cũng có nhu cầu sync chat log nhiều máy, lưu lịch sử...
+
+Từ đó, `llm-lean-log-cli` là tool đọc, ghi lịch sử chat tối ưu cho lượng token cần sử dụng -> tiết kiệm token -> tiết kiệm tiền.
+
 > 📝 Ghi log cho LLM, nhưng lược bỏ phần dư thừa.
 
 `llm-lean-log` là một định dạng ghi log được tối ưu hóa cho mức tiêu thụ token của LLM (Mô hình ngôn ngữ lớn), thể hiện các mối quan hệ nguyên nhân và kết quả dựa trên dữ liệu CSV.
+
+## 🍓 Yêu cầu AI agent (LLM) viết log
+
+Trước khi bạn yêu cầu AI agent (LLM) viết log, hãy đảm bảo đã cài đặt công cụ CLI `llm-lean-log-cli` trên toàn hệ thống.
+
+```bash
+bun add -g llm-lean-log-cli
+```
+
+Yêu cầu LLM viết log bằng lệnh:
+
+> sử dụng công cụ CLI `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề"` để lưu log cuộc hội thoại cuối cùng / cuộc nói chuyện ở trên
+
+Hoặc đơn giản hơn cho người dùng nhưng ít hiệu quả hơn cho LLM:
+
+> sử dụng l-log CLI để lưu log hội thoại trên
+
+Hoặc:
+
+> sử dụng l-log để lưu
+
+## 🍓 Yêu cầu AI agent (LLM) đọc log
+
+Yêu cầu LLM chỉ đọc log cuối cùng bằng lệnh (hiệu quả cho LLM):
+
+> chạy CLI `l-log view ./logs/example.csv --last` và đọc kết quả
+
+Yêu cầu LLM đọc tất cả log bằng lệnh (ít hiệu quả hơn cho LLM):
+
+> đọc log hội thoại cuối cùng từ "./logs/example.csv" và cho tôi biết tôi nên làm gì tiếp theo
+
+Đây là một cách hiệu quả để LLM đọc log. Tiết kiệm thời gian, token và năng lượng. Bởi vì LLM không cần phải đọc các tệp CSV dài trước khi có thể viết một log vào cuối phiên làm việc.
 
 ## ❌ Các vấn đề
 
@@ -174,61 +210,6 @@ l-log tags ./logs/example.csv tag1 tag2 --human
 # Thêm một mục log mới
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề"
 ```
-
-## 🍓 Yêu cầu AI agent (LLM) viết log
-
-Trước khi bạn yêu cầu AI agent (LLM) viết log, hãy đảm bảo đã cài đặt công cụ CLI `llm-lean-log-cli` trên toàn hệ thống.
-
-```bash
-bun add -g llm-lean-log-cli
-```
-
-Yêu cầu LLM viết log bằng lệnh:
-
-> sử dụng công cụ CLI `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề"` để lưu log cuộc hội thoại cuối cùng / cuộc nói chuyện ở trên
-
-Hoặc đơn giản hơn cho người dùng nhưng ít hiệu quả hơn cho LLM:
-
-> sử dụng l-log CLI để lưu log hội thoại trên
-
-Hoặc:
-
-> sử dụng l-log để lưu
-
-## 🍓 Yêu cầu AI agent (LLM) đọc log
-
-Yêu cầu LLM chỉ đọc log cuối cùng bằng lệnh (hiệu quả cho LLM):
-
-> chạy CLI `l-log view ./logs/example.csv --last` và đọc kết quả
-
-Yêu cầu LLM đọc tất cả log bằng lệnh (ít hiệu quả hơn cho LLM):
-
-> đọc log hội thoại cuối cùng từ "./logs/example.csv" và cho tôi biết tôi nên làm gì tiếp theo
-
-Ví dụ phản hồi của LLM:
-
-```text
-Dựa trên mục cuối cùng trong ./logs/example.csv và trạng thái hiện tại của kho lưu trữ của bạn, đây là những gì bạn nên làm tiếp theo:
-
-### Trạng thái hiện tại
-
-Nhiệm vụ cuối cùng đã hoàn thành là "Công khai các gói llm-lean-log". Việc này bao gồm:
-
-- Cập nhật package.json cho cả llm-lean-log-core và llm-lean-log-cli với thông tin kho lưu trữ, các tệp và publishConfig.
-- Thêm các tệp LICENSE và README.md.
-- Cấu hình CLI dưới dạng tệp thực thi.
-- Tạo tài liệu hướng dẫn tại docs/public.md.
-
-### Các bước tiếp theo được khuyến nghị
-
-1. Thực hiện chạy thử (Dry Run)
-Trước khi đẩy lên NPM, hãy đảm bảo rằng các tệp đang được đóng gói là chính xác. Chạy lệnh này từ thư mục gốc:
-
-vân vân...
-
-```
-
-Đây là một cách hiệu quả để LLM đọc log. Tiết kiệm thời gian, token và năng lượng. Bởi vì LLM không cần phải đọc các tệp CSV dài trước khi có thể viết một log vào cuối phiên làm việc.
 
 ## 🐳 Trình trực quan hóa cho con người
 
