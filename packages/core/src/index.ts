@@ -11,6 +11,33 @@ export {
 	logEntryToCSVRow,
 } from "./csv-utils";
 export {
+	buildGraph,
+	findShortestPath,
+	formatIds,
+	generateUUID,
+	getAncestors,
+	getCausalChain,
+	getDescendants,
+	getGraphStatistics,
+	getStronglyConnectedComponents,
+	hasCycles,
+	parseIds,
+	reasoningSearch,
+} from "./graph-utils";
+export {
+	buildGraphIndex,
+	buildIndex,
+	buildSearchIndex,
+	getIndexStatistics,
+	indexedFilterByTags,
+	indexedGetAncestors,
+	indexedGetCausalChain,
+	indexedGetDescendants,
+	indexedSearch,
+	updateIndex,
+} from "./indexer";
+export type { GraphIndex, LogIndex, SearchIndex } from "./indexer";
+export {
 	addLogEntry,
 	createLogEntry,
 	filterByTags,

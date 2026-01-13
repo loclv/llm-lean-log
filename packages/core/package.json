@@ -1,6 +1,13 @@
 {
 	"name": "llm-lean-log-core",
 	"version": "0.1.5",
+	"scripts": {
+		"build": "bun build src/index.ts --outdir dist --target node --splitting && tsc --emitDeclarationOnly",
+		"prepublishOnly": "bun run build",
+		"test": "bun test",
+		"example": "bun run example.ts",
+		"type": "tsc --noEmit"
+	},
 	"description": "Core library for llm-lean-log",
 	"repository": {
 		"type": "git",
@@ -22,13 +29,6 @@
 	],
 	"publishConfig": {
 		"access": "public"
-	},
-	"scripts": {
-		"build": "bun build src/index.ts --outdir dist --target node --splitting && tsc --emitDeclarationOnly",
-		"prepublishOnly": "bun run build",
-		"test": "bun test",
-		"example": "bun run example.ts",
-		"type": "tsc --noEmit"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"

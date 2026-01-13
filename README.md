@@ -2,7 +2,7 @@
 
 > 📝 Logging for LLMs, but we cut the fat.
 
-`llm-lean-log` is a format for logging that is optimized for LLMs token usage.
+`llm-lean-log` is a format for logging that is optimized for LLMs token usage, cause and effect relationships based on CSV Data.
 
 ## 📊 Format Examples
 
@@ -26,14 +26,17 @@ Here are visual examples of the CSV logs format:
   - 🌳 We need a efficient way to save logs for LLMs.
 - 🐥 When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
   - 🌳 We need a efficient way to read logs for humans.
-- 🌳 A local first, full control data storage for logs, not dependent on external services like Cursor, Windsurf, TUI client, etc.
+- 🌳 A local first, full control data storage for logs, documents of project, not dependent on external services like Cursor, Windsurf, TUI client, etc.
 - 🐥 Very long, long and long conversation history, but LLMs can summarize it in a few words and save important information only.
   - 🌳 Do not save all conversation history, only save important information.
+- 🌳 We need a reasoning-based, human-like retrieval over long documents (like <https://github.com/VectifyAI/PageIndex>).
+  - Data can be Directed Acyclic Graph (<https://en.wikipedia.org/wiki/Directed_acyclic_graph>) or Directed cyclic Graph (<https://en.wikipedia.org/wiki/Directed_graph>). Cause and effect is link between nodes - chats.
 
 ## ✅ Solution
 
 - 🪴 Create a simple, single, flat, CSV data format file for logs.
 - 🌟 Headers are logger important fields:
+  - `id`: log ID (required), UUID for unique identifier, used for Directed Graph, cause and effect.
   - `name`: main content of the log (short). (required)
   - `tags`: tags to categorize the log, comma separated. Example: `error,api,auth`. (optional)
   - `problem`: description of the problem, context of the log. (required)
@@ -60,6 +63,18 @@ Here are visual examples of the CSV logs format:
     - Why?
       - Better understanding of the code, context of the log.
     - Format: comma separated list of technologies.
+
+  - `causeIds`: cause log ID of the log (optional).
+    - Example: `UUID,UUID`
+    - Why?
+      - Better understanding of the log.
+    - Format: comma separated list of other log IDs.
+
+  - `effectIds`: effect log ID of the log (optional).
+    - Example: `UUID,UUID`
+    - Why?
+      - Better understanding of the log.
+    - Format: comma separated list of other log IDs.
 
   - `created-at`: when the log was created. (required).
     - Format: `YYYY-MM-DDTHH:mm:ssZ` (ISO 8601)

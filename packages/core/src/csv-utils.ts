@@ -7,6 +7,7 @@ import type { LogEntry } from "./types";
 
 // CSV headers in order
 export const CSV_HEADERS = [
+	"id",
 	"name",
 	"tags",
 	"problem",
@@ -14,6 +15,8 @@ export const CSV_HEADERS = [
 	"action",
 	"files",
 	"tech-stack",
+	"causeIds",
+	"effectIds",
 	"created-at",
 	"updated-at",
 	"model",
@@ -107,7 +110,7 @@ export function csvRowToLogEntry(row: string): LogEntry | null {
 	});
 
 	// Validate required fields
-	if (!entry.name || !entry["created-at"]) {
+	if (!entry.id || !entry.name || !entry["created-at"]) {
 		return null;
 	}
 
@@ -173,7 +176,7 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 					}
 				});
 
-				if (entry.name && entry["created-at"]) {
+				if (entry.id && entry.name && entry["created-at"]) {
 					entries.push(entry as LogEntry);
 				}
 			}
@@ -195,7 +198,7 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 					entry[header] = value;
 				}
 			});
-			if (entry.name && entry["created-at"]) {
+			if (entry.id && entry.name && entry["created-at"]) {
 				entries.push(entry as LogEntry);
 			}
 		}

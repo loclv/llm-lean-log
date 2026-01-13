@@ -13,6 +13,7 @@ import type { LogEntry } from "./types";
  */
 describe("csv-utils", () => {
 	const mockEntry1: LogEntry = {
+		id: "test-id-1",
 		name: "Test Entry 1",
 		tags: "test,tag1",
 		problem: "Something is wrong",
@@ -27,6 +28,7 @@ describe("csv-utils", () => {
 	};
 
 	const mockEntry2: LogEntry = {
+		id: "test-id-2",
 		name: "Test Entry 2",
 		tags: "tag2",
 		problem: 'Problem with "quotes"',
@@ -41,28 +43,35 @@ describe("csv-utils", () => {
 	describe("logEntryToCSVRow", () => {
 		it("should correctly escape commas and quotes", () => {
 			const entry: LogEntry = {
+				id: "test-escape",
 				name: 'Test, "quoted"',
 				problem: "Test problem",
 				"created-at": "2024-01-01",
 			};
 			const row = logEntryToCSVRow(entry);
-			// CSV order: name,tags,problem,solution,action,files,tech-stack,created-at,updated-at,model,log-created-modal
-			expect(row).toBe('"Test, ""quoted""",,Test problem,,,,,2024-01-01,,,');
+			// CSV order: id,name,tags,problem,solution,action,files,tech-stack,causeIds,effectIds,created-at,updated-at,model,log-created-modal
+			expect(row).toBe(
+				'test-escape,"Test, ""quoted""",,Test problem,,,,,,,2024-01-01,,,',
+			);
 		});
 
 		it("should handle newline in values", () => {
 			const entry: LogEntry = {
+				id: "test-newline",
 				name: "Multi-line",
 				problem: "Line 1\nLine 2",
 				"created-at": "2024-01-01",
 			};
 			const row = logEntryToCSVRow(entry);
-			expect(row).toBe('Multi-line,,"Line 1\nLine 2",,,,,2024-01-01,,,');
+			expect(row).toBe(
+				'test-newline,Multi-line,,"Line 1\nLine 2",,,,,,,2024-01-01,,,',
+			);
 		});
 
 		it("should handle all fields", () => {
 			const row = logEntryToCSVRow(mockEntry1);
 			const expected = [
+				"test-id-1", // id
 				"Test Entry 1",
 				'"test,tag1"',
 				"Something is wrong",
@@ -70,6 +79,8 @@ describe("csv-utils", () => {
 				"ts`console.log(1)`",
 				"src/index.ts",
 				"typescript",
+				"", // causeIds
+				"", // effectIds
 				"2024-01-01T00:00:00.000Z",
 				"2024-01-01T00:00:00.000Z",
 				"gpt-4",
@@ -84,23 +95,25 @@ describe("csv-utils", () => {
 	 */
 	describe("csvRowToLogEntry", () => {
 		it("should parse a simple row string", () => {
-			const entry = csvRowToLogEntry("Entry 1,,Prob 1,,,,,2024-01-01,,,");
+			const entry = csvRowToLogEntry(
+				"test-id,Entry 1,,Prob 1,,,,,,,2024-01-01,,,",
+			);
 			expect(entry?.name).toBe("Entry 1");
 			expect(entry?.problem).toBe("Prob 1");
 			expect(entry?.["created-at"]).toBe("2024-01-01");
 		});
 
 		it("should parse quoted fields with commas", () => {
-			const entry = csvRowToLogEntry(
-				'"Name, with comma",,"Prob, with comma",,,,,2024-01-01,,,',
-			);
+			const testRow =
+				'test-id2,"Name, with comma",,"Prob, with comma",,,,,,,2024-01-01,,,';
+			const entry = csvRowToLogEntry(testRow);
 			expect(entry?.name).toBe("Name, with comma");
 			expect(entry?.problem).toBe("Prob, with comma");
 		});
 
 		it("should parse escaped quotes", () => {
 			const entry = csvRowToLogEntry(
-				'"Name with ""quotes""",,Problem,,,,,2024-01-01,,,',
+				'test-id3,"Name with ""quotes""",,Problem,,,,,,,2024-01-01,,,',
 			);
 			expect(entry?.name).toBe('Name with "quotes"');
 		});
@@ -108,12 +121,12 @@ describe("csv-utils", () => {
 		it("should return null for empty or invalid rows", () => {
 			expect(csvRowToLogEntry("")).toBeNull();
 			expect(csvRowToLogEntry("   ")).toBeNull();
-			expect(csvRowToLogEntry("NameOnly,,,,,,,,")).toBeNull(); // Missing created-at
+			expect(csvRowToLogEntry("NameOnly,,,,,,,,,,,,")).toBeNull(); // Missing id and created-at
 		});
 
 		it("should trim values during parsing", () => {
 			const entry = csvRowToLogEntry(
-				"  Name 1  , , Problem 1 , , , , , 2024-01-01 , , , ",
+				"  test-id  ,  Name 1  , , Problem 1 , , , , , , , 2024-01-01 , , , ",
 			);
 			expect(entry?.name).toBe("Name 1");
 			expect(entry?.problem).toBe("Problem 1");
@@ -127,15 +140,15 @@ describe("csv-utils", () => {
 	describe("logEntriesToCSV", () => {
 		it("should create CSV with headers and multiple rows", () => {
 			const entries = [
-				{ name: "E1", problem: "P1", "created-at": "D1" },
-				{ name: "E2", problem: "P2", "created-at": "D2" },
+				{ id: "e1", name: "E1", problem: "P1", "created-at": "D1" },
+				{ id: "e2", name: "E2", problem: "P2", "created-at": "D2" },
 			] as LogEntry[];
 			const csv = logEntriesToCSV(entries);
 			const lines = csv.split("\n");
 			expect(lines).toHaveLength(3);
 			expect(lines[0]).toBe(CSV_HEADERS.join(","));
-			expect(lines[1]).toBe("E1,,P1,,,,,D1,,,");
-			expect(lines[2]).toBe("E2,,P2,,,,,D2,,,");
+			expect(lines[1]).toBe("e1,E1,,P1,,,,,,,D1,,,");
+			expect(lines[2]).toBe("e2,E2,,P2,,,,,,,D2,,,");
 		});
 
 		it("should handle empty array", () => {
@@ -151,7 +164,7 @@ describe("csv-utils", () => {
 		it("should parse a simple CSV string", () => {
 			const csv = [
 				CSV_HEADERS.join(","),
-				"Entry 1,tag1,prob1,sol1,act1,file1,stack1,2024-01-01,2024-01-01,m1,true",
+				"id1,Entry 1,tag1,prob1,sol1,act1,file1,stack1,,,2024-01-01,2024-01-01,m1,true",
 			].join("\n");
 
 			const entries = csvToLogEntries(csv);
@@ -163,7 +176,7 @@ describe("csv-utils", () => {
 		});
 
 		it("should handle CRLF line endings", () => {
-			const csv = `name,problem,created-at\r\nEntry 1,Prob 1,2024-01-01\r\nEntry 2,Prob 2,2024-01-02`;
+			const csv = `id,name,problem,created-at\r\ntest-1,Entry 1,Prob 1,2024-01-01\r\ntest-2,Entry 2,Prob 2,2024-01-02`;
 			const entries = csvToLogEntries(csv);
 			expect(entries).toHaveLength(2);
 			expect(entries[0].name).toBe("Entry 1");
@@ -171,7 +184,8 @@ describe("csv-utils", () => {
 		});
 
 		it("should handle dynamic header mapping (reordered columns)", () => {
-			const csv = "created-at,name,problem\n2024-01-01,Entry 1,Prob 1";
+			const csv =
+				"id,created-at,name,problem\ntest-1,2024-01-01,Entry 1,Prob 1";
 			const entries = csvToLogEntries(csv);
 			expect(entries).toHaveLength(1);
 			expect(entries[0]["created-at"]).toBe("2024-01-01");
@@ -181,8 +195,8 @@ describe("csv-utils", () => {
 
 		it("should handle quoted fields with interior newlines", () => {
 			const csv = [
-				"name,problem,created-at",
-				'"Entry\nmultiline","Prob\nmultiline",2024-01-01',
+				"id,name,problem,created-at",
+				'test-1,"Entry\nmultiline","Prob\nmultiline",2024-01-01',
 			].join("\n");
 			const entries = csvToLogEntries(csv);
 			expect(entries).toHaveLength(1);
@@ -192,10 +206,10 @@ describe("csv-utils", () => {
 
 		it("should filter out entries missing required fields", () => {
 			const csv = [
-				"name,problem,created-at",
-				"Valid,P,2024-01-01",
-				"NoDate,P,",
-				",NoName,2024-01-01",
+				"id,name,problem,created-at",
+				"test-1,Valid,P,2024-01-01",
+				"test-2,,P,", // Missing name
+				"test-3,,NoName,2024-01-01", // Missing name
 			].join("\n");
 			const entries = csvToLogEntries(csv);
 			expect(entries).toHaveLength(1);

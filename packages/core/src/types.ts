@@ -3,6 +3,8 @@
  */
 
 export interface LogEntry {
+	/** Log ID (required), UUID for unique identifier, used for Directed Graph, cause and effect */
+	id: string;
 	/** Main content of the log (short). (required) */
 	name: string;
 	/** Tags to categorize the log, comma separated. Example: error,api,auth. (optional) */
@@ -13,6 +15,14 @@ export interface LogEntry {
 	solution?: string;
 	/** Run command, action (web search, etc.) that was taken to fix the problem. (optional) */
 	action?: string;
+	/** List of files that were modified, created, deleted or must be read (optional). */
+	files?: string;
+	/** List of technologies that were used (optional). */
+	"tech-stack"?: string;
+	/** Cause log ID of the log (optional). Format: comma separated list of other log IDs */
+	causeIds?: string;
+	/** Effect log ID of the log (optional). Format: comma separated list of other log IDs */
+	effectIds?: string;
 	/** When the log was created. (required) */
 	"created-at": string;
 	/** When the log was updated (optional). */
@@ -21,8 +31,4 @@ export interface LogEntry {
 	model?: string;
 	/** Model that was used to create the log (optional). */
 	"log-created-modal"?: string;
-	/** List of files that were modified, created, deleted or must be read (optional). */
-	files?: string;
-	/** List of technologies that were used (optional). */
-	"tech-stack"?: string;
 }

@@ -4,6 +4,7 @@
  */
 
 import { csvToLogEntries, logEntriesToCSV } from "./csv-utils";
+import { generateUUID } from "./graph-utils";
 import type { LogEntry } from "./types";
 
 /**
@@ -46,10 +47,14 @@ export async function saveLogs(
  * Create a new log entry
  */
 export function createLogEntry(
-	entry: Omit<LogEntry, "created-at"> & { "created-at"?: string },
+	entry: Omit<LogEntry, "id" | "created-at"> & {
+		id?: string;
+		"created-at"?: string;
+	},
 ): LogEntry {
 	return {
 		...entry,
+		id: entry.id ?? generateUUID(),
 		"created-at": entry["created-at"] ?? new Date().toISOString(),
 	};
 }
@@ -59,7 +64,10 @@ export function createLogEntry(
  */
 export function addLogEntry(
 	entries: LogEntry[],
-	entry: Omit<LogEntry, "created-at"> & { "created-at"?: string },
+	entry: Omit<LogEntry, "id" | "created-at"> & {
+		id?: string;
+		"created-at"?: string;
+	},
 ): LogEntry[] {
 	return [...entries, createLogEntry(entry)];
 }
@@ -85,6 +93,7 @@ export function updateLogEntry(
 		...current,
 		...updates,
 		// Preserve required fields - use update value if provided, otherwise keep current
+		id: updates.id ?? current.id,
 		name: updates.name ?? current.name,
 		problem: updates.problem ?? current.problem,
 		"created-at": updates["created-at"] ?? current["created-at"],
