@@ -107,13 +107,23 @@ bun add -g llm-lean-log-cli
 
 `llm-lean-log-cli`'s bin name is `l-log`.
 
-For LLMs viewing logs (no need `--human` option):
+For LLMs viewing logs (no need `--human` option, output is CSV format (+ auto-hide Metadata columns if empty)):
 
 ```bash
-# List all log entries
+# List all log entries, output is CSV format
 l-log list ./logs/example.csv
-# Output: [1] My Task (test) | Created: 1/13/2026, 8:00 PM
+```
 
+Expected output is CSV format for LLMs:
+
+```text
+id,name,tags,problem,solution,action,files,tech-stack,causeIds,created-at,model
+auth-error-001,API Authentication Error,"error,api,auth",Users unable to login due to JWT token expiration not being handled correctly,Added token refresh logic with exponential backoff retry mechanism,Updated auth.ts middleware and added refresh endpoint,"src/middleware/auth.ts, src/routes/auth.routes.ts","typescript, express, jwt",,2026-01-13T14:52:58.681Z,claude-3.5-sonnet
+db-investigation-002,Database Connection Pool Exhausted,"error,database,performance",Application crashes during high traffic due to database connection pool being exhausted,Increased pool size from 10 to 50 and added connection timeout handling,"Modified database.config.ts: ts`pool.max = 50, pool.idleTimeoutMillis = 30_000`",src/config/database.config.ts,"typescript, postgresql, node.js",auth-error-001,2026-01-13T14:52:58.681Z,gpt-4-turbo
+...
+```
+
+```bash
 # Show statistics
 l-log stats ./logs/example.csv
 
@@ -122,12 +132,21 @@ l-log view ./logs/example.csv 0
 
 # View the last log entry
 l-log view ./logs/example.csv --last
+```
 
-# Search logs
-l-log search ./logs/example.csv "query"
+Expected output is CSV format for LLMs:
 
-# Filter by tags
-l-log tags ./logs/example.csv tag1 tag2
+```text
+id,name,tags,problem,solution,action,files,tech-stack,causeIds,created-at,model
+typescript-migration-006,TypeScript Migration Complete,"refactor,typescript,milestone",Codebase was in JavaScript making it hard to catch type errors,Migrated entire codebase to TypeScript with strict mode enabled,"Converted all .js files to .ts, added type definitions, configured tsconfig.json","tsconfig.json, package.json, src/**/*","typescript, node.js","auth-error-001,memory-leak-004,image-optimization-005",2026-01-13T14:52:58.681Z,gpt-4-turbo
+```
+
+```bash
+# Search logs, output is CSV format
+l-log search ./logs/example.csv "Database"
+
+# Filter by tags, output is CSV format
+l-log tags ./logs/example.csv error api
 
 # Add a new log entry
 l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"

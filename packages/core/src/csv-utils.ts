@@ -122,6 +122,26 @@ export function logEntriesToCSV(entries: LogEntry[]): string {
 }
 
 /**
+ * Convert log entries to CSV string, omitting columns that are empty in all entries
+ */
+export function logEntriesToCSVMinimal(entries: LogEntry[]): string {
+	if (entries.length === 0) return CSV_HEADERS.join(",");
+
+	const usedHeaders = CSV_HEADERS.filter((header) =>
+		entries.some(
+			(entry) => entry[header] !== undefined && entry[header] !== "",
+		),
+	);
+
+	const headerRow = usedHeaders.join(",");
+	const rows = entries.map((entry) => {
+		return usedHeaders.map((header) => escapeCSVField(entry[header])).join(",");
+	});
+
+	return [headerRow, ...rows].join("\n");
+}
+
+/**
  * Parse CSV string to log entries
  */
 export function csvToLogEntries(csv: string): LogEntry[] {

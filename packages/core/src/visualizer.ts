@@ -4,6 +4,7 @@
  */
 
 import { highlight } from "cli-highlight";
+import { logEntriesToCSVMinimal } from "./csv-utils";
 import type { LogEntry } from "./types";
 
 interface VisualizerOptions {
@@ -169,6 +170,10 @@ export function visualizeTable(
 			: colorize("No log entries found.", "gray", useColors);
 	}
 
+	if (llm) {
+		return logEntriesToCSVMinimal(entries);
+	}
+
 	const lines: string[] = [];
 
 	if (!llm) {
@@ -227,24 +232,27 @@ export function visualizeTable(
 		}
 
 		// Metadata
-		const metadata: string[] = [];
-		metadata.push(
-			colorize("Created: ", "dim", useColors) + formatDate(entry["created-at"]),
-		);
-
-		if (entry["updated-at"]) {
+		if (!llm) {
+			const metadata: string[] = [];
 			metadata.push(
-				colorize("Updated: ", "dim", useColors) +
-					formatDate(entry["updated-at"]),
+				colorize("Created: ", "dim", useColors) +
+					formatDate(entry["created-at"]),
 			);
-		}
 
-		if (entry.model) {
-			metadata.push(colorize("Model: ", "dim", useColors) + entry.model);
-		}
+			if (entry["updated-at"]) {
+				metadata.push(
+					colorize("Updated: ", "dim", useColors) +
+						formatDate(entry["updated-at"]),
+				);
+			}
 
-		lines.push(colorize(`  ${metadata.join(" | ")}`, "gray", useColors));
-		lines.push("");
+			if (entry.model) {
+				metadata.push(colorize("Model: ", "dim", useColors) + entry.model);
+			}
+
+			lines.push(colorize(`  ${metadata.join(" | ")}`, "gray", useColors));
+			lines.push("");
+		}
 	});
 
 	if (!llm) {
@@ -267,6 +275,10 @@ export function visualizeEntry(
 		highlight: useHighlight = !options.llm,
 		llm = false,
 	} = options;
+
+	if (llm) {
+		return logEntriesToCSVMinimal([entry]);
+	}
 
 	const lines: string[] = [];
 
@@ -321,19 +333,21 @@ export function visualizeEntry(
 		lines.push("");
 	}
 
-	lines.push(colorize("Metadata:", "dim", useColors));
-	lines.push(`  Created: ${formatDate(entry["created-at"])}`);
+	if (!llm) {
+		lines.push(colorize("Metadata:", "dim", useColors));
+		lines.push(`  Created: ${formatDate(entry["created-at"])}`);
 
-	if (entry["updated-at"]) {
-		lines.push(`  Updated: ${formatDate(entry["updated-at"])}`);
-	}
+		if (entry["updated-at"]) {
+			lines.push(`  Updated: ${formatDate(entry["updated-at"])}`);
+		}
 
-	if (entry.model) {
-		lines.push(`  Model: ${entry.model}`);
-	}
+		if (entry.model) {
+			lines.push(`  Model: ${entry.model}`);
+		}
 
-	if (entry["created-by-agent"]) {
-		lines.push(`  Log Created By: ${entry["created-by-agent"]}`);
+		if (entry["created-by-agent"]) {
+			lines.push(`  Log Created By: ${entry["created-by-agent"]}`);
+		}
 	}
 
 	return lines.join("\n");

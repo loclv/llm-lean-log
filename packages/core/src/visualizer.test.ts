@@ -101,10 +101,14 @@ describe("visualizer", () => {
 			expect(output).not.toContain("Solution:");
 		});
 
-		it("should respect llm mode", () => {
+		it("should respect llm mode (CSV output)", () => {
 			const output = visualizeTable([mockEntry1], { llm: true });
 			expect(output).not.toContain("═");
-			expect(output).toContain("Test Entry 1");
+			expect(output).toContain(
+				"id,name,tags,problem,solution,action,files,tech-stack",
+			);
+			expect(output).toContain("1,Test Entry 1");
+			expect(output).not.toContain("Metadata:");
 		});
 
 		it("should handle long text truncation", () => {
@@ -141,10 +145,13 @@ describe("visualizer", () => {
 			expect(output).not.toContain("Action:");
 		});
 
-		it("should handle llm mode for single entry", () => {
+		it("should handle llm mode for single entry (CSV output)", () => {
 			const output = visualizeEntry(mockEntry1, { llm: true });
-			expect(output).toContain("## Test Entry 1");
-			expect(output).not.toContain("═");
+			expect(output).not.toContain("##");
+			expect(output).toContain(
+				"id,name,tags,problem,solution,action,files,tech-stack",
+			);
+			expect(output).toContain("1,Test Entry 1");
 		});
 	});
 
