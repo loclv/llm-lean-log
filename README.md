@@ -4,6 +4,38 @@
 
 `llm-lean-log` is a format for logging that is optimized for LLMs token usage, cause and effect relationships based on CSV Data.
 
+## 🍓 Ask AI agent (LLMs) to write a log
+
+Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-log-cli` CLI tool globally.
+
+```bash
+bun add -g llm-lean-log-cli
+```
+
+Ask LLMs to write a log by prompt:
+
+> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --last-commit-short-sha="abc1234"` CLI tool to save last chat logs / talk above
+
+Or simpler for user but less efficient for LLMs:
+
+> use l-log CLI to save chat log above
+
+Or:
+
+> use l-log to save
+
+## 🍓 Ask AI agent (LLMs) to read a log
+
+Ask LLMs to read last log only by prompt (efficient for LLMs):
+
+> run `l-log view ./logs/example.csv --last` CLI and read output
+
+Ask LLMs to read all logs by prompt (less efficient for LLMs):
+
+> read last chat logs from "./logs/example.csv" and tell me what should I do next
+
+This is a efficient way to read logs for LLMs. Save time, tokens and energy. Because LLMs no need to read long CSV files before LLMs can write a log at the end of the log.
+
 ## ❌ Problems
 
 - 🐥 `markdown` is not optimized for LLMs token usage, only for human readability.
@@ -174,61 +206,6 @@ l-log tags ./logs/example.csv tag1 tag2 --human
 # Add a new log entry, if not specify log file, it will use `./logs/example.csv` log file
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
-
-## 🍓 Ask AI agent (LLMs) to write a log
-
-Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-log-cli` CLI tool globally.
-
-```bash
-bun add -g llm-lean-log-cli
-```
-
-Ask LLMs to write a log by prompt:
-
-> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"` CLI tool to save last chat logs / talk above
-
-Or simpler for user but less efficient for LLMs:
-
-> use l-log CLI to save chat log above
-
-Or:
-
-> use l-log to save
-
-## 🍓 Ask AI agent (LLMs) to read a log
-
-Ask LLMs to read last log only by prompt (efficient for LLMs):
-
-> run `l-log view ./logs/example.csv --last` CLI and read output
-
-Ask LLMs to read all logs by prompt (less efficient for LLMs):
-
-> read last chat logs from "./logs/example.csv" and tell me what should I do next
-
-Example LLMs's response:
-
-```text
-Based on the last entry in ./logs/example.csv and the current state of your repository, here is what you should do next:
-
-### Current Status
-
-The last task completed was "Make llm-lean-log packages public". This involved:
-
-- Updating package.json for both llm-lean-log-core and llm-lean-log-cli with repository info, files, and publishConfig.
-- Adding LICENSE and README.md files.
-- Configuring the CLI as an executable.
-- Creating the guide at docs/public.md.
-
-### Recommended Next Steps
-
-1. Perform a Dry Run
-Before pushing to NPM, ensure that the files being packaged are correct. Run this from the root:
-
-etc...
-
-```
-
-This is a efficient way to read logs for LLMs. Save time, tokens and energy. Because LLMs no need to read long CSV files before LLMs can write a log at the end of the log.
 
 ## 🐳 Visualizer for humans
 
