@@ -303,6 +303,20 @@ bun cli help
 
 Dự án này được tạo bằng `bun init` trong bun v1.3.5. [Bun](https://bun.com) là một môi trường thực thi JavaScript tất cả trong một cực nhanh.
 
+## Thêm quy tắc cho agent ghi log
+
+Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agent/rules/common.md`):
+
+```md
+Whenever you finish a task, always log your work using the l-log tool (llm-lean-log-cli package).
+
+Use the following format:
+
+llml add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha=$(git rev-parse --short HEAD) --created-by-agent="<agent-name>"
+
+More info: <https://github.com/loclv/llm-lean-log>.
+```
+
 ## 📖 Thông tin bổ sung
 
 - Tài liệu công bố: `./docs/publish.sh`
