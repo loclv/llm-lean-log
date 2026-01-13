@@ -1,7 +1,10 @@
 {
 	"name": "llm-lean-log-cli",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "CLI tool for llm-lean-log",
+	"scripts": {
+		"start": "bun run src/index.ts"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/loclv/llm-lean-log.git",
@@ -25,9 +28,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"scripts": {
-		"start": "bun run src/index.ts"
-	},
+
 	"dependencies": {
 		"llm-lean-log-core": "workspace:*"
 	},

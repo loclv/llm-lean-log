@@ -1,6 +1,6 @@
 {
 	"name": "llm-lean-log-core",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"scripts": {
 		"build": "bun build src/index.ts --outdir dist --target node --splitting && tsc --emitDeclarationOnly",
 		"prepublishOnly": "bun run build",

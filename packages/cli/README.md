@@ -14,22 +14,25 @@ bun add -g llm-lean-log-cli
 
 ## 💻 Usage
 
-For LLMs viewing logs:
+For LLMs viewing logs (default output is structured CSV):
 
 ```bash
-# List all log entries
+# List all log entries (returns CSV, omits empty columns)
 l-log list ./logs/example.csv
 
 # Show statistics
 l-log stats ./logs/example.csv
 
-# View detailed entry at index
+# View detailed entry at index (returns minimal CSV)
 l-log view ./logs/example.csv 0
 
-# Search logs
+# View the last log entry
+l-log view ./logs/example.csv --last
+
+# Search logs (returns CSV)
 l-log search ./logs/example.csv "query"
 
-# Filter by tags
+# Filter by tags (returns CSV)
 l-log tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
