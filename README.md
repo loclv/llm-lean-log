@@ -175,7 +175,7 @@ l-log tags ./logs/example.csv tag1 tag2 --human
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
-## Ask AI agent (LLMs) to write a log
+## 🍓 Ask AI agent (LLMs) to write a log
 
 Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-log-cli` CLI tool globally.
 
@@ -191,7 +191,11 @@ Or simpler for user but less efficient for LLMs:
 
 > use l-log CLI to save chat log above
 
-## Ask AI agent (LLMs) to read a log
+Or:
+
+> use l-log to save
+
+## 🍓 Ask AI agent (LLMs) to read a log
 
 Ask LLMs to read last log only by prompt (efficient for LLMs):
 
@@ -226,7 +230,7 @@ etc...
 
 This is a efficient way to read logs for LLMs. Save time, tokens and energy. Because LLMs no need to read long CSV files before LLMs can write a log at the end of the log.
 
-## Visualizer for humans
+## 🐳 Visualizer for humans
 
 Install `l-log-vis` (llm-lean-log-visualizer` package) globally:
 
