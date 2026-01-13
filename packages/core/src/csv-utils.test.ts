@@ -122,7 +122,12 @@ describe("csv-utils", () => {
 		it("should return null for empty or invalid rows", () => {
 			expect(csvRowToLogEntry("")).toBeNull();
 			expect(csvRowToLogEntry("   ")).toBeNull();
-			expect(csvRowToLogEntry("NameOnly,,,,,,,,,,,,")).toBeNull(); // Missing id and created-at
+			expect(csvRowToLogEntry("id,name,,,,,created-at")).toBeNull(); // Missing values (including problem)
+			expect(
+				csvRowToLogEntry(
+					"id,name,,,,,files,stack,c,e,sha,created,up,mod,agent",
+				),
+			).toBeNull(); // Missing problem (empty column)
 		});
 
 		it("should trim values during parsing", () => {
@@ -220,6 +225,32 @@ describe("csv-utils", () => {
 		it("should handle empty or whitespace CSV", () => {
 			expect(csvToLogEntries("")).toEqual([]);
 			expect(csvToLogEntries("   \n   ")).toEqual([]);
+		});
+
+		it("should throw error if required headers are missing", () => {
+			const csv = "name,problem,created-at\nEntry 1,Prob 1,2024-01-01";
+			expect(() => csvToLogEntries(csv)).toThrow(
+				"CSV is missing required headers: id",
+			);
+		});
+
+		it("should throw error if multiple required headers are missing", () => {
+			const csv = "name,created-at\nEntry 1,2024-01-01";
+			expect(() => csvToLogEntries(csv)).toThrow(
+				"CSV is missing required headers: id, problem",
+			);
+		});
+
+		it("should skip rows missing required fields", () => {
+			const csv = [
+				"id,name,problem,created-at",
+				"id1,Name1,Prob1,2024-01-01",
+				"id2,Name2,,2024-01-01", // Missing problem
+				",Name3,Prob3,2024-01-01", // Missing id
+			].join("\n");
+			const entries = csvToLogEntries(csv);
+			expect(entries).toHaveLength(1);
+			expect(entries[0].id).toBe("id1");
 		});
 	});
 
