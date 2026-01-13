@@ -7,7 +7,7 @@ export interface LogEntry {
 	"created-at": string;
 	"updated-at"?: string;
 	model?: string;
-	"log-created-modal"?: string;
+	"log-created-agent"?: string;
 	files?: string;
 	"tech-stack"?: string;
 }

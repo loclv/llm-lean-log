@@ -20,7 +20,7 @@ export const CSV_HEADERS = [
 	"created-at",
 	"updated-at",
 	"model",
-	"log-created-modal",
+	"log-created-agent",
 ] as const;
 
 /**
