@@ -1,4 +1,4 @@
-# llm-lean-log
+# ☘️ llm-lean-log
 
 > 📝 Ghi log cho LLM, nhưng lược bỏ phần dư thừa.
 

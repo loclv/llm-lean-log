@@ -1,4 +1,4 @@
-# llm-lean-log
+# ☘️ llm-lean-log
 
 > 📝 Logging for LLMs, but we cut the fat.
 
