@@ -111,7 +111,7 @@ export function csvRowToLogEntry(row: string): LogEntry | null {
 	});
 
 	// Validate required fields
-	if (!entry.id || !entry.name || !entry["created-at"]) {
+	if (!entry.id || !entry.name || !entry.problem || !entry["created-at"]) {
 		return null;
 	}
 
@@ -141,6 +141,8 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 	let fileHeaders: string[] = [];
 	let isHeaderRow = true;
 
+	const requiredHeaders = ["id", "name", "problem", "created-at"];
+
 	for (let i = 0; i < csv.length; i++) {
 		const char = csv[i];
 		const nextChar = csv[i + 1];
@@ -166,6 +168,12 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 
 			if (isHeaderRow) {
 				fileHeaders = fields.map((h) => h.trim());
+				const missing = requiredHeaders.filter((h) => !fileHeaders.includes(h));
+				if (missing.length > 0) {
+					throw new Error(
+						`CSV is missing required headers: ${missing.join(", ")}`,
+					);
+				}
 				isHeaderRow = false;
 			} else {
 				const entry: Partial<LogEntry> = {};
@@ -177,7 +185,7 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 					}
 				});
 
-				if (entry.id && entry.name && entry["created-at"]) {
+				if (entry.id && entry.name && entry.problem && entry["created-at"]) {
 					entries.push(entry as LogEntry);
 				}
 			}
@@ -190,7 +198,15 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 	// Handle last field if not ending with newline
 	if (currentField || fields.length > 0) {
 		fields.push(unescapeCSVField(currentField));
-		if (!isHeaderRow) {
+		if (isHeaderRow) {
+			fileHeaders = fields.map((h) => h.trim());
+			const missing = requiredHeaders.filter((h) => !fileHeaders.includes(h));
+			if (missing.length > 0) {
+				throw new Error(
+					`CSV is missing required headers: ${missing.join(", ")}`,
+				);
+			}
+		} else {
 			const entry: Partial<LogEntry> = {};
 			fileHeaders.forEach((header, index) => {
 				const value = fields[index]?.trim();
@@ -199,7 +215,7 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 					entry[header] = value;
 				}
 			});
-			if (entry.id && entry.name && entry["created-at"]) {
+			if (entry.id && entry.name && entry.problem && entry["created-at"]) {
 				entries.push(entry as LogEntry);
 			}
 		}

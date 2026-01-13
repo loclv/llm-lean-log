@@ -34,15 +34,20 @@ Usage: l-log <command> [logfile] [options]
 Commands:
   list, ls              List all log entries
     --compact, -c       Show compact view
+    --human             Show human-readable output (with colors)
   
   stats                 Show log statistics
+    --human             Show human-readable output (with colors)
   
   view <index>          View detailed entry at index
     --last              Show the last log entry
+    --human             Show human-readable output (with colors)
   
   search <query>        Search logs by name, problem, or solution
+    --human             Show human-readable output (with colors)
   
   tags <tag1> [tag2]    Filter logs by tags
+    --human             Show human-readable output (with colors)
   
   add <name>            Add a new log entry
     --tags=<tags>       Comma-separated tags
@@ -58,27 +63,29 @@ Commands:
   -v, -V, --version     Show version number
 
 Examples:
-  l-log list ./logs/example.csv
-  l-log stats
-  l-log view 0
-  l-log search "memory"
-  l-log tags error api
+  l-log list ./logs/example.csv --human
+  l-log stats --human
+  l-log view 0 --human
+  l-log search "memory" --human
+  l-log tags error api --human
   l-log add "Fix bug" --tags=bug,fix --problem="Bug description"
 `;
 
 async function main() {
 	let entries = await loadLogs(logFile);
+	const isHuman = args.includes("--human");
+	const llm = !isHuman;
 
 	switch (command) {
 		case "list":
 		case "ls": {
-			const compact = args.includes("--compact") || args.includes("-c");
-			console.log(visualizeTable(entries, { compact }));
+			const compact = args.includes("--compact") || args.includes("-c") || llm;
+			console.log(visualizeTable(entries, { compact, llm }));
 			break;
 		}
 
 		case "stats": {
-			console.log(visualizeStats(entries));
+			console.log(visualizeStats(entries, { llm }));
 			break;
 		}
 
@@ -109,7 +116,7 @@ async function main() {
 				console.error(`Error: Entry not found at index ${index}`);
 				process.exit(1);
 			}
-			console.log(visualizeEntry(entry));
+			console.log(visualizeEntry(entry, { llm }));
 			break;
 		}
 
@@ -120,18 +127,20 @@ async function main() {
 				process.exit(1);
 			}
 			const results = searchLogs(entries, query);
-			console.log(visualizeTable(results));
+			const compact = args.includes("--compact") || args.includes("-c") || llm;
+			console.log(visualizeTable(results, { compact, llm }));
 			break;
 		}
 
 		case "tags": {
-			const tagsList = args.slice(paramStart);
+			const tagsList = args.slice(paramStart).filter((a) => a !== "--human");
 			if (tagsList.length === 0) {
 				console.error("Error: Please provide at least one tag");
 				process.exit(1);
 			}
 			const results = filterByTags(entries, tagsList);
-			console.log(visualizeTable(results));
+			const compact = args.includes("--compact") || args.includes("-c") || llm;
+			console.log(visualizeTable(results, { compact, llm }));
 			break;
 		}
 

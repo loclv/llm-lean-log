@@ -15,6 +15,8 @@ interface VisualizerOptions {
 	colors?: boolean;
 	/** Enable syntax highlighting for code blocks */
 	highlight?: boolean;
+	/** Optimize for LLM consumption (compact, no colors, no fancy boxes) */
+	llm?: boolean;
 }
 
 // ANSI color codes
@@ -156,21 +158,26 @@ export function visualizeTable(
 	const {
 		compact = false,
 		maxWidth = 50,
-		colors: useColors = true,
-		highlight: useHighlight = true,
+		colors: useColors = !options.llm,
+		highlight: useHighlight = !options.llm,
+		llm = false,
 	} = options;
 
 	if (entries.length === 0) {
-		return colorize("No log entries found.", "gray", useColors);
+		return llm
+			? "No log entries found."
+			: colorize("No log entries found.", "gray", useColors);
 	}
 
 	const lines: string[] = [];
 
-	// Header
-	lines.push(colorize("═".repeat(80), "cyan", useColors));
-	lines.push(colorize("  LLM Lean Log Entries", "bright", useColors));
-	lines.push(colorize("═".repeat(80), "cyan", useColors));
-	lines.push("");
+	if (!llm) {
+		// Header
+		lines.push(colorize("═".repeat(80), "cyan", useColors));
+		lines.push(colorize("  LLM Lean Log Entries", "bright", useColors));
+		lines.push(colorize("═".repeat(80), "cyan", useColors));
+		lines.push("");
+	}
 
 	entries.forEach((entry, index) => {
 		// Entry header
@@ -240,8 +247,10 @@ export function visualizeTable(
 		lines.push("");
 	});
 
-	lines.push(colorize("─".repeat(80), "gray", useColors));
-	lines.push(colorize(`Total: ${entries.length} entries`, "dim", useColors));
+	if (!llm) {
+		lines.push(colorize("─".repeat(80), "gray", useColors));
+		lines.push(colorize(`Total: ${entries.length} entries`, "dim", useColors));
+	}
 
 	return lines.join("\n");
 }
@@ -253,14 +262,23 @@ export function visualizeEntry(
 	entry: LogEntry,
 	options: VisualizerOptions = {},
 ): string {
-	const { colors: useColors = true, highlight: useHighlight = true } = options;
+	const {
+		colors: useColors = !options.llm,
+		highlight: useHighlight = !options.llm,
+		llm = false,
+	} = options;
 
 	const lines: string[] = [];
 
-	lines.push(colorize("═".repeat(80), "cyan", useColors));
-	lines.push(colorize(`  ${entry.name}`, "bright", useColors));
-	lines.push(colorize("═".repeat(80), "cyan", useColors));
-	lines.push("");
+	if (!llm) {
+		lines.push(colorize("═".repeat(80), "cyan", useColors));
+		lines.push(colorize(`  ${entry.name}`, "bright", useColors));
+		lines.push(colorize("═".repeat(80), "cyan", useColors));
+		lines.push("");
+	} else {
+		lines.push(`## ${entry.name}`);
+		lines.push("");
+	}
 
 	if (entry.tags) {
 		lines.push(colorize("Tags: ", "blue", useColors) + entry.tags);
@@ -328,14 +346,19 @@ export function visualizeStats(
 	entries: LogEntry[],
 	options: VisualizerOptions = {},
 ): string {
-	const { colors: useColors = true } = options;
+	const { colors: useColors = !options.llm, llm = false } = options;
 
 	const lines: string[] = [];
 
-	lines.push(colorize("═".repeat(80), "cyan", useColors));
-	lines.push(colorize("  Log Statistics", "bright", useColors));
-	lines.push(colorize("═".repeat(80), "cyan", useColors));
-	lines.push("");
+	if (!llm) {
+		lines.push(colorize("═".repeat(80), "cyan", useColors));
+		lines.push(colorize("  Log Statistics", "bright", useColors));
+		lines.push(colorize("═".repeat(80), "cyan", useColors));
+		lines.push("");
+	} else {
+		lines.push("# Log Statistics");
+		lines.push("");
+	}
 
 	// Total entries
 	lines.push(colorize("Total Entries: ", "bright", useColors) + entries.length);

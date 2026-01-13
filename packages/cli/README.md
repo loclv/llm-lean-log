@@ -14,6 +14,8 @@ bun add -g llm-lean-log-cli
 
 ## 💻 Usage
 
+For LLMs viewing logs:
+
 ```bash
 # List all log entries
 l-log list ./logs/example.csv
@@ -29,6 +31,28 @@ l-log search ./logs/example.csv "query"
 
 # Filter by tags
 l-log tags ./logs/example.csv tag1 tag2
+
+# Add a new log entry
+l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+```
+
+For human users viewing logs:
+
+```bash
+# List all log entries
+l-log list ./logs/example.csv --human
+
+# Show statistics
+l-log stats ./logs/example.csv --human
+
+# View detailed entry at index
+l-log view ./logs/example.csv 0 --human
+
+# Search logs
+l-log search ./logs/example.csv "query" --human
+
+# Filter by tags
+l-log tags ./logs/example.csv tag1 tag2 --human
 
 # Add a new log entry
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"

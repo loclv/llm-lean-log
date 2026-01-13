@@ -4,16 +4,6 @@
 
 `llm-lean-log` is a format for logging that is optimized for LLMs token usage, cause and effect relationships based on CSV Data.
 
-## 📊 Format Examples
-
-Here are visual examples of the CSV logs format:
-
-**Example - part 1:**
-![CSV Logs Format 1](docs/imgs/screenshot-csv-logs-format-1.png)
-
-**Example - part 2:**
-![CSV Logs Format 2](docs/imgs/screenshot-csv-logs-format-2.png)
-
 ## ❌ Problems
 
 - 🐥 `markdown` is not optimized for LLMs token usage, only for human readability.
@@ -34,7 +24,10 @@ Here are visual examples of the CSV logs format:
 
 ## ✅ Solution
 
-- 🪴 Create a simple, single, flat, CSV data format file for logs.
+<img src="docs/imgs/graph.png" alt="Graph" width="256">
+
+🪴 Create a simple, single, flat, CSV data format file for logs:
+
 - 🌟 Headers are logger important fields:
   - `id`: log ID (required), UUID for unique identifier, used for Directed Graph, cause and effect.
   - `name`: main content of the log (short). (required)
@@ -114,9 +107,12 @@ bun add -g llm-lean-log-cli
 
 `llm-lean-log-cli`'s bin name is `l-log`.
 
+For LLMs viewing logs (no need `--human` option):
+
 ```bash
 # List all log entries
 l-log list ./logs/example.csv
+# Output: [1] My Task (test) | Created: 1/13/2026, 8:00 PM
 
 # Show statistics
 l-log stats ./logs/example.csv
@@ -135,6 +131,29 @@ l-log tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
 l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+```
+
+For human users viewing logs with `--human` option:
+
+```bash
+# List all log entries
+l-log list ./logs/example.csv --human
+# Output: [Full beautiful table with colors and headers]
+
+# Show statistics
+l-log stats ./logs/example.csv --human
+
+# View detailed entry at index
+l-log view ./logs/example.csv 0 --human
+
+# Search logs
+l-log search ./logs/example.csv "query" --human
+
+# Filter by tags
+l-log tags ./logs/example.csv tag1 tag2 --human
+
+# Add a new log entry
+l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
 ```
 
 ## Ask AI agent (LLMs) to write a log
@@ -293,6 +312,10 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
   - `oven-sh.bun` - Bun runtime support
   - `jeff-hykin.better-csv-syntax` - CSV syntax highlighting (with color coding)
   - `YoavBls.pretty-ts-errors` - Pretty TypeScript errors
+
+## TODO
+
+- Improve visualizer web app for Directed Graph (show cause and effect).
 
 ## 📄 License
 
