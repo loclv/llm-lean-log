@@ -319,17 +319,13 @@ touch .agent/rules/common.md
 trigger: always_on
 ---
 
-# LLMエージェント共通ルール
+# Common rules for LLM agent
 
-タスクを完了するたびに、常にl-logツール（llm-lean-log-cliパッケージ）を使用して作業を記録してください。
+Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
-以下の形式を使用してください：
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
 
-```bash
-l-log add ./logs/chat.csv "<タスク名>" --tags="<タグ>" --problem="<問題>" --solution="<解決策>" --action="<アクション>" --files="<ファイル>" --tech-stack="<技術>" --last-commit-short-sha="short-sha" --created-by-agent="<エージェント名>"
-```
-
-詳細：<https://github.com/loclv/llm-lean-log>。
+More info: <https://github.com/loclv/llm-lean-log>.
 
 ```
 

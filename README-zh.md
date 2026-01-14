@@ -319,17 +319,13 @@ touch .agent/rules/common.md
 trigger: always_on
 ---
 
-# LLM代理通用规则
+# Common rules for LLM agent
 
-每当您完成一项任务时，始终使用l-log工具（llm-lean-log-cli包）记录您的工作。
+Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
-使用以下格式：
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
 
-```bash
-l-log add ./logs/chat.csv "<任务名称>" --tags="<标签>" --problem="<问题>" --solution="<解决方案>" --action="<操作>" --files="<文件>" --tech-stack="<技术>" --last-commit-short-sha="<short-sha>" --created-by-agent="<代理名称>"
-```
-
-更多信息：<https://github.com/loclv/llm-lean-log>。
+More info: <https://github.com/loclv/llm-lean-log>.
 
 ```
 
