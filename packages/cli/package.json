@@ -30,7 +30,7 @@
 	},
 
 	"dependencies": {
-		"llm-lean-log-core": "workspace:*"
+		"llm-lean-log-core": "^0.1.7"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
