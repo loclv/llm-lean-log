@@ -40,6 +40,36 @@ bun add -g llm-lean-log-cli
 
 这是LLM读取日志的有效方式。节省时间、token和能源。因为LLM不需要先读取长CSV文件才能在日志末尾写入新日志。
 
+## 📚 为代理添加写日志规则
+
+例如，您可以将此规则添加到您的LLM代理配置文件中（例如 `.agent/rules/common.md`）：
+
+```bash
+# 创建文件
+touch .agent/rules/common.md
+```
+
+将此内容添加到文件中：
+
+```text
+---
+trigger: always_on
+---
+
+# Common rules for LLM agent
+
+Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
+
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
+
+Before run:
+
+- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
+- If need, run CLI help command: `l-log -h` for more information.
+- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
+
+```
+
 ## ❌ 问题
 
 - 🐥 `markdown` 没有为LLM的token使用量优化，仅适用于人类阅读。
@@ -302,36 +332,6 @@ bun cli help
 ```
 
 此项目使用 `bun init` 在 bun v1.3.5 中创建。[Bun](https://bun.com) 是一个快速的一体化JavaScript运行时。
-
-## 📚 为代理添加写日志规则
-
-例如，您可以将此规则添加到您的LLM代理配置文件中（例如 `.agent/rules/common.md`）：
-
-```bash
-# 创建文件
-touch .agent/rules/common.md
-```
-
-将此内容添加到文件中：
-
-```text
----
-trigger: always_on
----
-
-# Common rules for LLM agent
-
-Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
-
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
-
-Before run:
-
-- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
-- If need, run CLI help command: `l-log -h` for more information.
-- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
-
-```
 
 ## 📖 附加信息
 

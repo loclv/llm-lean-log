@@ -40,6 +40,36 @@ bun add -g llm-lean-log-cli
 
 これはLLMがログを読むための効率的な方法です。時間、トークン、エネルギーを節約できます。LLMがログの最後に新しいログを書く前に長いCSVファイルを読む必要がないためです。
 
+## 📚 エージェントにログ記録ルールを追加
+
+たとえば、LLMエージェント設定ファイル（例：`.agent/rules/common.md`）にこのルールを追加できます：
+
+```bash
+# Create file
+touch .agent/rules/common.md
+```
+
+下記をファイルに追加してください:
+
+```text
+---
+trigger: always_on
+---
+
+# Common rules for LLM agent
+
+Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
+
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
+
+Before run:
+
+- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
+- If need, run CLI help command: `l-log -h` for more information.
+- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
+
+```
+
 ## ❌ 問題
 
 - 🐥 `markdown` はLLMのトークン使用量を最適化しておらず、人間の可読性のためだけです。
@@ -302,36 +332,6 @@ bun cli help
 ```
 
 このプロジェクトは、bun v1.3.5で`bun init`を使用して作成されました。[Bun](https://bun.com)は高速なオールインワンJavaScriptランタイムです。
-
-## 📚 エージェントにログ記録ルールを追加
-
-たとえば、LLMエージェント設定ファイル（例：`.agent/rules/common.md`）にこのルールを追加できます：
-
-```bash
-# Create file
-touch .agent/rules/common.md
-```
-
-下記をファイルに追加してください:
-
-```text
----
-trigger: always_on
----
-
-# Common rules for LLM agent
-
-Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
-
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
-
-Before run:
-
-- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
-- If need, run CLI help command: `l-log -h` for more information.
-- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
-
-```
 
 ## 📖 追加情報
 

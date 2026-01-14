@@ -40,6 +40,36 @@ Yêu cầu LLM đọc tất cả log bằng lệnh (ít hiệu quả hơn cho LL
 
 Đây là một cách hiệu quả để LLM đọc log. Tiết kiệm thời gian, token và năng lượng. Bởi vì LLM không cần phải đọc các tệp CSV dài trước khi có thể viết một log vào cuối phiên làm việc.
 
+## 📚 Thêm quy tắc cho agent ghi log
+
+Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agent/rules/common.md`):
+
+```bash
+# Tạo tệp
+touch .agent/rules/common.md
+```
+
+Thêm nội dung này vào tệp:
+
+```text
+---
+trigger: always_on
+---
+
+# Common rules for LLM agent
+
+Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
+
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
+
+Before run:
+
+- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
+- If need, run CLI help command: `l-log -h` for more information.
+- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
+
+```
+
 ## ❌ Các vấn đề
 
 - 🐥 `markdown` không được tối ưu cho việc sử dụng token của LLM, chỉ phục vụ cho việc con người đọc.
@@ -302,36 +332,6 @@ bun cli help
 ```
 
 Dự án này được tạo bằng `bun init` trong bun v1.3.5. [Bun](https://bun.com) là một môi trường thực thi JavaScript tất cả trong một cực nhanh.
-
-## 📚 Thêm quy tắc cho agent ghi log
-
-Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agent/rules/common.md`):
-
-```bash
-# Tạo tệp
-touch .agent/rules/common.md
-```
-
-Thêm nội dung này vào tệp:
-
-```text
----
-trigger: always_on
----
-
-# Common rules for LLM agent
-
-Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
-
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
-
-Before run:
-
-- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
-- If need, run CLI help command: `l-log -h` for more information.
-- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
-
-```
 
 ## 📖 Thông tin bổ sung
 
