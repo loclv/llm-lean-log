@@ -2,6 +2,17 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.0] - 2026-01-14
+
+### ⚠️ BREAKING CHANGES
+
+- **Dependency Update**: Updated core dependency to explicit version `^0.2.0` for proper publishing
+
+### Changed
+
+- **Release Process**: Now follows enhanced release workflow with CHANGELOG.md integration
+- Updated dependency on `llm-lean-log-core` to version 0.2.0
+
 ## [0.1.8] - 2026-01-14
 
 ### Fixed

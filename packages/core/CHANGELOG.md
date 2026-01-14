@@ -2,6 +2,25 @@
 
 All notable changes to the `llm-lean-log-core` package will be documented in this file.
 
+## [0.2.0] - 2026-01-14
+
+### ⚠️ BREAKING CHANGES
+
+- **Dependency Management**: Updated CLI package dependency from `workspace:*` to explicit version `^0.2.0` for proper publishing
+
+### Added
+
+- Enhanced release workflow with CHANGELOG.md parsing for version-specific content
+- Automated npm publishing via GitHub Actions
+- Improved documentation for release process
+
+### Changed
+
+- Updated CLI package dependency to use explicit version constraint
+- Standardized release process with changelog integration
+- **Release Workflow Integration**: Enhanced release workflow now requires CHANGELOG.md updates for version-specific content
+- **Publishing Process**: Automated npm publishing now enabled in GitHub Actions workflow
+
 ## [0.1.7] - 2026-01-14
 
 ### Fixed
