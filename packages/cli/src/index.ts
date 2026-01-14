@@ -45,8 +45,7 @@ Commands:
     --files=<files>     Comma-separated files
     --tech-stack=<tech> Comma-separated tech stack
     --model=<name>      Model name
-    --id=<id>           Log ID (optional)
-    --causeIds=<ids>    Comma-separated cause log IDs
+        --causeIds=<ids>    Comma-separated cause log IDs
     --effectIds=<ids>   Comma-separated effect log IDs
     --last-commit-short-sha=<sha> Last git commit short SHA
     --created-at=<time> Creation time (ISO 8601)

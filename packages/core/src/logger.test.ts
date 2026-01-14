@@ -231,6 +231,10 @@ describe("createLogEntry", () => {
 
 		expect(result.name).toBe("Test Entry");
 		expect(result.problem).toBe("Test Problem");
+		expect(result.id).toBeDefined();
+		expect(result.id).toMatch(
+			/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+		);
 		const createdDate = new Date(result["created-at"]);
 		const beforeDate = new Date(beforeCreate);
 		const afterDate = new Date(afterCreate);

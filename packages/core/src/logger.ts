@@ -4,7 +4,6 @@
  */
 
 import { csvToLogEntries, logEntriesToCSV } from "./csv-utils";
-import { generateUUID } from "./graph-utils";
 import type { LogEntry } from "./types";
 
 /**
@@ -45,6 +44,8 @@ export async function saveLogs(
 
 /**
  * Create a new log entry
+ * ID is UUID, auto created.
+ * Created at metadata is current time, auto created.
  */
 export function createLogEntry(
 	entry: Omit<LogEntry, "id" | "created-at"> & {
@@ -54,8 +55,8 @@ export function createLogEntry(
 ): LogEntry {
 	return {
 		...entry,
-		id: entry.id ?? generateUUID(),
-		"created-at": entry["created-at"] ?? new Date().toISOString(),
+		id: crypto.randomUUID(),
+		"created-at": new Date().toISOString(),
 	};
 }
 

@@ -6,13 +6,6 @@
 import type { LogEntry } from "./types";
 
 /**
- * Generate a UUID v4 for log entries
- */
-export function generateUUID(): string {
-	return crypto.randomUUID();
-}
-
-/**
  * Parse comma-separated IDs into an array
  */
 export function parseIds(ids?: string): string[] {

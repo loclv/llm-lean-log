@@ -14,7 +14,6 @@ export {
 	buildGraph,
 	findShortestPath,
 	formatIds,
-	generateUUID,
 	getAncestors,
 	getCausalChain,
 	getDescendants,

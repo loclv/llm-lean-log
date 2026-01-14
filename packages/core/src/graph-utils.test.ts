@@ -7,7 +7,6 @@ import {
 	buildGraph,
 	findShortestPath,
 	formatIds,
-	generateUUID,
 	getAncestors,
 	getCausalChain,
 	getDescendants,
@@ -64,21 +63,6 @@ describe("Graph Utils", () => {
 		log3.effectIds = "log4";
 
 		testLogs = [log1, log2, log3, log4];
-	});
-
-	describe("UUID Generation", () => {
-		it("should generate valid UUIDs", () => {
-			const uuid1 = generateUUID();
-			const uuid2 = generateUUID();
-
-			expect(uuid1).toMatch(
-				/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-			);
-			expect(uuid2).toMatch(
-				/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-			);
-			expect(uuid1).not.toBe(uuid2);
-		});
 	});
 
 	describe("ID Parsing and Formatting", () => {
