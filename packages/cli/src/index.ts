@@ -15,9 +15,12 @@ import {
 } from "llm-lean-log-core";
 import pkg from "../package.json";
 
+/**
+ * Help text for LLMs, not human!
+ */
 const helpText = `l-log CLI
 
-Usage: l-log <command> [logfile] [options]
+Usage: l-log <command> [log-file] [options]
 
 Commands:
   list, ls              List all log entries
@@ -42,14 +45,14 @@ Commands:
     --problem=<text>    Problem description
     --solution=<text>   Solution description
     --action=<text>     Action taken
-    --files=<files>     Comma-separated files
+    --files=<files>     Comma-separated files paths
     --tech-stack=<tech> Comma-separated tech stack
     --model=<name>      Model name
-        --causeIds=<ids>    Comma-separated cause log IDs
-    --effectIds=<ids>   Comma-separated effect log IDs
+    --causeIds=<ids>    Comma-separated cause log row UUIDs
+    --effectIds=<ids>   Comma-separated effect log row UUIDs
     --last-commit-short-sha=<sha> Last git commit short SHA
-    --created-at=<time> Creation time (ISO 8601)
-    --updated-at=<time> Update time (ISO 8601)
+    --created-at=<time> Creation time (ISO 8601 formatted string)
+    --updated-at=<time> Update time (ISO 8601 formatted string)
     --created-by-agent=<name> Agent model name
   
   help, -h, --help      Show this help message
@@ -63,7 +66,7 @@ Examples for LLMs:
   l-log view --last
   l-log search "memory"
   l-log tags error api
-  l-log add ./logs/chat1.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,file2.ts" --tech-stack="ts,react" --model="gpt-4o"
+  l-log add ./logs/chat1.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --last-commit-short-sha="a1b2c3d" --model="gpt-4o"
 `;
 
 /**

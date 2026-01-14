@@ -2,6 +2,17 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.2] - 2026-01-14
+
+### Changed
+
+- **Help Text Updates**: Enhanced CLI help documentation with improved parameter descriptions
+  - Updated `--files` parameter description to "Comma-separated files paths"
+  - Updated `--causeIds` and `--effectIds` to specify "Comma-separated cause/effect log row UUIDs"
+  - Restored "Examples for LLMs:" section title for clarity
+  - Added comprehensive example with all available parameters including UUIDs and commit SHA
+  - Maintained `[log-file]` parameter in usage for backward compatibility
+
 ## [0.2.0] - 2026-01-14
 
 ### ⚠️ BREAKING CHANGES

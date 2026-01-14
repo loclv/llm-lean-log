@@ -81,13 +81,13 @@ jobs:
           body: ${{ steps.changelog.outputs.CHANGELOG }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish Core Package
-        run: |
-          cd packages/core
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          bun publish
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Publish Core Package
+      #   run: |
+      #     cd packages/core
+      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      #     bun publish
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish CLI Package
         run: |
