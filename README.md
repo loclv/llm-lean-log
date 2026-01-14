@@ -308,13 +308,22 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 For example, you can add this rule to your LLM agent configuration file (e.g. `.agent/rules/common.md`):
 
 ```md
+---
+trigger: always_on
+---
+
+# Common rules for LLM agent
+
 Whenever you finish a task, always log your work using the l-log tool (llm-lean-log-cli package).
 
 Use the following format:
 
-llml add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha=$(git rev-parse --short HEAD) --created-by-agent="<agent-name>"
+```bash
+l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha=$(git rev-parse --short HEAD) --created-by-agent="<agent-name>"
+```
 
 More info: <https://github.com/loclv/llm-lean-log>.
+
 ```
 
 ## 📖 Additional information

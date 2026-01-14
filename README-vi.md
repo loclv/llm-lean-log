@@ -308,13 +308,22 @@ Dự án này được tạo bằng `bun init` trong bun v1.3.5. [Bun](https://b
 Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agent/rules/common.md`):
 
 ```md
+---
+trigger: always_on
+---
+
+# Common rules for LLM agent
+
 Whenever you finish a task, always log your work using the l-log tool (llm-lean-log-cli package).
 
 Use the following format:
 
-llml add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha=$(git rev-parse --short HEAD) --created-by-agent="<agent-name>"
+```bash
+l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha=$(git rev-parse --short HEAD) --created-by-agent="<agent-name>"
+```
 
 More info: <https://github.com/loclv/llm-lean-log>.
+
 ```
 
 ## 📖 Thông tin bổ sung
@@ -331,7 +340,7 @@ More info: <https://github.com/loclv/llm-lean-log>.
   - `jeff-hykin.better-csv-syntax` - Làm nổi bật cú pháp CSV (với mã hóa màu sắc)
   - `YoavBls.pretty-ts-errors` - Hiển thị lỗi TypeScript đẹp hơn
 
-## 📚 Trạng thái độ bao phủ (Coverage)
+## 📚 Trạng thái độ bao phủ (Coverage) Unit Test
 
 ```text
 ----------------------------------|---------|---------|-------------------
