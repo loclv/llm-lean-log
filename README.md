@@ -303,7 +303,7 @@ bun cli help
 
 This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
 
-## Add rules for agent to write log
+## 📚 Add rules for agent to write log
 
 For example, you can add this rule to your LLM agent configuration file (e.g. `.agent/rules/common.md`):
 
@@ -330,6 +330,8 @@ More info: <https://github.com/loclv/llm-lean-log>.
 
 - Publish docs: `./docs/publish.sh`
 - Release docs: `./docs/release.sh`
+
+More info at `./docs` folder.
 
 ### 💻 Use with VS Code base editor
 

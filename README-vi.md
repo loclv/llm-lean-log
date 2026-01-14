@@ -303,7 +303,7 @@ bun cli help
 
 Dự án này được tạo bằng `bun init` trong bun v1.3.5. [Bun](https://bun.com) là một môi trường thực thi JavaScript tất cả trong một cực nhanh.
 
-## Thêm quy tắc cho agent ghi log
+## 📚 Thêm quy tắc cho agent ghi log
 
 Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agent/rules/common.md`):
 
@@ -330,6 +330,8 @@ More info: <https://github.com/loclv/llm-lean-log>.
 
 - Tài liệu công bố: `./docs/publish.sh`
 - Tài liệu phát hành: `./docs/release.sh`
+
+Xem thêm tại `./docs` folder.
 
 ### 💻 Sử dụng với trình soạn thảo dựa trên VS Code
 
