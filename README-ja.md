@@ -325,7 +325,11 @@ Whenever you finish a task, always log your work using the l-log bash command (l
 
 `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
 
-More info: <https://github.com/loclv/llm-lean-log>.
+Before run:
+
+- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
+- If need, run CLI help command: `l-log -h` for more information.
+- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
 
 ```
 
