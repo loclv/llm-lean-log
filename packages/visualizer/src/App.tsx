@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
+import type { LogEntry } from "llm-lean-log-core";
 import { Search, Trash2, Upload } from "lucide-react";
 import Papa from "papaparse";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { LogCard } from "./components/LogCard";
-import type { LogEntry } from "./types";
 
 /**
  * Main application component for the LLM Lean Log Visualizer.

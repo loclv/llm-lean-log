@@ -5,7 +5,9 @@ import type { ParsedCode } from "./types";
  * <lang>`<code>` or just appears to have a code prefix.
  * For this project, we check for common language prefixes like ts, js, python, etc.
  */
-export const extractCode = (text: string): ParsedCode | null => {
+export const extractCode = (text: string | undefined): ParsedCode | null => {
+	if (!text) return null;
+
 	// Simple heuristic: check if it starts with a known language prefix and has backticks
 	// or if it's explicitly marked.
 	// The example had "ts`..." pattern or similar.
@@ -35,7 +37,7 @@ export const extractCode = (text: string): ParsedCode | null => {
 /**
  * Parses tags string into an array of strings.
  */
-export const parseTags = (tags: string): string[] => {
+export const parseTags = (tags: string | undefined): string[] => {
 	if (!tags) return [];
 	return tags
 		.split(",")

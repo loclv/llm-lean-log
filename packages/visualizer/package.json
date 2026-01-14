@@ -29,6 +29,7 @@
 	"dependencies": {
 		"framer-motion": "^12.26.1",
 		"lucide-react": "^0.562.0",
+		"llm-lean-log-core": "^0.2.1",
 		"papaparse": "^5.5.3",
 		"prism-react-renderer": "^2.4.1",
 		"react": "^19.2.0",

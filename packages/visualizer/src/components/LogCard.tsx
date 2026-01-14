@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import type { LogEntry } from "llm-lean-log-core";
 import {
 	AlertCircle,
 	Calendar,
@@ -10,7 +11,6 @@ import {
 	Tag,
 } from "lucide-react";
 import type React from "react";
-import type { LogEntry } from "../types";
 import { extractCode, formatDate, parseTags } from "../utils";
 import { CodeBlock } from "./CodeBlock";
 
