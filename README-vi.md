@@ -307,7 +307,14 @@ Dự án này được tạo bằng `bun init` trong bun v1.3.5. [Bun](https://b
 
 Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agent/rules/common.md`):
 
-```md
+```bash
+# Tạo tệp
+touch .agent/rules/common.md
+```
+
+Thêm nội dung này vào tệp:
+
+```text
 ---
 trigger: always_on
 ---
@@ -344,17 +351,7 @@ Xem thêm tại `./docs` folder.
 
 ## 📚 Trạng thái độ bao phủ (Coverage) Unit Test
 
-```text
-----------------------------------|---------|---------|-------------------
-Tệp                               | % Hàm   | % Dòng  | Số dòng chưa bao phủ
-----------------------------------|---------|---------|-------------------
-Tất cả các tệp                    |   98.18 |   96.26 |
- packages/core/src/csv-utils.ts   |  100.00 |   99.29 | 
- packages/core/src/graph-utils.ts |   96.88 |   96.83 | 243,308-314
- packages/core/src/logger.ts      |  100.00 |   92.00 | 20,22-25
- packages/core/src/visualizer.ts  |   95.83 |   96.90 | 54-55,77-78,100-101,126-127,140-141
-----------------------------------|---------|---------|-------------------
-```
+Xem `coverage.txt`.
 
 ## VIỆC CẦN LÀM (TODO)
 

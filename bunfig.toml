@@ -1,0 +1,7 @@
+[test]
+# Always enable coverage
+coverage = true
+coveragePathIgnorePatterns = [
+  "node_modules/**",
+  "**/*.test.ts"
+]

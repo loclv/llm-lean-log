@@ -307,7 +307,14 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 
 For example, you can add this rule to your LLM agent configuration file (e.g. `.agent/rules/common.md`):
 
-```md
+```bash
+# Create file
+touch .agent/rules/common.md
+```
+
+Add this content to the file:
+
+```text
 ---
 trigger: always_on
 ---
@@ -344,17 +351,7 @@ More info at `./docs` folder.
 
 ## 📚 Coverage status
 
-```text
-----------------------------------|---------|---------|-------------------
-File                              | % Funcs | % Lines | Uncovered Line #s
-----------------------------------|---------|---------|-------------------
-All files                         |   98.18 |   96.26 |
- packages/core/src/csv-utils.ts   |  100.00 |   99.29 | 
- packages/core/src/graph-utils.ts |   96.88 |   96.83 | 243,308-314
- packages/core/src/logger.ts      |  100.00 |   92.00 | 20,22-25
- packages/core/src/visualizer.ts  |   95.83 |   96.90 | 54-55,77-78,100-101,126-127,140-141
-----------------------------------|---------|---------|-------------------
-```
+Read more at `./coverage.txt`
 
 ## TODO
 
