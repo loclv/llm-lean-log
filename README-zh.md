@@ -348,6 +348,9 @@ bun cli help
   - `oven-sh.bun` - Bun运行时支持
   - `jeff-hykin.better-csv-syntax` - CSV语法高亮（带颜色编码）
   - `YoavBls.pretty-ts-errors` - 美观的TypeScript错误
+  - `ReprEng.csv` - CSV支持
+  
+![CSV Preview](./docs/imgs/screenshot-csv-preview.png)
 
 ## 📚 覆盖状态
 

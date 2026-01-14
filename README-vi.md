@@ -348,6 +348,9 @@ Xem thêm tại `./docs` folder.
   - `oven-sh.bun` - Hỗ trợ môi trường thực thi Bun
   - `jeff-hykin.better-csv-syntax` - Làm nổi bật cú pháp CSV (với mã hóa màu sắc)
   - `YoavBls.pretty-ts-errors` - Hiển thị lỗi TypeScript đẹp hơn
+  - `ReprEng.csv` - Hỗ trợ CSV
+
+![CSV Preview](./docs/imgs/screenshot-csv-preview.png)
 
 ## 📚 Trạng thái độ bao phủ (Coverage) Unit Test
 

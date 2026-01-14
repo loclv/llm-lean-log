@@ -348,6 +348,9 @@ bun cli help
   - `oven-sh.bun` - Bunランタイムサポート
   - `jeff-hykin.better-csv-syntax` - CSV構文ハイライト（カラーコーディング付き）
   - `YoavBls.pretty-ts-errors` - 美しいTypeScriptエラー
+  - `ReprEng.csv` - CSVサポート
+  
+![CSV Preview](./docs/imgs/screenshot-csv-preview.png)
 
 ## 📚 カバレッジ状況
 

@@ -348,6 +348,9 @@ More info at `./docs` folder.
   - `oven-sh.bun` - Bun runtime support
   - `jeff-hykin.better-csv-syntax` - CSV syntax highlighting (with color coding)
   - `YoavBls.pretty-ts-errors` - Pretty TypeScript errors
+  - `ReprEng.csv` - CSV support
+  
+![CSV Preview](./docs/imgs/screenshot-csv-preview.png)
 
 ## 📚 Coverage status
 
