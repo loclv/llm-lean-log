@@ -6,6 +6,12 @@ This project is a monorepo containing multiple packages. For detailed changes, p
 - [`llm-lean-log-cli`](./packages/cli/CHANGELOG.md)
 - [`l-log-vis`](./packages/visualizer/CHANGELOG.md)
 
+### v0.2.1 - January 14, 2026
+
+- Version bump across all packages to 0.2.1
+- Updated dependency versions for consistency
+- Minor improvements and bug fixes
+
 ## Summary of Major Milestones
 
 ### Jan 14, 2026
