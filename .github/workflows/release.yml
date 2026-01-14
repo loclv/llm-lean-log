@@ -32,14 +32,53 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          # Simple changelog generation logic or use a tool
-          echo "CHANGELOG=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+          # Extract version from tag
+          VERSION=${GITHUB_REF#refs/tags/v}
+          
+          # Extract changelog content for this version from CHANGELOG.md
+          if [ -f "CHANGELOG.md" ]; then
+            # Look for version section or date section that matches the tag
+            CHANGELOG_CONTENT=$(awk -v version="$VERSION" '
+              /^### / {
+                if (match($0, /[0-9]+\.[0-9]+\.[0-9]+/)) {
+                  current_version = substr($0, RSTART, RLENGTH)
+                  if (current_version == version) {
+                    in_section = 1
+                    next
+                  } else if (in_section) {
+                    exit
+                  }
+                }
+              }
+              in_section && /^### / { exit }
+              in_section { print }
+            ' CHANGELOG.md)
+            
+            # Fallback to latest entry if no version match found
+            if [ -z "$CHANGELOG_CONTENT" ]; then
+              CHANGELOG_CONTENT=$(awk '
+                /^### / { 
+                  if (found) exit 
+                  found=1 
+                  next 
+                } 
+                found { print }
+              ' CHANGELOG.md)
+            fi
+          else
+            CHANGELOG_CONTENT="No CHANGELOG.md found. Using git commit message."
+            CHANGELOG_CONTENT=$(git log -1 --pretty=%B)
+          fi
+          
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          # body: ${{ steps.changelog.outputs.CHANGELOG }}
+          body: ${{ steps.changelog.outputs.CHANGELOG }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Setup npm registry
