@@ -104,8 +104,16 @@ export function csvRowToLogEntry(row: string): LogEntry | null {
 	});
 
 	// Validate required fields
-	if (!entry.id || !entry.name || !entry.problem || !entry["created-at"]) {
+	if (!entry.name || !entry.problem) {
 		return null;
+	}
+
+	// Auto-fill missing required fields
+	if (!entry.id) {
+		entry.id = crypto.randomUUID();
+	}
+	if (!entry["created-at"]) {
+		entry["created-at"] = new Date().toISOString();
 	}
 
 	return entry as LogEntry;
@@ -154,7 +162,7 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 	let fileHeaders: string[] = [];
 	let isHeaderRow = true;
 
-	const requiredHeaders = ["id", "name", "problem", "created-at"];
+	const requiredHeaders = ["name", "problem"];
 
 	for (let i = 0; i < csv.length; i++) {
 		const char = csv[i];
@@ -198,7 +206,14 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 					}
 				});
 
-				if (entry.id && entry.name && entry.problem && entry["created-at"]) {
+				if (entry.name && entry.problem) {
+					// Auto-fill missing required fields
+					if (!entry.id) {
+						entry.id = crypto.randomUUID();
+					}
+					if (!entry["created-at"]) {
+						entry["created-at"] = new Date().toISOString();
+					}
 					entries.push(entry as LogEntry);
 				}
 			}
@@ -228,7 +243,14 @@ export function csvToLogEntries(csv: string): LogEntry[] {
 					entry[header] = value;
 				}
 			});
-			if (entry.id && entry.name && entry.problem && entry["created-at"]) {
+			if (entry.name && entry.problem) {
+				// Auto-fill missing required fields
+				if (!entry.id) {
+					entry.id = crypto.randomUUID();
+				}
+				if (!entry["created-at"]) {
+					entry["created-at"] = new Date().toISOString();
+				}
 				entries.push(entry as LogEntry);
 			}
 		}

@@ -38,7 +38,6 @@ async function main() {
 
 	// Initial problem
 	const authError = createLogEntry({
-		id: mockIds.authError,
 		name: "API Authentication Error",
 		tags: "error,api,auth",
 		problem:
@@ -58,7 +57,6 @@ async function main() {
 
 	// Investigation caused by auth error
 	const dbInvestigation = createLogEntry({
-		id: mockIds.dbInvestigation,
 		name: "Database Connection Pool Exhausted",
 		tags: "error,database,performance",
 		problem:
@@ -79,7 +77,6 @@ async function main() {
 
 	// Feature request (independent cause)
 	const darkMode = createLogEntry({
-		id: mockIds.darkMode,
 		name: "Implement Dark Mode",
 		tags: "feature,ui,enhancement",
 		problem: "Users requested dark mode for better viewing experience at night",
@@ -98,7 +95,6 @@ async function main() {
 
 	// Bug discovered during database investigation
 	const memoryLeak = createLogEntry({
-		id: mockIds.memoryLeak,
 		name: "Memory Leak in WebSocket Handler",
 		tags: "bug,websocket,memory",
 		problem:
@@ -118,7 +114,6 @@ async function main() {
 
 	// Performance improvement (caused by dark mode implementation)
 	const imageOptimization = createLogEntry({
-		id: mockIds.imageOptimization,
 		name: "Optimize Image Loading",
 		tags: "performance,optimization,images",
 		problem: "Page load time is slow due to large unoptimized images",
@@ -136,7 +131,6 @@ async function main() {
 
 	// Final milestone (caused by multiple fixes)
 	const typescriptMigration = createLogEntry({
-		id: mockIds.typescriptMigration,
 		name: "TypeScript Migration Complete",
 		tags: "refactor,typescript,milestone",
 		problem: "Codebase was in JavaScript making it hard to catch type errors",

@@ -11,6 +11,7 @@
 		"test": "bun test",
 		"test:watch": "bun test --watch",
 		"test:coverage": "bun test --coverage",
+		"test:coverage:w": "bun test --coverage > coverage.txt 2>&1",
 		"pub:core": "cd packages/core && bun publish",
 		"pub:cli": "cd packages/cli && bun publish",
 		"pub:vis": "cd packages/visualizer && bun publish"

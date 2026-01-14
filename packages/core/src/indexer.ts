@@ -144,15 +144,15 @@ export function buildSearchIndex(entries: LogEntry[]): SearchIndex {
  */
 export function buildGraphIndex(entries: LogEntry[]): GraphIndex {
 	const graph = buildGraph(entries);
-	const _entryMap = new Map(entries.map((e) => [e.id, e]));
+	const entryMap = new Map(entries.map((e) => [e.id, e]));
 
 	// Pre-compute ancestors and descendants for all nodes
 	const ancestorsCache = new Map<string, LogEntry[]>();
 	const descendantsCache = new Map<string, LogEntry[]>();
 
 	for (const entry of entries) {
-		ancestorsCache.set(entry.id, getAncestors(entries, entry.id));
-		descendantsCache.set(entry.id, getDescendants(entries, entry.id));
+		ancestorsCache.set(entry.id, getAncestors(graph, entryMap, entry.id));
+		descendantsCache.set(entry.id, getDescendants(graph, entryMap, entry.id));
 	}
 
 	return {
@@ -165,10 +165,12 @@ export function buildGraphIndex(entries: LogEntry[]): GraphIndex {
 /**
  * Get ancestors using cached index
  */
-function getAncestors(entries: LogEntry[], entryId: string): LogEntry[] {
-	const graph = buildGraph(entries);
+function getAncestors(
+	graph: Map<string, { causes: string[]; effects: string[] }>,
+	entryMap: Map<string, LogEntry>,
+	entryId: string,
+): LogEntry[] {
 	const ancestors: LogEntry[] = [];
-	const entryMap = new Map(entries.map((e) => [e.id, e]));
 	const visited = new Set<string>();
 
 	function dfs(id: string): void {
@@ -194,10 +196,12 @@ function getAncestors(entries: LogEntry[], entryId: string): LogEntry[] {
 /**
  * Get descendants using cached index
  */
-function getDescendants(entries: LogEntry[], entryId: string): LogEntry[] {
-	const graph = buildGraph(entries);
+function getDescendants(
+	graph: Map<string, { causes: string[]; effects: string[] }>,
+	entryMap: Map<string, LogEntry>,
+	entryId: string,
+): LogEntry[] {
 	const descendants: LogEntry[] = [];
-	const entryMap = new Map(entries.map((e) => [e.id, e]));
 	const visited = new Set<string>();
 
 	function dfs(id: string): void {

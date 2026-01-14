@@ -43,8 +43,27 @@ export function buildGraph(
 
 		const node = graph.get(entry.id);
 		if (node) {
-			node.causes = causeIds;
-			node.effects = effectIds;
+			// Add explicitly defined causes and their reverse effects
+			for (const id of causeIds) {
+				if (!node.causes.includes(id)) {
+					node.causes.push(id);
+				}
+				const causeNode = graph.get(id);
+				if (causeNode && !causeNode.effects.includes(entry.id)) {
+					causeNode.effects.push(entry.id);
+				}
+			}
+
+			// Add explicitly defined effects and their reverse causes
+			for (const id of effectIds) {
+				if (!node.effects.includes(id)) {
+					node.effects.push(id);
+				}
+				const effectNode = graph.get(id);
+				if (effectNode && !effectNode.causes.includes(entry.id)) {
+					effectNode.causes.push(entry.id);
+				}
+			}
 		}
 	}
 

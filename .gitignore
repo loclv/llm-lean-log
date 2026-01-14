@@ -11,7 +11,7 @@ coverage
 *.lcov
 
 # logs
-_.log
+*.log
 
 # dot-env environment variable files
 .env

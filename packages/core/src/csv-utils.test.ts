@@ -235,35 +235,38 @@ describe("csv-utils", () => {
 		});
 
 		it("should throw error if required headers are missing", () => {
-			const csv = "name,problem,created-at\nEntry 1,Prob 1,2024-01-01";
+			const csv = "tags,created-at\nEntry 1,Prob 1,2024-01-01";
 			expect(() => csvToLogEntries(csv)).toThrow(
-				"CSV is missing required headers: id",
+				"CSV is missing required headers: name, problem",
 			);
 		});
 
-		it("should throw error if multiple required headers are missing", () => {
-			const csv = "name,created-at\nEntry 1,2024-01-01";
+		it("should throw error if name is missing in header", () => {
+			const csv = "id,problem,created-at\nid1,prob1,2024-01-01";
 			expect(() => csvToLogEntries(csv)).toThrow(
-				"CSV is missing required headers: id, problem",
+				"CSV is missing required headers: name",
 			);
 		});
 
-		it("should skip rows missing required fields", () => {
+		it("should NOT skip rows missing id or created-at", () => {
 			const csv = [
 				"id,name,problem,created-at",
 				"id1,Name1,Prob1,2024-01-01",
-				"id2,Name2,,2024-01-01", // Missing problem
-				",Name3,Prob3,2024-01-01", // Missing id
+				"id2,Name2,,2024-01-01", // Missing problem - still skipped
+				",Name3,Prob3,2024-01-01", // Missing id - now auto-filled
 			].join("\n");
 			const entries = csvToLogEntries(csv);
-			expect(entries).toHaveLength(1);
+			expect(entries).toHaveLength(2);
 			expect(entries[0].id).toBe("id1");
+			expect(entries[1].name).toBe("Name3");
+			expect(entries[1].id).toBeDefined();
+			expect(entries[1].id).not.toBe("");
 		});
 
-		it("should throw error if required headers are missing in last row (no newline)", () => {
-			const csv = "id,name,problem";
+		it("should throw error if problem is missing in header", () => {
+			const csv = "id,name,created-at";
 			expect(() => csvToLogEntries(csv)).toThrow(
-				"CSV is missing required headers: created-at",
+				"CSV is missing required headers: problem",
 			);
 		});
 
@@ -289,7 +292,7 @@ describe("csv-utils", () => {
 		it("should handle rows with fewer fields than headers", () => {
 			const csv = "id,name,problem,created-at\nid1,Name1";
 			const entries = csvToLogEntries(csv);
-			expect(entries).toHaveLength(0); // Should be filtered out due to missing problem and created-at
+			expect(entries).toHaveLength(0); // Still skipped because 'problem' is missing
 		});
 
 		it("should handle rows with more fields than headers", () => {
@@ -300,10 +303,12 @@ describe("csv-utils", () => {
 			expect(entries[0].id).toBe("id1");
 		});
 
-		it("should skip last row if missing required fields", () => {
+		it("should NOT skip last row if missing id/created-at but has name/problem", () => {
 			const csv = "id,name,problem,created-at\nid1,Name1,Prob1"; // Missing created-at
 			const entries = csvToLogEntries(csv);
-			expect(entries).toHaveLength(0);
+			expect(entries).toHaveLength(1);
+			expect(entries[0].name).toBe("Name1");
+			expect(entries[0]["created-at"]).toBeDefined();
 		});
 
 		it("should handle CSV with only a newline", () => {

@@ -204,7 +204,7 @@ describe("updateLogEntry", () => {
 });
 
 describe("createLogEntry", () => {
-	test("should create log entry with provided created-at timestamp", () => {
+	test("should ALWAYS auto-generate timestamp even if provided", () => {
 		const customTimestamp = "2024-01-01T12:00:00.000Z";
 		const entry = {
 			name: "Test Entry",
@@ -216,7 +216,10 @@ describe("createLogEntry", () => {
 
 		expect(result.name).toBe("Test Entry");
 		expect(result.problem).toBe("Test Problem");
-		expect(result["created-at"]).toBe(customTimestamp);
+		expect(result["created-at"]).not.toBe(customTimestamp);
+		expect(new Date(result["created-at"]).getTime()).toBeGreaterThan(
+			new Date(customTimestamp).getTime(),
+		);
 	});
 
 	test("should create log entry with auto-generated timestamp", () => {

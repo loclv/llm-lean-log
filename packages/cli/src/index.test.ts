@@ -30,6 +30,8 @@ describe("CLI", () => {
 	let consoleLogSpy: any;
 	let consoleErrorSpy: any;
 	let processExitSpy: any;
+	let bunFileSpy: any;
+	let bunWriteSpy: any;
 	let originalArgv: string[];
 
 	beforeEach(() => {
@@ -40,6 +42,16 @@ describe("CLI", () => {
 				throw new Error(`process.exit(${code})`);
 			},
 		);
+		bunFileSpy = spyOn(Bun, "file").mockImplementation(
+			() =>
+				({
+					exists: () => Promise.resolve(true),
+					text: () => Promise.resolve(""),
+				}) as any,
+		);
+		bunWriteSpy = spyOn(Bun, "write").mockImplementation(() =>
+			Promise.resolve(0),
+		);
 		originalArgv = process.argv;
 	});
 
@@ -47,6 +59,8 @@ describe("CLI", () => {
 		consoleLogSpy.mockRestore();
 		consoleErrorSpy.mockRestore();
 		processExitSpy.mockRestore();
+		bunFileSpy.mockRestore();
+		bunWriteSpy.mockRestore();
 		process.argv = originalArgv;
 	});
 
@@ -72,6 +86,16 @@ describe("CLI", () => {
 		expect(consoleLogSpy).toHaveBeenCalledWith(pkg.version);
 	});
 
+	it("should show version with '-v' flag", async () => {
+		await runCommand(["-v"]);
+		expect(consoleLogSpy).toHaveBeenCalledWith(pkg.version);
+	});
+
+	it("should show version with '-V' flag", async () => {
+		await runCommand(["-V"]);
+		expect(consoleLogSpy).toHaveBeenCalledWith(pkg.version);
+	});
+
 	it("should call loadLogs and visualizeTable for 'list' command", async () => {
 		const { loadLogs, visualizeTable } = core as any;
 		loadLogs.mockResolvedValueOnce([
@@ -85,6 +109,13 @@ describe("CLI", () => {
 		expect(consoleLogSpy).toHaveBeenCalledWith("visualized table");
 	});
 
+	it("should work with 'ls' alias", async () => {
+		const { loadLogs, visualizeTable } = core as any;
+		await runCommand(["ls"]);
+		expect(loadLogs).toHaveBeenCalled();
+		expect(visualizeTable).toHaveBeenCalled();
+	});
+
 	it("should call visualizeStats for 'stats' command", async () => {
 		const { visualizeStats } = core as any;
 
@@ -95,7 +126,7 @@ describe("CLI", () => {
 	});
 
 	it("should add a new log entry with 'add' command", async () => {
-		const { saveLogs, addLogEntry } = core as any;
+		const { saveLogs, addLogEntry } = core;
 
 		await runCommand([
 			"add",
@@ -107,6 +138,16 @@ describe("CLI", () => {
 		expect(addLogEntry).toHaveBeenCalled();
 		expect(saveLogs).toHaveBeenCalled();
 		expect(consoleLogSpy).toHaveBeenCalledWith("Log entry added successfully");
+
+		// Verify that saveLogs was called with the expected entries
+		const savedEntries = (saveLogs as any).mock.calls[0][1];
+		const lastEntry = savedEntries[savedEntries.length - 1];
+
+		expect(lastEntry.name).toBe("New Log");
+		expect(lastEntry.problem).toBe("Test Problem");
+		expect(lastEntry.tags).toBe("test,cli");
+		expect(lastEntry["created-at"]).toBeDefined();
+		expect(lastEntry.id).toBeDefined();
 	});
 
 	it("should show error and exit if 'add' is missing problem", async () => {
@@ -120,6 +161,17 @@ describe("CLI", () => {
 		);
 	});
 
+	it("should show error and exit if 'add' is missing name", async () => {
+		try {
+			await runCommand(["add"]);
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit(1)");
+		}
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("Please provide a log name"),
+		);
+	});
+
 	it("should search logs with 'search' command", async () => {
 		const { searchLogs, visualizeTable } = core as any;
 		searchLogs.mockReturnValueOnce([]);
@@ -130,6 +182,17 @@ describe("CLI", () => {
 		expect(visualizeTable).toHaveBeenCalled();
 	});
 
+	it("should show error and exit if 'search' is missing query", async () => {
+		try {
+			await runCommand(["search"]);
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit(1)");
+		}
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("Please provide a search query"),
+		);
+	});
+
 	it("should filter logs by tags with 'tags' command", async () => {
 		const { filterByTags, visualizeTable } = core as any;
 		filterByTags.mockReturnValueOnce([]);
@@ -138,6 +201,17 @@ describe("CLI", () => {
 
 		expect(filterByTags).toHaveBeenCalled();
 		expect(visualizeTable).toHaveBeenCalled();
+	});
+
+	it("should show error and exit if 'tags' is missing tags", async () => {
+		try {
+			await runCommand(["tags"]);
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit(1)");
+		}
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("Please provide at least one tag"),
+		);
 	});
 
 	it("should view entry at index", async () => {
@@ -152,6 +226,78 @@ describe("CLI", () => {
 		expect(consoleLogSpy).toHaveBeenCalledWith("visualized entry");
 	});
 
+	it("should view last entry with --last flag", async () => {
+		const { loadLogs, visualizeEntry } = core as any;
+		loadLogs.mockResolvedValueOnce([
+			{ id: "1", name: "test1", problem: "p1", "created-at": "t1" },
+			{ id: "2", name: "test2", problem: "p2", "created-at": "t2" },
+		]);
+
+		await runCommand(["view", "--last"]);
+
+		expect(visualizeEntry).toHaveBeenCalledWith(
+			expect.objectContaining({ id: "2" }),
+			expect.any(Object),
+		);
+	});
+
+	it("should show error and exit if 'view' has no logs", async () => {
+		const { loadLogs } = core as any;
+		loadLogs.mockResolvedValueOnce([]);
+
+		try {
+			await runCommand(["view", "0"]);
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit(1)");
+		}
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("No log entries found"),
+		);
+	});
+
+	it("should show error and exit if 'view' index is NaN", async () => {
+		const { loadLogs } = core as any;
+		loadLogs.mockResolvedValueOnce([{ id: "1" }]);
+
+		try {
+			await runCommand(["view", "abc"]);
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit(1)");
+		}
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("Please provide a valid entry index"),
+		);
+	});
+
+	it("should show error and exit if 'view' index is out of range", async () => {
+		const { loadLogs } = core as any;
+		loadLogs.mockResolvedValueOnce([{ id: "1" }]);
+
+		try {
+			await runCommand(["view", "10"]);
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit(1)");
+		}
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("out of range"),
+		);
+	});
+
+	it("should show error and exit if entry is missing at index", async () => {
+		const { loadLogs } = core as any;
+		// Create an array with a hole or undefined
+		loadLogs.mockResolvedValueOnce([undefined]);
+
+		try {
+			await runCommand(["view", "0"]);
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit(1)");
+		}
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("Entry not found at index 0"),
+		);
+	});
+
 	it("should show error for unknown command", async () => {
 		try {
 			await runCommand(["unknown"]);
@@ -161,6 +307,12 @@ describe("CLI", () => {
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
 			expect.stringContaining('Unknown command "unknown"'),
 		);
+	});
+
+	it("should show help when no command is provided", async () => {
+		await runCommand([]);
+		expect(consoleLogSpy).toHaveBeenCalled();
+		expect(consoleLogSpy.mock.calls[0][0]).toContain("l-log CLI");
 	});
 
 	it("should use custom log file if provided", async () => {

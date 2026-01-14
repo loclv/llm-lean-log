@@ -319,7 +319,7 @@ trigger: always_on
 以下の形式を使用してください：
 
 ```bash
-l-log add ./logs/chat.csv "<タスク名>" --tags="<タグ>" --problem="<問題>" --solution="<解決策>" --action="<アクション>" --files="<ファイル>" --tech-stack="<技術>" --last-commit-short-sha=$(git rev-parse --short HEAD) --created-by-agent="<エージェント名>"
+l-log add ./logs/chat.csv "<タスク名>" --tags="<タグ>" --problem="<問題>" --solution="<解決策>" --action="<アクション>" --files="<ファイル>" --tech-stack="<技術>" --last-commit-short-sha="short-sha" --created-by-agent="<エージェント名>"
 ```
 
 詳細：<https://github.com/loclv/llm-lean-log>。

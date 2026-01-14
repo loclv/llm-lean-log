@@ -48,10 +48,7 @@ export async function saveLogs(
  * Created at metadata is current time, auto created.
  */
 export function createLogEntry(
-	entry: Omit<LogEntry, "id" | "created-at"> & {
-		id?: string;
-		"created-at"?: string;
-	},
+	entry: Omit<LogEntry, "id" | "created-at">,
 ): LogEntry {
 	return {
 		...entry,
