@@ -81,12 +81,26 @@ jobs:
           body: ${{ steps.changelog.outputs.CHANGELOG }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup npm registry
-        run: npm config set @${{ github.repository_owner }}:registry https://registry.npmjs.org/
-
-      - name: Publish to npm
+      - name: Publish Core Package
         run: |
+          cd packages/core
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          bun publish --access public
+          bun publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish CLI Package
+        run: |
+          cd packages/cli
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          bun publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # - name: Publish Visualizer Package
+      #   run: |
+      #     cd packages/visualizer
+      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      #     bun publish
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
