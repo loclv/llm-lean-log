@@ -2,6 +2,19 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.3] - 2026-01-16
+
+### Changed
+
+- **Build Optimization**: Improved build script to output a single bundled file
+
+| Option | Before | After |
+|--------|--------|-------|
+| Output | `--outdir dist` (directory) | `--outfile dist/index.js` (single file) |
+| Target | `--target node` | `--target bun` |
+| Minify | ❌ | `--minify` ✅ |
+| Size | ~1.6MB | **~1.26MB** |
+
 ## [0.2.2] - 2026-01-14
 
 ### Changed
