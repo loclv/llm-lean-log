@@ -82,25 +82,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Publish Core Package
-      #   run: |
-      #     cd packages/core
-      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-      #     bun publish
+      #   run: bun publish --cwd packages/core
       #   env:
       #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish CLI Package
-        run: |
-          cd packages/cli
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          bun publish
+        run: bun publish --cwd packages/cli
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Publish Visualizer Package
-      #   run: |
-      #     cd packages/visualizer
-      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-      #     bun publish
+      #   run: bun publish --cwd packages/visualizer
       #   env:
       #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
