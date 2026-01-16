@@ -3,5 +3,9 @@
 coverage = true
 coveragePathIgnorePatterns = [
   "node_modules/**",
-  "**/*.test.ts"
+  "**/*.test.ts",
+  "dist/**",
+  "packages/core/dist/**",
+  "packages/cli/dist/**",
+  "packages/visualizer/dist/**"
 ]
