@@ -16,9 +16,31 @@ import {
 import pkg from "../package.json";
 
 /**
- * Help text for LLMs, not human!
+ * Help text for LLMs in CSV format
  */
-const helpText = `l-log CLI
+const helpText = `l-log CLI - Usage: l-log <command> [log-file] [options]
+
+command,options,description
+list|ls,"--compact|-c,--human",List all log entries
+stats,--human,Show log statistics
+view <index>,"--last,--human",View detailed entry at index
+search <query>,--human,Search logs by name/problem/solution
+tags <tag1> [tag2],--human,Filter logs by tags
+add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--causeIds=<ids>,--effectIds=<ids>,--last-commit-short-sha=<sha>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>",Add a new log entry
+help|-h|--help,--human,Show this help message
+-v|-V|--version,,Show version number
+
+examples
+l-log list ./logs/example.csv
+l-log stats
+l-log view 0
+l-log view --last
+l-log search "memory"
+l-log tags error api
+l-log add ./logs/chat1.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --last-commit-short-sha="a1b2c3d" --model="gpt-4o"
+`;
+
+const helpTextForHuman = `l-log CLI
 
 Usage: l-log <command> [log-file] [options]
 
@@ -56,6 +78,7 @@ Commands:
     --created-by-agent=<name> Agent model name
   
   help, -h, --help      Show this help message
+    --human             Show human-readable output (default for terminal)
   
   -v, -V, --version     Show version number
 
@@ -201,9 +224,11 @@ export async function main() {
 		}
 		case "help":
 		case "--help":
-		case "-h":
-			console.log(helpText);
+		case "-h": {
+			const showHumanHelp = args.includes("--human");
+			console.log(showHumanHelp ? helpTextForHuman : helpText);
 			break;
+		}
 		case "-v":
 		case "-V":
 		case "--version":

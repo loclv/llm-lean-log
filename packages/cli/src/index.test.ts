@@ -81,6 +81,24 @@ describe("CLI", () => {
 		expect(consoleLogSpy.mock.calls[0][0]).toContain("l-log CLI");
 	});
 
+	it("should show CSV format help by default (for LLMs)", async () => {
+		await runCommand(["help"]);
+		expect(consoleLogSpy).toHaveBeenCalled();
+		const output = consoleLogSpy.mock.calls[0][0];
+		expect(output).toContain("command,options,description");
+		expect(output).toContain("list|ls");
+	});
+
+	it("should show human-readable help with '--human' flag", async () => {
+		await runCommand(["help", "--human"]);
+		expect(consoleLogSpy).toHaveBeenCalled();
+		const output = consoleLogSpy.mock.calls[0][0];
+		expect(output).toContain("Usage: l-log <command> [log-file] [options]");
+		expect(output).toContain("Commands:");
+		expect(output).toContain("list, ls");
+		expect(output).not.toContain("command,options,description");
+	});
+
 	it("should show version with '--version' flag", async () => {
 		await runCommand(["--version"]);
 		expect(consoleLogSpy).toHaveBeenCalledWith(pkg.version);

@@ -15,6 +15,12 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 | Minify | ❌ | `--minify` ✅ |
 | Size | ~1.6MB | **~1.26MB** |
 
+### Added
+
+- **LLM-Optimized Help Output**: Default help output is now in CSV format for better LLM consumption
+  - Added `--human` flag to show human-readable format for help command
+  - CSV format includes columns: `command`, `options`, `description` for easy parsing
+
 ## [0.2.2] - 2026-01-14
 
 ### Changed
