@@ -79,6 +79,10 @@ Before run:
 
 With `logs/chat.csv` file path, you can change it to any path you want.
 
+If LLMs forget about the log or it is not known that should write the log when responding to a user, you can ask LLMs to write the log again by prompt:
+
+> use l-log
+
 ## ❌ Problems
 
 - 🐥 `markdown` is not optimized for LLMs token usage, only for human readability.

@@ -51,6 +51,10 @@ touch .agent/rules/common.md
 
 [.agent/rules/common.md](.agent/rules/common.md)ファイルの内容をコピーしてください。
 
+もしLLMsがログを忘れるか、またはユーザーに応答する際にログを書くべきかどうかが不明確な場合は、プロンプトでLLMsにログを書くように要求できます：
+
+> use l-log
+
 ## ❌ 問題
 
 - 🐥 `markdown` はLLMのトークン使用量を最適化しておらず、人間の可読性のためだけです。

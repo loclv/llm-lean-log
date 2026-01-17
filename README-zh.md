@@ -53,6 +53,10 @@ touch .agent/rules/common.md
 
 更改规则中的 `logs/chat.csv` 文件路径。
 
+如果LLMs忘记写日志或者不知道应该写日志时，可以提示LLMs写日志：
+
+> use l-log
+
 ## ❌ 问题
 
 - 🐥 `markdown` 没有为LLM的token使用量优化，仅适用于人类阅读。

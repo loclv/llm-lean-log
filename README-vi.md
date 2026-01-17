@@ -53,6 +53,10 @@ Copy nội dung của [.agent/rules/common.md](.agent/rules/common.md).
 
 Thay đổi `logs/chat.csv` file path trong quy tắc.
 
+Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi trả lời người dùng, bạn có thể yêu cầu LLMs viết lại log bằng lệnh:
+
+> use l-log
+
 ## ❌ Các vấn đề
 
 - 🐥 `markdown` không được tối ưu cho việc sử dụng token của LLM, chỉ phục vụ cho việc con người đọc.
