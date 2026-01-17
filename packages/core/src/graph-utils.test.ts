@@ -66,7 +66,7 @@ describe("Graph Utils", () => {
 	});
 
 	describe("ID Parsing and Formatting", () => {
-		it("should parse comma-separated IDs", () => {
+		it("should parse comma-separated IDs, wrap with double quotes if multiple IDs", () => {
 			expect(parseIds("log1,log2,log3")).toEqual(["log1", "log2", "log3"]);
 			expect(parseIds("log1, log2, log3")).toEqual(["log1", "log2", "log3"]);
 			expect(parseIds("log1")).toEqual(["log1"]);
@@ -74,7 +74,7 @@ describe("Graph Utils", () => {
 			expect(parseIds(undefined)).toEqual([]);
 		});
 
-		it("should format IDs to comma-separated string", () => {
+		it("should format IDs to comma-separated string, wrap with double quotes if multiple IDs", () => {
 			expect(formatIds(["log1", "log2", "log3"])).toBe("log1,log2,log3");
 			expect(formatIds(["log1"])).toBe("log1");
 			expect(formatIds([])).toBe("");

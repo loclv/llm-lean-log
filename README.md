@@ -102,7 +102,7 @@ With `logs/chat.csv` file path, you can change it to any path you want.
 - 🌟 Headers are logger important fields:
   - `id`: log ID (required), UUID for unique identifier, used for Directed Graph, cause and effect.
   - `name`: main content of the log (short). (required)
-  - `tags`: tags to categorize the log, comma separated. Example: `error,api,auth`. (optional)
+  - `tags`: tags to categorize the log, comma separated, wrap with double quotes if multiple tags. Example: `"error,api,auth"`. (optional)
   - `problem`: description of the problem, context of the log. (required)
   - `solution`: description of the solution, method to fix the problem. (optional)
   - `action`: run command, action (web search, etc.) that was taken to fix the problem. (optional)
@@ -118,27 +118,27 @@ With `logs/chat.csv` file path, you can change it to any path you want.
         - Better parsing and understanding of the code.
         - Learn from Markdown code blocks format, so humans can read and understand the code.
   - `files`: list of files that were modified, created, deleted or must be read (optional).
-    - Example: `src/index.ts,src/constants.ts`
+    - Example: `"src/index.ts,src/constants.ts"`
     - Why?
       - Better understanding of the code, context of the log.
-    - Format: comma separated list of files.
+    - Format: comma separated list of files, wrap with double quotes if multiple files.
   - `tech-stack`: list of technologies that were used (optional).
-    - Example: `elysia,drizzle,sqlite,turso`
+    - Example: `"elysia,drizzle,sqlite,turso"`
     - Why?
       - Better understanding of the code, context of the log.
-    - Format: comma separated list of technologies.
+    - Format: comma separated list of technologies, wrap with double quotes if multiple technologies.
 
   - `causeIds`: cause log ID of the log (optional).
-    - Example: `UUID,UUID`
+    - Example: `"UUID,UUID"`
     - Why?
       - Better understanding of the log.
-    - Format: comma separated list of other log IDs.
+    - Format: comma separated list of other log IDs, wrap with double quotes if multiple cause log IDs.
 
   - `effectIds`: effect log ID of the log (optional).
-    - Example: `UUID,UUID`
+    - Example: `"UUID,UUID"`
     - Why?
       - Better understanding of the log.
-    - Format: comma separated list of other log IDs.
+    - Format: comma separated list of other log IDs, wrap with double quotes if multiple effect log IDs.
 
   - `last-commit-short-sha`: last git commit short SHA of the log (optional).
     - Example: `a1b2c3d`

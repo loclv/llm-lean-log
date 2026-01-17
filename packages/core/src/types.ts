@@ -7,7 +7,7 @@ export interface LogEntry {
 	id: string;
 	/** Main content of the log (short). (required) */
 	name: string;
-	/** Tags to categorize the log, comma separated. Example: error,api,auth. (optional) */
+	/** Tags to categorize the log, comma separated. Wrap with double quotes if multiple tags. Example: error,api,auth. (optional) */
 	tags?: string;
 	/** Description of the problem, context of the log. (required) */
 	problem: string;
@@ -19,9 +19,9 @@ export interface LogEntry {
 	files?: string;
 	/** List of technologies that were used (optional). */
 	"tech-stack"?: string;
-	/** Cause log ID of the log (optional). Format: comma separated list of other log IDs */
+	/** Cause log ID of the log (optional). Wrap with double quotes if multiple cause log IDs. Format: comma separated list of other log IDs */
 	causeIds?: string;
-	/** Effect log ID of the log (optional). Format: comma separated list of other log IDs */
+	/** Effect log ID of the log (optional). Wrap with double quotes if multiple effect log IDs. Format: comma separated list of other log IDs */
 	effectIds?: string;
 	/** Last git commit short SHA of the log (optional). Example: a1b2c3d */
 	"last-commit-short-sha"?: string;

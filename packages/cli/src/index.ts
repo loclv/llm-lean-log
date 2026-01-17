@@ -63,15 +63,15 @@ Commands:
     --human             Show human-readable output (with colors)
   
   add <name>            Add a new log entry
-    --tags=<tags>       Comma-separated tags
+    --tags=<tags>       Comma-separated tags, wrap with double quotes if multiple tags
     --problem=<text>    Problem description
     --solution=<text>   Solution description
     --action=<text>     Action taken
-    --files=<files>     Comma-separated files paths
-    --tech-stack=<tech> Comma-separated tech stack
+    --files=<files>     Comma-separated files paths, wrap with double quotes if multiple files
+    --tech-stack=<tech> Comma-separated tech stack, wrap with double quotes if multiple tech stack
     --model=<name>      Model name
-    --causeIds=<ids>    Comma-separated cause log row UUIDs
-    --effectIds=<ids>   Comma-separated effect log row UUIDs
+    --causeIds=<ids>    Comma-separated cause log row UUIDs, wrap with double quotes if multiple cause log row UUIDs
+    --effectIds=<ids>   Comma-separated effect log row UUIDs, wrap with double quotes if multiple effect log row UUIDs
     --last-commit-short-sha=<sha> Last git commit short SHA
     --created-at=<time> Creation time (ISO 8601 formatted string)
     --updated-at=<time> Update time (ISO 8601 formatted string)

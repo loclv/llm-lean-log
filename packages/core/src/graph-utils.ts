@@ -7,6 +7,7 @@ import type { LogEntry } from "./types";
 
 /**
  * Parse comma-separated IDs into an array
+ * Wrap with double quotes if multiple IDs
  */
 export function parseIds(ids?: string): string[] {
 	if (!ids) return [];
@@ -18,6 +19,7 @@ export function parseIds(ids?: string): string[] {
 
 /**
  * Convert array of IDs to comma-separated string
+ * Wrap with double quotes if multiple IDs
  */
 export function formatIds(ids: string[]): string {
 	return ids.join(",");
