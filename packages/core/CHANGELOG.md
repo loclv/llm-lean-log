@@ -2,6 +2,12 @@
 
 All notable changes to the `llm-lean-log-core` package will be documented in this file.
 
+## [0.2.4] - 2026-01-18
+
+### Added
+
+- `cause` field support added to CLI commands
+
 ## [0.2.0] - 2026-01-14
 
 ### ⚠️ BREAKING CHANGES

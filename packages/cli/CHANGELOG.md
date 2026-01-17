@@ -2,7 +2,7 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
-## [0.2.3] - 2026-01-18
+## [0.2.4] - 2026-01-18
 
 ### Changed
 

@@ -39,7 +39,7 @@ jobs:
           if [ -f "CHANGELOG.md" ]; then
             # Look for version section or date section that matches the tag
             CHANGELOG_CONTENT=$(awk -v version="$VERSION" '
-              /^### / {
+              /^## / {
                 if (match($0, /[0-9]+\.[0-9]+\.[0-9]+/)) {
                   current_version = substr($0, RSTART, RLENGTH)
                   if (current_version == version) {
@@ -50,14 +50,14 @@ jobs:
                   }
                 }
               }
-              in_section && /^### / { exit }
+              in_section && /^## / { exit }
               in_section { print }
             ' CHANGELOG.md)
             
             # Fallback to latest entry if no version match found
             if [ -z "$CHANGELOG_CONTENT" ]; then
               CHANGELOG_CONTENT=$(awk '
-                /^### / { 
+                /^## / { 
                   if (found) exit 
                   found=1 
                   next 
@@ -86,10 +86,10 @@ jobs:
       #   env:
       #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish CLI Package
-        run: bun publish --cwd packages/cli
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Publish CLI Package
+      #   run: bun publish --cwd packages/cli
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Publish Visualizer Package
       #   run: bun publish --cwd packages/visualizer

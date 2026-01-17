@@ -2,19 +2,19 @@
 
 This project uses GitHub Actions to automate releases with CHANGELOG.md integration. To create a new release:
 
-1. **Update the version** in `package.json` files.
-2. **Update CHANGELOG.md** with the new version details:
+1. Update the version in `package.json` files.
+2. Update CHANGELOG.md with the new version details:
    - Add a new section with the version number (e.g., `### v0.1.9`)
    - Include detailed changes, features, and fixes
    - Follow the existing format in the changelog
-3. **Tag and push** the commit with the new version:
+3. Tag and push the commit with the new version:
 
    ```bash
    git tag v0.1.9
    git push origin v0.1.9
    ```
 
-4. **GitHub Actions will automatically:**
+4. GitHub Actions will automatically:
    - Extract the relevant changelog section from `CHANGELOG.md`
    - Create a GitHub Release with the changelog content
    - Generate additional release notes automatically
