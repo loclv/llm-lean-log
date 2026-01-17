@@ -11,9 +11,9 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 | Option | Before | After |
 |--------|--------|-------|
 | Output | `--outdir dist` (directory) | `--outfile dist/index.js` (single file) |
-| Target | `--target node` | `--target bun` |
+| Target | `--target node` | `--target node` |
 | Minify | ❌ | `--minify` ✅ |
-| Size | ~1.6MB | **~1.26MB** |
+| Size | ~1.6MB | **~1.14MB** |
 
 ### Added
 
