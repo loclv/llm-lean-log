@@ -8,7 +8,9 @@ This project is a monorepo containing multiple packages. For detailed changes, p
 
 ## v0.2.5 - January 18, 2026
 
-- Updated core package versions to 0.2.4
+- Fixed CLI build configuration to resolve __require errors
+- Updated build process to use external dependencies
+- Fixed package.json import issues in bundled CLI
 
 ## v0.2.4 - January 18, 2026
 

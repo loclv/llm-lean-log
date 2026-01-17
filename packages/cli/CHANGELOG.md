@@ -2,6 +2,18 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.6] - 2026-01-18
+
+### Fixed
+
+- **Build Configuration**: Fixed __require error in bundled CLI by using external dependencies
+- **Package Import**: Replaced JSON import with fs-based reading to avoid bundling issues
+- **Dependency Management**: Updated build to exclude llm-lean-log-core from bundle
+
+### Changed
+
+- **Build Process**: Now uses --external flag for core dependency
+
 ## [0.2.4] - 2026-01-18
 
 ### Changed

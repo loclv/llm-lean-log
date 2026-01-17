@@ -4,7 +4,7 @@
 	"description": "CLI tool for llm-lean-log",
 	"scripts": {
 		"start": "bun run src/index.ts",
-		"build": "bun build src/index.ts --outfile dist/index.js --target node --minify && tsc --emitDeclarationOnly",
+		"build": "bun build src/index.ts --outfile dist/index.js --target node && tsc --emitDeclarationOnly",
 		"prepublishOnly": "bun run build",
 		"type": "tsc --noEmit"
 	},

@@ -1,8 +1,10 @@
 #!/usr/bin/env bun
+
 /**
  * CLI tool for llm-lean-log
  */
 
+import { readFileSync } from "node:fs";
 import {
 	addLogEntry,
 	filterByTags,
@@ -13,7 +15,13 @@ import {
 	visualizeStats,
 	visualizeTable,
 } from "llm-lean-log-core";
-import pkg from "../package.json";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(
+	readFileSync(join(__dirname, "../package.json"), "utf8"),
+);
 
 /**
  * Help text for LLMs in CSV format
