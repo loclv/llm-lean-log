@@ -4,7 +4,6 @@
  * CLI tool for llm-lean-log
  */
 
-import { readFileSync } from "node:fs";
 import {
 	addLogEntry,
 	filterByTags,
@@ -15,9 +14,11 @@ import {
 	visualizeStats,
 	visualizeTable,
 } from "llm-lean-log-core";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// use node.js modules for better compatibility
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(
 	readFileSync(join(__dirname, "../package.json"), "utf8"),
