@@ -6,6 +6,7 @@ import {
 	CheckCircle2,
 	Cpu,
 	FileCode,
+	Info,
 	Layers,
 	MessageSquare,
 	Tag,
@@ -89,6 +90,23 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 							{entry.solution}
 						</p>
 					</div>
+
+					{entry.cause && (
+						<div className="flex flex-col gap-2">
+							<div
+								className="flex items-center gap-2"
+								style={{ color: "var(--warning)" }}
+							>
+								<Info size={16} />
+								<strong style={{ fontSize: "0.875rem" }}>Cause</strong>
+							</div>
+							<p
+								style={{ color: "var(--text-secondary)", fontSize: "0.925rem" }}
+							>
+								{entry.cause}
+							</p>
+						</div>
+					)}
 				</div>
 
 				<div className="flex flex-col gap-2">
@@ -108,7 +126,7 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 									marginBottom: "0.5rem",
 								}}
 							>
-								{entry.action.replace(
+								{entry.action?.replace(
 									`${codeInfo.language}\`${codeInfo.code}\``,
 									"",
 								)}

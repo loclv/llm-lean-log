@@ -125,7 +125,8 @@ export function searchLogs(entries: LogEntry[], query: string): LogEntry[] {
 			entry.problem?.toLowerCase().includes(lowerQuery) ||
 			entry.solution?.toLowerCase().includes(lowerQuery) ||
 			entry.files?.toLowerCase().includes(lowerQuery) ||
-			entry["tech-stack"]?.toLowerCase().includes(lowerQuery)
+			entry["tech-stack"]?.toLowerCase().includes(lowerQuery) ||
+			entry.cause?.toLowerCase().includes(lowerQuery)
 		);
 	});
 }

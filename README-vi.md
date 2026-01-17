@@ -99,6 +99,7 @@ Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi tr
       - Tại sao?
         - Giúp phân tích và hiểu mã tốt hơn.
         - Học hỏi từ định dạng khối mã của Markdown, để con người có thể đọc và hiểu mã.
+    - Định dạng: `text {language}`\`code-block\`` hoặc markdown code block hoặc text.
   - `files`: danh sách các tệp đã được sửa đổi, tạo mới, xóa hoặc phải đọc (tùy chọn).
     - Ví dụ: `src/index.ts,src/constants.ts`
     - Tại sao?
@@ -109,6 +110,11 @@ Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi tr
     - Tại sao?
       - Giúp hiểu mã và ngữ cảnh của log tốt hơn.
     - Định dạng: danh sách các công nghệ phân tách bằng dấu phẩy.
+  - `cause`: mô tả nguyên nhân của vấn đề (tùy chọn).
+    - Ví dụ: `you choose to use X instead of Y, to do Z`
+    - Tại sao?
+      - Giúp hiểu log tốt hơn.
+    - Định dạng: văn bản.
 
   - `causeIds`: ID log nguyên nhân của log này (tùy chọn).
     - Ví dụ: `UUID,UUID`

@@ -97,6 +97,7 @@ describe("CLI", () => {
 		expect(output).toContain("Commands:");
 		expect(output).toContain("list, ls");
 		expect(output).not.toContain("command,options,description");
+		expect(output).toContain("--cause=<text>");
 	});
 
 	it("should show version with '--version' flag", async () => {
@@ -151,6 +152,7 @@ describe("CLI", () => {
 			"New Log",
 			"--problem=Test Problem",
 			"--tags=test,cli",
+			"--cause=Test Cause",
 		]);
 
 		expect(addLogEntry).toHaveBeenCalled();
@@ -164,6 +166,7 @@ describe("CLI", () => {
 		expect(lastEntry.name).toBe("New Log");
 		expect(lastEntry.problem).toBe("Test Problem");
 		expect(lastEntry.tags).toBe("test,cli");
+		expect(lastEntry.cause).toBe("Test Cause");
 		expect(lastEntry["created-at"]).toBeDefined();
 		expect(lastEntry.id).toBeDefined();
 	});

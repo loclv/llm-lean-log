@@ -97,6 +97,7 @@ touch .agent/rules/common.md
       - なぜ？
         - コードのより良い解析と理解。
         - Markdownコードブロック形式から学び、人間がコードを読めるようにします。
+    - 形式：`text {language}`\`code-block\`` または markdown code block またはテキスト。
   - `files`: 修正、作成、削除されたファイル、または読む必要があるファイルのリスト（オプション）。
     - 例：`src/index.ts,src/constants.ts`
     - なぜ？
@@ -107,6 +108,11 @@ touch .agent/rules/common.md
     - なぜ？
       - コードとログのコンテキストをより良く理解するため。
     - 形式：カンマ区切りの技術リスト。
+  - `cause`: 問題の原因（オプション）。
+    - 例：`you choose to use X instead of Y, to do Z`
+    - なぜ？
+      - ログをより良く理解するため。
+    - 形式：テキスト。
 
   - `causeIds`: ログの原因ログID（オプション）。
     - 例：`UUID,UUID`

@@ -19,6 +19,8 @@ export interface LogEntry {
 	files?: string;
 	/** List of technologies that were used (optional). */
 	"tech-stack"?: string;
+	/** Cause log of the problem (optional). Example: you choose to use X instead of Y, to do Z */
+	cause?: string;
 	/** Cause log ID of the log (optional). Wrap with double quotes if multiple cause log IDs. Format: comma separated list of other log IDs */
 	causeIds?: string;
 	/** Effect log ID of the log (optional). Wrap with double quotes if multiple effect log IDs. Format: comma separated list of other log IDs */

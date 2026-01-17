@@ -26,7 +26,7 @@ stats,--human,Show log statistics
 view <index>,"--last,--human",View detailed entry at index
 search <query>,--human,Search logs by name/problem/solution
 tags <tag1> [tag2],--human,Filter logs by tags
-add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--causeIds=<ids>,--effectIds=<ids>,--last-commit-short-sha=<sha>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>",Add a new log entry
+add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--last-commit-short-sha=<sha>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>",Add a new log entry
 help|-h|--help,--human,Show this help message
 -v|-V|--version,,Show version number
 
@@ -70,6 +70,7 @@ Commands:
     --files=<files>     Comma-separated files paths, wrap with double quotes if multiple files
     --tech-stack=<tech> Comma-separated tech stack, wrap with double quotes if multiple tech stack
     --model=<name>      Model name
+    --cause=<text>      Cause description
     --causeIds=<ids>    Comma-separated cause log row UUIDs, wrap with double quotes if multiple cause log row UUIDs
     --effectIds=<ids>   Comma-separated effect log row UUIDs, wrap with double quotes if multiple effect log row UUIDs
     --last-commit-short-sha=<sha> Last git commit short SHA
@@ -210,6 +211,7 @@ export async function main() {
 				"tech-stack": findFlag("--tech-stack"),
 				model: findFlag("--model"),
 				id: findFlag("--id"),
+				cause: findFlag("--cause"),
 				causeIds: findFlag("--causeIds"),
 				effectIds: findFlag("--effectIds"),
 				"last-commit-short-sha": findFlag("--last-commit-short-sha"),

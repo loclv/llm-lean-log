@@ -15,6 +15,7 @@ export const CSV_HEADERS = [
 	"action",
 	"files",
 	"tech-stack",
+	"cause",
 	"causeIds",
 	"effectIds",
 	"last-commit-short-sha",

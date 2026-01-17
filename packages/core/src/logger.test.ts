@@ -522,6 +522,23 @@ describe("searchLogs", () => {
 		expect(result).toHaveLength(1);
 		expect(result[0]?.name).toBe("File related");
 	});
+
+	test("should search by cause (case insensitive)", () => {
+		const entriesWithCause: LogEntry[] = [
+			...mockEntries,
+			{
+				id: "test-cause-related-id",
+				name: "Cause related",
+				problem: "Problem with cause",
+				cause: "Memory leak in loop",
+				"created-at": "2024-01-05T00:00:00.000Z",
+			},
+		];
+		const result = searchLogs(entriesWithCause, "memory leak");
+
+		expect(result).toHaveLength(1);
+		expect(result[0]?.name).toBe("Cause related");
+	});
 });
 
 describe("loadLogs", () => {

@@ -125,6 +125,7 @@ If LLMs forget about the log or it is not known that should write the log when r
       - Why?
         - Better parsing and understanding of the code.
         - Learn from Markdown code blocks format, so humans can read and understand the code.
+    - Format: `text {language}`\`code-block\`` or markdown code block or text.
   - `files`: list of files that were modified, created, deleted or must be read (optional).
     - Example: `"src/index.ts,src/constants.ts"`
     - Why?
@@ -135,6 +136,11 @@ If LLMs forget about the log or it is not known that should write the log when r
     - Why?
       - Better understanding of the code, context of the log.
     - Format: comma separated list of technologies, wrap with double quotes if multiple technologies.
+  - `cause`: cause log of the problem (optional).
+    - Example: `you choose to use X instead of Y, to do Z`
+    - Why?
+      - Better understanding of the log.
+    - Format: text.
 
   - `causeIds`: cause log ID of the log (optional).
     - Example: `"UUID,UUID"`

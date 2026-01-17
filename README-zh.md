@@ -99,6 +99,7 @@ touch .agent/rules/common.md
       - 为什么？
         - 更好的代码解析和理解。
         - 学习Markdown代码块格式，这样人类可以阅读和理解代码。
+    - 格式：`text {language}`\`code-block\`` 或者 markdown code block 或者 text。
   - `files`: 修改、创建、删除或必须阅读的文件列表（可选）。
     - 示例：`src/index.ts,src/constants.ts`
     - 为什么？
@@ -109,6 +110,11 @@ touch .agent/rules/common.md
     - 为什么？
       - 更好地理解代码，日志上下文。
     - 格式：逗号分隔的技术列表。
+  - `cause`: 问题的原因（可选）。
+    - 示例：`you choose to use X instead of Y, to do Z`
+    - 为什么？
+      - 更好地理解日誌。
+    - 格式：文本。
 
   - `causeIds`: 日志的原因ID（可选）。
     - 示例：`UUID,UUID`
