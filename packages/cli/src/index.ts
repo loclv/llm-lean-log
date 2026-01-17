@@ -46,7 +46,7 @@ l-log view 0
 l-log view --last
 l-log search "memory"
 l-log tags error api
-l-log add ./logs/chat1.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --last-commit-short-sha="a1b2c3d" --model="gpt-4o"
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --cause="" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --last-commit-short-sha="a1b2c3d" --model="gpt-4o"
 `;
 
 const helpTextForHuman = `l-log CLI
@@ -99,7 +99,7 @@ Examples for LLMs:
   l-log view --last
   l-log search "memory"
   l-log tags error api
-  l-log add ./logs/chat1.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --last-commit-short-sha="a1b2c3d" --model="gpt-4o"
+  l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --cause="" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --last-commit-short-sha="a1b2c3d" --model="gpt-4o"
 `;
 
 /**
