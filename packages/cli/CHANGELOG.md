@@ -2,6 +2,12 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.7] - 2026-01-18
+
+### Changed
+
+- **Dependency Management**: Updated build to include `llm-lean-log-core` in bundle and removed peer dependency on `typescript`
+
 ## [0.2.6] - 2026-01-18
 
 ### Fixed

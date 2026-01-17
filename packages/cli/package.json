@@ -1,6 +1,6 @@
 {
 	"name": "llm-lean-log-cli",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "CLI tool for llm-lean-log",
 	"scripts": {
 		"start": "bun run src/index.ts",
@@ -32,13 +32,9 @@
 		"access": "public"
 	},
 
-	"dependencies": {
-		"llm-lean-log-core": "^0.2.4"
-	},
 	"devDependencies": {
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
+		"@types/bun": "latest",
+		"llm-lean-log-core": "workspace:*",
 		"typescript": "^5.9.3"
 	},
 	"keywords": [

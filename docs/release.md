@@ -38,3 +38,9 @@ bun i -g l-log-vis
 # confirm
 l-log-vis
 ```
+
+## Additional Notes
+
+I have updated `packages/cli/package.json` to move `llm-lean-log-core` and `typescript` from `dependencies` and `peerDependencies` to `devDependencies`. This ensures that bun build bundles `llm-lean-log-core` into the final executable and removes the dependency requirement.
+
+Verified that `dist/index.js` does not contain `require("llm-lean-log-core")` after building, confirming it is bundled.
