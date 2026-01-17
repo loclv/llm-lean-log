@@ -1,6 +1,6 @@
 {
 	"name": "l-log-vis",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"description": "A beautiful visualizer for LLM interaction logs",
 	"scripts": {
 		"dev": "vite",
@@ -29,7 +29,7 @@
 	"dependencies": {
 		"framer-motion": "^12.26.1",
 		"lucide-react": "^0.562.0",
-		"llm-lean-log-core": "^0.2.1",
+		"llm-lean-log-core": "^0.2.4",
 		"papaparse": "^5.5.3",
 		"prism-react-renderer": "^2.4.1",
 		"react": "^19.2.0",

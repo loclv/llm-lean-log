@@ -13,7 +13,7 @@
     },
     "packages/cli": {
       "name": "llm-lean-log-cli",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "bin": {
         "l-log": "dist/index.js",
       },
@@ -29,7 +29,7 @@
     },
     "packages/core": {
       "name": "llm-lean-log-core",
-      "version": "0.2.1",
+      "version": "0.2.4",
       "dependencies": {
         "cli-highlight": "^2.1.11",
       },
@@ -52,12 +52,12 @@
         "@types/bun": "latest",
       },
       "peerDependencies": {
-        "typescript": "^5.0.0",
+        "typescript": "^5.9.3",
       },
     },
     "packages/visualizer": {
       "name": "l-log-vis",
-      "version": "0.1.7",
+      "version": "0.2.4",
       "bin": {
         "l-log-vis": "./src/cli.ts",
       },
@@ -770,8 +770,6 @@
     "@typescript-eslint/typescript-estree/semver": ["semver@7.7.3", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q=="],
 
     "ajv-formats/ajv": ["ajv@8.17.1", "", { "dependencies": { "fast-deep-equal": "^3.1.3", "fast-uri": "^3.0.1", "json-schema-traverse": "^1.0.0", "require-from-string": "^2.0.2" } }, "sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g=="],
-
-    "llm-lean-log-memory-mcp/llm-lean-log-core": ["llm-lean-log-core@0.2.1", "", { "dependencies": { "cli-highlight": "^2.1.11" }, "peerDependencies": { "typescript": "^5.9.3" } }, "sha512-+w6efw2rBcg5pNoYuiYbda+vkdpBL/wCfmFiWxHTp1pyaZpV+kNZJBOv8FFZoAVKJ3nckBFJjl1om9EBLkjrCQ=="],
 
     "parse5-htmlparser2-tree-adapter/parse5": ["parse5@6.0.1", "", {}, "sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw=="],
 
