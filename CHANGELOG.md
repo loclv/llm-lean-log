@@ -6,10 +6,11 @@ This project is a monorepo containing multiple packages. For detailed changes, p
 - [`llm-lean-log-cli`](./packages/cli/CHANGELOG.md)
 - [`l-log-vis`](./packages/visualizer/CHANGELOG.md)
 
-## v0.2.3 - January 18, 2026
+## v0.2.4 - January 18, 2026
 
 - Updated changelog documentation
 - Minor documentation improvements
+- Added cause field support across all packages
 
 ## v0.2.1 - January 14, 2026
 
