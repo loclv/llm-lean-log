@@ -1,0 +1,21 @@
+{
+	"name": "llm-lean-log-memory-mcp",
+	"version": "0.1.0",
+	"type": "module",
+	"scripts": {
+		"start": "bun src/index.ts",
+		"build": "bun build src/index.ts --outdir dist --target node --format esm",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.25.2",
+		"llm-lean-log-core": "^0.2.1",
+		"zod": "^4.3.5"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.9.3"
+	}
+}
