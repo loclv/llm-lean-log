@@ -1,5 +1,9 @@
 # ☘️ llm-lean-log
 
+- llm-lean-log-cli: ![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli) | ![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core)
+- llm-lean-log-core: ![llm-lean-log-core npm](https://img.shields.io/npm/v/llm-lean-log-core) | ![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)
+- l-log-vis: ![l-log-vis npm](https://img.shields.io/npm/v/l-log-vis) | ![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)
+
 [Vietnamese](README-vi.md) | [Japanese](README-ja.md) | [Chinese](README-zh.md)
 
 Starting from my day-to-day coding needs, I wanted a tool to log chat sessions with AI agents so I could use them as personal reference material or as project documentation. While browsing developer groups, I also noticed a growing demand for syncing chat logs across multiple machines and keeping long-term history.
