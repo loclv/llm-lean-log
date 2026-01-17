@@ -2,7 +2,7 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
-## [0.2.3] - 2026-01-16
+## [0.2.3] - 2026-01-18
 
 ### Changed
 
@@ -20,6 +20,8 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 - **LLM-Optimized Help Output**: Default help output is now in CSV format for better LLM consumption
   - Added `--human` flag to show human-readable format for help command
   - CSV format includes columns: `command`, `options`, `description` for easy parsing
+
+- `cause` field support added to CLI commands
 
 ## [0.2.2] - 2026-01-14
 
