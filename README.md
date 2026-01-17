@@ -1,5 +1,7 @@
 # ☘️ llm-lean-log
 
+[Vietnamese](README-vi.md) | [Japanese](README-ja.md) | [Chinese](README-zh.md)
+
 Starting from my day-to-day coding needs, I wanted a tool to log chat sessions with AI agents so I could use them as personal reference material or as project documentation. While browsing developer groups, I also noticed a growing demand for syncing chat logs across multiple machines and keeping long-term history.
 
 That’s how `llm-lean-log-cli` was born: a tool for reading and writing chat history optimized for minimal token usage — which means fewer tokens, and therefore lower cost.
@@ -58,7 +60,7 @@ trigger: always_on
 
 # Common rules for LLM agent
 
-Whenever you finish a task, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
+Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
 `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
 
@@ -67,8 +69,11 @@ Before run:
 - Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
 - If need, run CLI help command: `l-log -h` for more information.
 - Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
+- log path: `./logs/chat.csv`.
 
 ```
+
+With `logs/chat.csv` file path, you can change it to any path you want.
 
 ## ❌ Problems
 
