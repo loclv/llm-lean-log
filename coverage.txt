@@ -1,16 +1,16 @@
 ----------------------------------|---------|---------|-------------------
 File                              | % Funcs | % Lines | Uncovered Line #s
 ----------------------------------|---------|---------|-------------------
-All files                         |   96.39 |   96.69 |
+All files                         |   96.39 |   96.79 |
  packages/cli/src/index.ts        |   85.71 |   97.78 | 251-252
- packages/core/src/csv-utils.ts   |  100.00 |   97.06 | 113,116,212,215
- packages/core/src/graph-utils.ts |   96.77 |   96.99 | 255,320-326
+ packages/core/src/csv-utils.ts   |  100.00 |   97.65 | 113,212,215
+ packages/core/src/graph-utils.ts |   96.77 |   96.99 | 257,322-328
  packages/core/src/indexer.ts     |  100.00 |  100.00 | 
  packages/core/src/logger.ts      |  100.00 |   91.89 | 19,21-24
  packages/core/src/visualizer.ts  |   95.83 |   96.42 | 55-56,78-79,101-102,127-128,141-142,290-291
 ----------------------------------|---------|---------|-------------------
 
- 150 pass
+ 154 pass
  0 fail
- 369 expect() calls
-Ran 150 tests across 6 files. [368.00ms]
+ 376 expect() calls
+Ran 154 tests across 7 files. [343.00ms]
