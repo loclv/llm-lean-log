@@ -1,0 +1,2 @@
+id,name,tags,problem,solution,action,files,tech-stack,cause,causeIds,effectIds,last-commit-short-sha,created-at,updated-at,model,created-by-agent
+73492255-0adc-4323-b255-927934eb48c8,Document postinstall script in README,"docs, readme, mcp",Lack of explanation for postinstall script in README,Added detailed explanation and example output to the Postinstall section,Updated packages/mcp-server/README.md,packages/mcp-server/README.md,markdown,,,,b74fecc,2026-01-18T17:52:39.250Z,,,Antigravity

@@ -11,12 +11,14 @@
 	"scripts": {
 		"start": "bun dist/index.js",
 		"dev": "bun --watch src/index.ts",
-		"build": "bun build src/index.ts --outdir dist --target node --format esm --external @modelcontextprotocol/sdk && tsc --emitDeclarationOnly",
+		"build": "bun build src/index.ts --outdir dist --target node --format esm --external @modelcontextprotocol/sdk --banner='#!/usr/bin/env node' && chmod +x dist/index.js && tsc --emitDeclarationOnly",
 		"prepublishOnly": "bun run build",
-		"test": "bun test"
+		"test": "bun test",
+		"postinstall": "node scripts/postinstall.js"
 	},
 	"files": [
 		"dist",
+		"scripts",
 		"README.md"
 	],
 	"publishConfig": {
