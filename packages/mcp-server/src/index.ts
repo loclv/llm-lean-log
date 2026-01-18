@@ -64,7 +64,7 @@ export async function run(
 		args.includes("-V")
 	) {
 		// Update this when you release a new version of `l-log-mcp-server`
-		console.log("0.1.1");
+		console.log("0.1.2");
 		return;
 	}
 
@@ -108,7 +108,7 @@ Options:
 
 	const server = new McpServer({
 		name: "l-log-mcp-server",
-		version: "0.1.1",
+		version: "0.1.2",
 	});
 
 	// Register memory MCP handlers from the package
