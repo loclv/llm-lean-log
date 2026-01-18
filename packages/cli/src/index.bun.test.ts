@@ -148,13 +148,7 @@ describe("CLI Commands Integration", () => {
 	});
 
 	it("should show human-readable help with --human", () => {
-		const { stdout } = spawnSync([
-			"bun",
-			"run",
-			cliPath,
-			"help",
-			"--human",
-		]);
+		const { stdout } = spawnSync(["bun", "run", cliPath, "help", "--human"]);
 		expect(stdout.toString()).toContain("Usage:");
 		expect(stdout.toString()).not.toContain("command,options,description");
 	});

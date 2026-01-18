@@ -48,7 +48,7 @@ describe("CLI Commands Integration", () => {
 			if (file.exists()) {
 				spawnSync(["rm", testCsv]);
 			}
-		} catch (e) {}
+		} catch (_e) {}
 	};
 
 	it("should add a log entry successfully", () => {
@@ -148,13 +148,7 @@ describe("CLI Commands Integration", () => {
 	});
 
 	it("should show human-readable help with --human", () => {
-		const { stdout } = spawnSync([
-			"bun",
-			"run",
-			cliPath,
-			"help",
-			"--human",
-		]);
+		const { stdout } = spawnSync(["bun", "run", cliPath, "help", "--human"]);
 		expect(stdout.toString()).toContain("Usage:");
 		expect(stdout.toString()).not.toContain("command,options,description");
 	});
