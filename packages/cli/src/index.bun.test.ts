@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 describe("CLI Basic Checks", () => {
-	const cliPath = join(import.meta.dir, "index.ts");
+	const cliPath = join(import.meta.dir, "index.bun.ts");
 	const pkgPath = join(import.meta.dir, "../package.json");
 
 	it("should output version when --version flag is used", async () => {
@@ -38,8 +38,8 @@ describe("CLI Basic Checks", () => {
 });
 
 describe("CLI Commands Integration", () => {
-	const cliPath = join(import.meta.dir, "index.ts");
-	const testCsv = join(import.meta.dir, "test-logs-ts.csv");
+	const cliPath = join(import.meta.dir, "index.bun.ts");
+	const testCsv = join(import.meta.dir, "test-logs.csv");
 
 	// Clean up after tests
 	const cleanup = () => {
@@ -143,7 +143,7 @@ describe("CLI Commands Integration", () => {
 			"--human",
 			"--compact",
 		]);
-		// Compact output should be different
+		// Compact output should be different (usually shorter or different layout)
 		expect(compactOutput.toString()).not.toBe(normalOutput.toString());
 	});
 

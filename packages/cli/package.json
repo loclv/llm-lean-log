@@ -5,6 +5,7 @@
 	"scripts": {
 		"start": "bun run src/index.ts",
 		"build": "bun build src/index.ts --outfile dist/index.js --target node && tsc --emitDeclarationOnly",
+		"compile": "bun build src/index.ts --compile --outfile dist/index.js --target node",
 		"prepublishOnly": "bun run build",
 		"type": "tsc --noEmit"
 	},
