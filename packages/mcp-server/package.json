@@ -1,0 +1,38 @@
+{
+	"name": "l-log-mcp-server",
+	"version": "0.1.0",
+	"type": "module",
+	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"bin": {
+		"l-log-mcp-server": "dist/index.js"
+	},
+	"scripts": {
+		"start": "bun dist/index.js",
+		"dev": "bun --watch src/index.ts",
+		"build": "bun build src/index.ts --outdir dist --target node --format esm --external @modelcontextprotocol/sdk && tsc --emitDeclarationOnly",
+		"prepublishOnly": "bun run build",
+		"test": "bun test"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/loclv/llm-lean-log.git",
+		"directory": "packages/mcp-server"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.25.2",
+		"l-log-mcp": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"typescript": "^5.9.3"
+	}
+}

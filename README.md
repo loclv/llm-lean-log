@@ -83,6 +83,10 @@ If LLMs forget about the log or it is not known that should write the log when r
 
 > use l-log
 
+## 🌵 MCP Memory
+
+For MCP memory, please use `l-log-mcp` package. More information in [packages/mcp/README.md](packages/mcp/README.md).
+
 ## ❌ Problems
 
 - 🐥 `markdown` is not optimized for LLMs token usage, only for human readability.

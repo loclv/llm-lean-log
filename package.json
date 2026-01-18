@@ -6,6 +6,8 @@
 		"example": "bun run --filter llm-lean-log-core example",
 		"cli": "bun run packages/cli/src/index.ts",
 		"web:dev": "bun run --filter l-log-vis dev",
+		"mcp:dev": "bun run --filter l-log-mcp-server dev",
+		"mcp:start": "bun run --filter l-log-mcp-server start",
 		"fmt": "biome format --write .",
 		"lint": "biome lint",
 		"test": "bun test",

@@ -1,7 +1,7 @@
 ----------------------------------|---------|---------|-------------------
 File                              | % Funcs | % Lines | Uncovered Line #s
 ----------------------------------|---------|---------|-------------------
-All files                         |   98.94 |   97.58 |
+All files                         |   99.18 |   98.12 |
  packages/cli/src/utils/cli.ts    |  100.00 |  100.00 | 
  packages/cli/src/utils/const.ts  |  100.00 |  100.00 | 
  packages/core/src/csv-utils.ts   |  100.00 |   97.66 | 114,213,216
@@ -9,9 +9,11 @@ All files                         |   98.94 |   97.58 |
  packages/core/src/indexer.ts     |  100.00 |  100.00 | 
  packages/core/src/logger.ts      |  100.00 |   92.00 | 19,21-24
  packages/core/src/visualizer.ts  |   95.83 |   96.42 | 55-56,78-79,101-102,127-128,141-142,290-291
+ packages/mcp/src/data-access.ts  |  100.00 |  100.00 | 
+ packages/mcp/src/index.ts        |  100.00 |  100.00 | 
 ----------------------------------|---------|---------|-------------------
 
- 182 pass
+ 201 pass
  0 fail
- 449 expect() calls
-Ran 182 tests across 11 files. [1.54s]
+ 487 expect() calls
+Ran 201 tests across 14 files. [1.81s]

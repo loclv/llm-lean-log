@@ -1,15 +1,17 @@
-# @llm-lean-log/memory-mcp
+# l-log-mcp-server
 
-An MCP server that exposes your `llm-lean-log` history as a queryable memory for LLMs.
+The standalone MCP server application for `llm-lean-log`.
+
+You can read more about `l-log-mcp` at [mcp/README.md](../mcp/README.md).
 
 ## Installation
 
 This package is part of the `llm-lean-log` monorepo.
 
-To run it locally:
+To run the standalone server locally:
 
 ```bash
-cd packages/memory-mcp
+cd packages/mcp-server
 bun i
 bun run src/index.ts
 ```
@@ -24,7 +26,7 @@ Add this to your `claude_config.json`:
     "llm-memory": {
       "command": "bun",
       "args": [
-        "/absolute/path/to/llm-lean-log/packages/memory-mcp/src/index.ts"
+        "/absolute/path/to/llm-lean-log/packages/mcp-server/src/index.ts"
       ],
       "env": {
         "LLM_LOG_PATH": "/absolute/path/to/your/logs/chat.csv"

@@ -5,6 +5,8 @@ This project is a monorepo containing multiple packages. For detailed changes, p
 - [`llm-lean-log-core`](./packages/core/CHANGELOG.md)
 - [`llm-lean-log-cli`](./packages/cli/CHANGELOG.md)
 - [`l-log-vis`](./packages/visualizer/CHANGELOG.md)
+- [`l-log-mcp`](./packages/mcp-server/CHANGELOG.md)
+- [`l-log-mcp-server`](./packages/mcp-server/CHANGELOG.md)
 
 ## v0.2.5 - January 18, 2026
 
