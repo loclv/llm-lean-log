@@ -8,6 +8,12 @@ This project is a monorepo containing multiple packages. For detailed changes, p
 - [`l-log-mcp`](./packages/mcp-server/CHANGELOG.md)
 - [`l-log-mcp-server`](./packages/mcp-server/CHANGELOG.md)
 
+## v0.2.6 - January 19, 2026
+
+- Enhanced `l-log-mcp-server` with developer convenience features (`--config`, `postinstall` guide)
+- Improved building and type management for MCP server package
+- Updated release workflows to sync GitHub Release notes with package changelogs
+
 ## v0.2.5 - January 18, 2026
 
 - Fixed CLI build configuration to resolve __require errors

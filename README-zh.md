@@ -57,6 +57,10 @@ touch .agent/rules/common.md
 
 > use l-log
 
+## 🌵 MCP Memory
+
+对于 MCP 内存，请使用 `l-log-mcp-server` 软件包。更多信息请参见 [packages/mcp/README.md](packages/mcp/README.md) 和 [packages/mcp-server/README.md](packages/mcp-server/README.md)。
+
 ## ❌ 问题
 
 - 🐥 `markdown` 没有为LLM的token使用量优化，仅适用于人类阅读。

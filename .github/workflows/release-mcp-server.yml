@@ -39,8 +39,17 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Extract Release Notes
+        id: extract_notes
+        run: |
+          VERSION=$(echo ${{ github.ref_name }} | sed 's/mcp-server-v//')
+          sed -n "/## \[$VERSION\]/,/## \[/p" packages/mcp-server/CHANGELOG.md | sed '$d' > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "No notes found in CHANGELOG.md for version $VERSION" > release_notes.md
+          fi
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
+          body_path: release_notes.md
           token: ${{ secrets.GITHUB_TOKEN }}

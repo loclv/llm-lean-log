@@ -46,9 +46,9 @@ Add this to your `~/.opencode.json`:
 }
 ```
 
-### Claude Desktop Configuration
+### Claude Desktop / Claude Code Configuration
 
-Add this to your `claude_config.json`:
+Add this to your `claude_config.json` (Desktop) or `.claude/settings.json` (Code):
 
 ```json
 {
@@ -83,7 +83,7 @@ Add this to your `claude_config.json`:
 
 The package includes a `postinstall` script to streamline the setup process for new users.
 
-Why it's needed: Setting up an MCP server requires specific configuration (like environment variables and command paths) that can be easily overlooked. The postinstall script provides an immediate, copy-pasteable configuration snippet tailored for your client (like OpenCode) right after installation.
+Why it's needed: Setting up an MCP server requires specific configuration (like environment variables and command paths) that can be easily overlooked. The postinstall script provides an immediate, copy-paste-able configuration snippet tailored for your client (like OpenCode) right after installation.
 
 How it runs: This script is triggered automatically by your package manager (`bun`, `npm`, or `yarn`) immediately after the global or local installation of `l-log-mcp-server` finishes.
 

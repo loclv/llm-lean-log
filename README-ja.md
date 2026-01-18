@@ -55,6 +55,10 @@ touch .agent/rules/common.md
 
 > use l-log
 
+## 🌵 MCP Memory
+
+MCP Memoryを使用するには、`l-log-mcp-server`パッケージを使用してください。詳細については、[packages/mcp/README.md](packages/mcp/README.md)と[packages/mcp-server/README.md](packages/mcp-server/README.md)を参照してください。
+
 ## ❌ 問題
 
 - 🐥 `markdown` はLLMのトークン使用量を最適化しておらず、人間の可読性のためだけです。

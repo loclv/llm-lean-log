@@ -34,7 +34,9 @@ function printConfig() {
 	console.log("\n\x1b[32m✨ l-log-mcp-server configuration examples:\x1b[0m");
 	console.log("\n\x1b[36mOpenCode (~/.opencode.json):\x1b[0m");
 	console.log(JSON.stringify(config, null, 2));
-	console.log("\n\x1b[36mClaude Desktop (claude_config.json):\x1b[0m");
+	console.log(
+		"\n\x1b[36mClaude Desktop / Claude Code (claude_config.json or .claude/settings.json):\x1b[0m",
+	);
 	console.log(JSON.stringify(claudeConfig, null, 2));
 	console.log(
 		"\n\x1b[33mNote: Replace /absolute/path/to/your/logs/chat.csv with the actual path to your chat.csv file.\x1b[0m\n",
@@ -56,7 +58,7 @@ async function main() {
 		console.log("Usage: l-log-mcp-server [options]");
 		console.log("\nOptions:");
 		console.log(
-			"  --config, -c  Show configuration examples for OpenCode and Claude Desktop",
+			"  --config, -c  Show configuration examples for OpenCode, Claude Desktop, and Claude Code",
 		);
 		console.log("  --help, -h    Show this help message");
 		process.exit(0);

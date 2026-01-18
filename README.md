@@ -85,7 +85,7 @@ If LLMs forget about the log or it is not known that should write the log when r
 
 ## 🌵 MCP Memory
 
-For MCP memory, please use `l-log-mcp` package. More information in [packages/mcp/README.md](packages/mcp/README.md).
+For MCP memory, please use `l-log-mcp-server` package. More information in [packages/mcp/README.md](packages/mcp/README.md) and [packages/mcp-server/README.md](packages/mcp-server/README.md).
 
 ## ❌ Problems
 

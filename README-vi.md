@@ -57,6 +57,10 @@ Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi tr
 
 > use l-log
 
+## 🌵 MCP Memory
+
+Để sử dụng MCP Memory, vui lòng sử dụng gói `l-log-mcp-server`. Thông tin chi tiết hơn có trong [packages/mcp/README.md](packages/mcp/README.md) và [packages/mcp-server/README.md](packages/mcp-server/README.md).
+
 ## ❌ Các vấn đề
 
 - 🐥 `markdown` không được tối ưu cho việc sử dụng token của LLM, chỉ phục vụ cho việc con người đọc.
