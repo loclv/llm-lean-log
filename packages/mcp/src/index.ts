@@ -24,7 +24,7 @@ export const registerMemoryMcpHandlers = (
 		logCache = await loadEntries(logPath);
 	};
 
-	const RECENT_LOGS_LIMIT = 8;
+	const RECENT_LOGS_LIMIT = 50;
 
 	/**
 	 * Resources
@@ -34,7 +34,7 @@ export const registerMemoryMcpHandlers = (
 		"memory://recent",
 		{
 			mimeType: "text/plain",
-			description: "The last 8 log entries from the project history.",
+			description: "The last 50 log entries from the project history.",
 		},
 		async (uri) => {
 			await refreshCache();

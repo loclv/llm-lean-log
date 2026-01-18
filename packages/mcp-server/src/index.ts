@@ -45,31 +45,55 @@ function printConfig() {
 
 /**
  * Main function to start the MCP server.
+ *
+ * @param args - Command line arguments.
+ * @param env - Environment variables.
  */
-async function main() {
-	const args = process.argv.slice(2);
-
+export async function run(
+	args: string[] = process.argv.slice(2),
+	env: Record<string, string | undefined> = process.env,
+) {
 	if (args.includes("--config") || args.includes("-c")) {
 		printConfig();
-		process.exit(0);
+		return;
+	}
+
+	if (
+		args.includes("--version") ||
+		args.includes("-v") ||
+		args.includes("-V")
+	) {
+		// Update this when you release a new version of `l-log-mcp-server`
+		console.log("0.1.1");
+		return;
 	}
 
 	if (args.includes("--help") || args.includes("-h")) {
-		console.log("Usage: l-log-mcp-server [options]");
-		console.log("\nOptions:");
-		console.log(
-			"  --config, -c  Show configuration examples for OpenCode, Claude Desktop, and Claude Code",
-		);
-		console.log("  --help, -h    Show this help message");
-		process.exit(0);
+		const _helpText = `Usage: l-log-mcp-server [options]
+
+Options:
+  --config, -c        Show configuration examples for OpenCode, Claude Desktop, and Claude Code
+  --version, -v, -V   Show version number
+  --help, -h          Show this help message`;
+		console.log(_helpText);
+		return;
 	}
 
 	// Use environment variable or default to a test log file
+	// @example
+	// LLM_LOG_PATH=/absolute/path/to/your/logs/chat.csv l-log-mcp-server
+	// @default ./logs/chat.csv
+	const configLogPath = env.LLM_LOG_PATH;
 	const LOG_PATH =
-		(process.env as { LLM_LOG_PATH?: string }).LLM_LOG_PATH ||
-		path.resolve(process.cwd(), "logs/chat.csv");
+		configLogPath || path.resolve(process.cwd(), "logs/chat.csv");
 
-	console.error(`Starting MCP server with log path: ${LOG_PATH}`);
+	if (!configLogPath) {
+		console.warn(
+			"[WARN] LLM_LOG_PATH environment variable is not set. Defaulting to ./logs/chat.csv.",
+		);
+	}
+
+	console.log(`Starting MCP server with log path: ${LOG_PATH}`);
 
 	// Check if log file exists
 	if (!existsSync(LOG_PATH)) {
@@ -84,7 +108,7 @@ async function main() {
 
 	const server = new McpServer({
 		name: "l-log-mcp-server",
-		version: "0.1.0",
+		version: "0.1.1",
 	});
 
 	// Register memory MCP handlers from the package
@@ -99,7 +123,7 @@ async function main() {
 	console.error("MCP Server is running on stdio");
 }
 
-main().catch((error) => {
+run().catch((error) => {
 	console.error("Fatal error in MCP server:", error);
 	process.exit(1);
 });

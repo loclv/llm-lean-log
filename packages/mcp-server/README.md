@@ -110,6 +110,12 @@ Note: Replace /absolute/path/to/your/logs/chat.csv with the actual path to your 
 You can also get this config anytime by running: l-log-mcp-server --config
 ```
 
+### CLI Usage
+
+```bash
+l-log-mcp-server --help
+```
+
 ---
 
 For more details about the core logic, see [mcp/README.md](../mcp/README.md).

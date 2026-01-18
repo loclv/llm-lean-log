@@ -7,6 +7,7 @@
 - Added `postinstall` script to display configuration examples for OpenCode and Claude Desktop immediately after installation.
 - Added `--config` (or `-c`) CLI flag to output configuration snippets on demand.
 - Added `--help` (or `-h`) CLI flag for usage instructions.
+- Added `--version` (or `-v` or `-V`) CLI flag for version information.
 - Added automated file existence check for `LLM_LOG_PATH` with helpful warning messages.
 - Added `tsconfig.json` to the package for better build and type declaration management.
 

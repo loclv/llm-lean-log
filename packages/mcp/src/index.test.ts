@@ -89,7 +89,7 @@ describe("MCP Handlers", () => {
 	test("should respect RECENT_LOGS_LIMIT in recent-logs", async () => {
 		const { mockServer, resources } = setup();
 		let content = "name,problem,solution,tags,created-at\n";
-		for (let i = 1; i <= 12; i++) {
+		for (let i = 1; i <= 60; i++) {
 			content += `Task ${i},Prob ${i},Sol ${i},tag,2024-01-${i.toString().padStart(2, "0")}\n`;
 		}
 		fs.writeFileSync(testLogPath, content);
@@ -103,11 +103,11 @@ describe("MCP Handlers", () => {
 		const result = await handler({ href: "memory://recent" });
 		const lines = result.contents[0].text.split("\n");
 
-		// Limit is 8
-		expect(lines.length).toBe(8);
-		// Should be reverse chronological: 12, 11, 10, 9, 8, 7, 6, 5
-		expect(lines[0]).toContain("Task 12");
-		expect(lines[7]).toContain("Task 5");
+		// Limit is 50
+		expect(lines.length).toBe(50);
+		// Should be reverse chronological: 60...11
+		expect(lines[0]).toContain("Task 60");
+		expect(lines[49]).toContain("Task 11");
 
 		fs.unlinkSync(testLogPath);
 	});

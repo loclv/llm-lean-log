@@ -39,6 +39,8 @@ bun i -g l-log-vis
 l-log-vis
 
 bun i -g l-log-mcp-server
+# confirm
+l-log-mcp-server -v
 ```
 
 ## Additional Notes
