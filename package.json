@@ -17,6 +17,8 @@
 		"pub:core": "cd packages/core && bun publish",
 		"pub:cli": "cd packages/cli && bun publish",
 		"pub:vis": "cd packages/visualizer && bun publish",
+		"pub:mcp": "cd packages/mcp && bun publish",
+		"pub:mcp-server": "cd packages/mcp-server && bun publish",
 		"type": "bun run --filter llm-lean-log-core type && bun run --filter llm-lean-log-cli type && bun run --filter l-log-vis type"
 	},
 	"description": "Logging for LLMs, but we cut the fat. A CSV-based logging format optimized for LLM token usage.",

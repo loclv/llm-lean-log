@@ -41,7 +41,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@modelcontextprotocol/sdk": "^1.25.2",
-        "llm-lean-log-core": "^0.2.1",
+        "llm-lean-log-core": "workspace:*",
         "zod": "^4.3.5",
       },
       "devDependencies": {
@@ -53,13 +53,17 @@
     },
     "packages/mcp-server": {
       "name": "l-log-mcp-server",
-      "version": "0.1.0",
+      "version": "0.1.1",
+      "bin": {
+        "l-log-mcp-server": "dist/index.js",
+      },
       "dependencies": {
         "@modelcontextprotocol/sdk": "^1.25.2",
         "l-log-mcp": "workspace:*",
       },
       "devDependencies": {
         "@types/bun": "latest",
+        "typescript": "^5.9.3",
       },
     },
     "packages/visualizer": {
