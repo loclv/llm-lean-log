@@ -59,10 +59,10 @@
       },
       "dependencies": {
         "@modelcontextprotocol/sdk": "^1.25.2",
-        "l-log-mcp": "workspace:*",
       },
       "devDependencies": {
         "@types/bun": "latest",
+        "l-log-mcp": "workspace:*",
         "typescript": "^5.9.3",
       },
     },
