@@ -2,6 +2,27 @@
 
 The standalone MCP (Model Context Protocol) server for `llm-lean-log`. It allows AI agents to search and access your coding task history.
 
+## MCP server with llm-lean-log
+
+The pairing looks like:
+
+```text
+LLM runtime
+-[use CLI to write log]->
+llm-lean-log (token-cheap, structured CSV)
+->
+mcp-server
+<-[use MCP to read log]->
+LLM runtime
+```
+
+`llm-lean-log` become MCP memory, which gives you:
+
+- auditability (what did the model think last week?)
+- debugging (why did it choose X?)
+- analytics (token burn, drift, behavior change)
+- training data for fine-tuning or evals
+
 ## Installation
 
 ### Global Installation (Recommended)
