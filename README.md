@@ -7,6 +7,15 @@
 
 [Vietnamese](README-vi.md) | [Japanese](README-ja.md) | [Chinese](README-zh.md)
 
+Work with LLMs and it's agents to write and read logs:
+
+- Antigravity
+- Cursor
+- Windsurf
+- Claude Code
+- Opencode
+- or what LLM client you want
+
 Starting from my day-to-day coding needs, I wanted a tool to log chat sessions with AI agents so I could use them as personal reference material or as project documentation. While browsing developer groups, I also noticed a growing demand for syncing chat logs across multiple machines and keeping long-term history.
 
 That’s how `llm-lean-log-cli` was born: a tool for reading and writing chat history optimized for minimal token usage — which means fewer tokens, and therefore lower cost.
@@ -113,13 +122,16 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
 🪴 Create a simple, single, flat, CSV data format file for logs:
 
 - 🌟 Headers are logger important fields:
+
   - `id`: log ID (required), UUID for unique identifier, used for Directed Graph, cause and effect.
   - `name`: main content of the log (short). (required)
   - `tags`: tags to categorize the log, comma separated, wrap with double quotes if multiple tags. Example: `"error,api,auth"`. (optional)
   - `problem`: description of the problem, context of the log. (required)
   - `solution`: description of the solution, method to fix the problem. (optional)
   - `action`: run command, action (web search, etc.) that was taken to fix the problem. (optional)
+
     - running command format: `text {language}`\`code-block\``
+
       - Example of row value:
 
         ```text
@@ -130,7 +142,9 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
       - Why?
         - Better parsing and understanding of the code.
         - Learn from Markdown code blocks format, so humans can read and understand the code.
+
     - Format: `text {language}`\`code-block\`` or markdown code block or text.
+
   - `files`: list of files that were modified, created, deleted or must be read (optional).
     - Example: `"src/index.ts,src/constants.ts"`
     - Why?
@@ -142,24 +156,28 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
       - Better understanding of the code, context of the log.
     - Format: comma separated list of technologies, wrap with double quotes if multiple technologies.
   - `cause`: cause log of the problem (optional).
+
     - Example: `you choose to use X instead of Y, to do Z`
     - Why?
       - Better understanding of the log.
     - Format: text.
 
   - `causeIds`: cause log ID of the log (optional).
+
     - Example: `"UUID,UUID"`
     - Why?
       - Better understanding of the log.
     - Format: comma separated list of other log IDs, wrap with double quotes if multiple cause log IDs.
 
   - `effectIds`: effect log ID of the log (optional).
+
     - Example: `"UUID,UUID"`
     - Why?
       - Better understanding of the log.
     - Format: comma separated list of other log IDs, wrap with double quotes if multiple effect log IDs.
 
   - `last-commit-short-sha`: last git commit short SHA of the log (optional).
+
     - Example: `a1b2c3d`
     - Why not updated git commit?
       - git commit is usually updated before when LLMs write logs.
@@ -177,6 +195,7 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
     - Example: `gpt-4o-mini`
   - `created-by-agent`: model that was used to create the log (optional).
     - Example: `gpt-4o-mini`
+
 - Row:
   - Each row is a log entry.
   - No new lines, or use `\n`, just use comma - `,`, dot - `.`, semicolon - `;` to separate information.
@@ -373,7 +392,7 @@ More info at `./docs` folder.
   - `jeff-hykin.better-csv-syntax` - CSV syntax highlighting (with color coding)
   - `YoavBls.pretty-ts-errors` - Pretty TypeScript errors
   - `ReprEng.csv` - CSV support
-  
+
 ![CSV Preview](./docs/imgs/screenshot-csv-preview.png)
 
 ## 📚 Coverage status

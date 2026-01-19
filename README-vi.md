@@ -1,5 +1,14 @@
 # ☘️ llm-lean-log
 
+Làm việc với các LLM và các agent của chúng để ghi và đọc nhật ký:
+
+- Antigravity
+- Cursor
+- Windsurf
+- Claude Code
+- Opencode
+- hoặc bất kỳ ứng dụng / client LLM nào bạn muốn
+
 Xuất phát từ nhu cầu hàng ngày coding, mình muốn có 1 tool để ghi Chat log với AI Agent để làm tài liệu tra cứu cho bản thân hoặc docs của dự án. Mình lướt thấy trong các group cũng có nhu cầu sync chat log nhiều máy, lưu lịch sử...
 
 Từ đó, `llm-lean-log-cli` là tool đọc, ghi lịch sử chat tối ưu cho lượng token cần sử dụng -> tiết kiệm token -> tiết kiệm tiền.
