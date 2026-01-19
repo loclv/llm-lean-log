@@ -182,7 +182,7 @@ export const registerMemoryMcpHandlers = (
 	 * Prompts
 	 */
 	server.registerPrompt(
-		"summarize_recent_work",
+		"recent_work",
 		{
 			description: "Summarize what has been done recently based on logs.",
 		},

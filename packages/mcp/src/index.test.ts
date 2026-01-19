@@ -196,13 +196,13 @@ describe("MCP Handlers", () => {
 		fs.unlinkSync(testLogPath);
 	});
 
-	test("should handle summarize_recent_work prompt", async () => {
+	test("should handle recent_work prompt", async () => {
 		const { mockServer, prompts } = setup();
 		await registerMemoryMcpHandlers(mockServer, testLogPath)();
 
-		const handler = prompts.get("summarize_recent_work");
+		const handler = prompts.get("recent_work");
 		if (!handler) {
-			throw new Error("summarize_recent_work handler not found");
+			throw new Error("recent_work handler not found");
 		}
 		const result = await handler();
 		expect(result.messages[0].content.text).toContain("Task 1");
@@ -211,7 +211,7 @@ describe("MCP Handlers", () => {
 		fs.unlinkSync(testLogPath);
 	});
 
-	test("should respect RECENT_WORK_LIMIT in summarize_recent_work", async () => {
+	test("should respect RECENT_WORK_LIMIT in recent_work", async () => {
 		const { mockServer, prompts } = setup();
 		let content = "name,problem,solution,tags,created-at\n";
 		for (let i = 1; i <= 25; i++) {
@@ -221,9 +221,9 @@ describe("MCP Handlers", () => {
 
 		await registerMemoryMcpHandlers(mockServer, testLogPath)();
 
-		const handler = prompts.get("summarize_recent_work");
+		const handler = prompts.get("recent_work");
 		if (!handler) {
-			throw new Error("summarize_recent_work handler not found");
+			throw new Error("recent_work handler not found");
 		}
 		const result = await handler();
 		const lines = result.messages[0].content.text

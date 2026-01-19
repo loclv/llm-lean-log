@@ -23,7 +23,7 @@ This project has an MCP server `llm-memory` configured. Use it to retrieve conte
 
 - Use `search_logs(query)` to find how previous problems were solved.
 - Use `get_task_history(taskName)` to see the progression of a specific feature.
-- Use the `summarize_recent_work` prompt to get an overview of what has been done recently.
+- Use the `recent_work` prompt to get an overview of what has been done recently.
 
 ## Technical Preferences
 

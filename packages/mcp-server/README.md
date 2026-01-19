@@ -77,7 +77,7 @@ Add this to your `claude_config.json` (Desktop) or `.claude/settings.json` (Code
 
 ### Prompts
 
-- `summarize_recent_work`: A prompt template to summarize recent activities.
+- `recent_work`: A prompt template to summarize recent activities.
 
 ### Postinstall
 

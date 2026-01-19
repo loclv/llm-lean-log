@@ -94,7 +94,8 @@ Add this to your `opencode.json` or `.opencode.json` (usually located at `~/.ope
 
 ### Prompts
 
-- `summarize_recent_work`: A prompt template to summarize recent activities.
+- `recent_work`: A prompt template to summarize recent activities.
+- `learned`: Review past mistakes and lessons learned to avoid repeating them.
 
 ## Test the MCP server
 
@@ -141,7 +142,7 @@ Found 2 log entries containing "CSV parsing":
 1. Implement Memory MCP (2026-01-17T16:28:57.632Z)
 - Tags: mcp, implementation, feature
 - Problem: Need to implement the Memory MCP server as per the roadmap
-- Solution: Created packages/memory-mcp, implemented basic server with Resources (recent, stats), Tools (search_logs, get_task_history), and Prompts (summarize_recent_work). Used llm-lean-log-core for CSV parsing
+- Solution: Created packages/memory-mcp, implemented basic server with Resources (recent, stats), Tools (search_logs, get_task_history), and Prompts (recent_work). Used llm-lean-log-core for CSV parsing
 - Files: packages/memory-mcp/package.json, packages/memory-mcp/src/index.ts, packages/memory-mcp/src/data-access.ts, packages/memory-mcp/README.md
 - Tech Stack: bun, typescript, mcp-sdk
 - Agent: Antigravity
