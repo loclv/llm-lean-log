@@ -51,7 +51,7 @@ export const registerMemoryMcpHandlers = (
 					{
 						uri: uri.href,
 						mimeType: "text/plain",
-						text: text,
+						text,
 					},
 				],
 			};
@@ -85,7 +85,7 @@ export const registerMemoryMcpHandlers = (
 					{
 						uri: uri.href,
 						mimeType: "text/plain",
-						text: text,
+						text,
 					},
 				],
 			};
@@ -204,6 +204,8 @@ export const registerMemoryMcpHandlers = (
 		},
 	);
 
+	const LEARNED_LIMIT = 10;
+
 	server.registerPrompt(
 		"learned",
 		{
@@ -211,16 +213,24 @@ export const registerMemoryMcpHandlers = (
 				"Review past mistakes and lessons learned to avoid repeating them.",
 		},
 		async () => {
-			await refreshCache();
+			try {
+				await refreshCache();
+			} catch (error) {
+				console.error("[learned] Error refreshing cache:", error);
+				throw error;
+			}
+
 			// Filter for logs that might contain important lessons
 			const lessons = logCache
 				.filter(
 					(e) =>
-						e.tags?.includes("bug") ||
-						e.tags?.includes("fix") ||
+						(e.tags &&
+							(e.tags.includes("bug") ||
+								e.tags.includes("fix") ||
+								e.tags.includes("error"))) ||
 						e.problem.toLowerCase().includes("error"),
 				)
-				.slice(-10);
+				.slice(-LEARNED_LIMIT);
 
 			const text = lessons
 				.map((e) => `Problem: ${e.problem}\nSolution: ${e.solution}`)
