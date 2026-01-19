@@ -263,4 +263,56 @@ describe("MCP Handlers", () => {
 
 		fs.unlinkSync(testLogPath);
 	});
+	test("should handle learned prompt", async () => {
+		const { mockServer, prompts } = setup();
+		fs.writeFileSync(
+			testLogPath,
+			"name,problem,solution,tags,created-at\n" +
+				"Bug Task,It crashes,Fix it,bug,2024-01-01\n" +
+				"Regular Task,New feature,Done,,2024-01-02\n" +
+				"Error Task,Found error,Resolved,fix,2024-01-03\n",
+		);
+		await registerMemoryMcpHandlers(mockServer, testLogPath)();
+
+		const handler = prompts.get("learned");
+		if (!handler) {
+			throw new Error("learned handler not found");
+		}
+		const result = await handler();
+		const text = result.messages[0].content.text;
+
+		expect(text).toContain("Problem: It crashes");
+		expect(text).toContain("Problem: Found error");
+		expect(text).not.toContain("Problem: New feature");
+
+		fs.unlinkSync(testLogPath);
+	});
+
+	test("should respect limit in learned prompt", async () => {
+		const { mockServer, prompts } = setup();
+		let content = "name,problem,solution,tags,created-at\n";
+		for (let i = 1; i <= 15; i++) {
+			content += `Bug ${i},Crash ${i},Fixed ${i},bug,2024-01-${i.toString().padStart(2, "0")}\n`;
+		}
+		fs.writeFileSync(testLogPath, content);
+
+		await registerMemoryMcpHandlers(mockServer, testLogPath)();
+
+		const handler = prompts.get("learned");
+		if (!handler) {
+			throw new Error("learned handler not found");
+		}
+		const result = await handler();
+		const text = result.messages[0].content.text;
+		const occurrences = (text.match(/Problem: /g) || []).length;
+
+		// Limit is 10
+		expect(occurrences).toBe(10);
+		// Should be the last 10 (Bug 6 to Bug 15)
+		expect(text).toContain("Problem: Crash 15");
+		expect(text).toContain("Problem: Crash 6");
+		expect(text).not.toContain("Problem: Crash 5");
+
+		fs.unlinkSync(testLogPath);
+	});
 });

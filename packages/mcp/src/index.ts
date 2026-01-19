@@ -204,5 +204,41 @@ export const registerMemoryMcpHandlers = (
 		},
 	);
 
+	server.registerPrompt(
+		"learned",
+		{
+			description:
+				"Review past mistakes and lessons learned to avoid repeating them.",
+		},
+		async () => {
+			await refreshCache();
+			// Filter for logs that might contain important lessons
+			const lessons = logCache
+				.filter(
+					(e) =>
+						e.tags?.includes("bug") ||
+						e.tags?.includes("fix") ||
+						e.problem.toLowerCase().includes("error"),
+				)
+				.slice(-10);
+
+			const text = lessons
+				.map((e) => `Problem: ${e.problem}\nSolution: ${e.solution}`)
+				.join("\n\n");
+
+			return {
+				messages: [
+					{
+						role: "user",
+						content: {
+							type: "text",
+							text: `Based on these past issues, what should I be careful about in this project?\n\n${text}`,
+						},
+					},
+				],
+			};
+		},
+	);
+
 	return refreshCache;
 };
