@@ -67,6 +67,8 @@ Add this to your `~/.opencode.json`:
 }
 ```
 
+Read more at: [docs/config-for-opencode.md](docs/config-for-opencode.md)
+
 ### Claude Desktop / Claude Code Configuration
 
 Add this to your `claude_config.json` (Desktop) or `.claude/settings.json` (Code):

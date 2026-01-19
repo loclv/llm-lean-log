@@ -6,11 +6,7 @@ This project uses `llm-lean-log` to maintain a history of development tasks. As 
 
 Whenever you finish a task or modify code, you must log your work using the `l-log` CLI.
 
-Command Format:
-
-```bash
-l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="OpenCode"
-```
+Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --cause="<cause>" --created-by-agent="OpenCode"`
 
 Steps before logging:
 
