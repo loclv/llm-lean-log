@@ -19,7 +19,9 @@ async function main() {
 
 	const server = new McpServer({
 		name: "l-log-mcp",
-		version: "0.1.0",
+		// should be updated when the version of the SDK changes,
+		// or when the version of the server changes
+		version: "0.1.2",
 	});
 
 	const refresh = registerMemoryMcpHandlers(server, LOG_PATH);
@@ -27,8 +29,10 @@ async function main() {
 
 	const transport = new StdioServerTransport();
 	await server.connect(transport);
-	console.error("Memory MCP Server running on stdio");
-	console.error(`Monitoring logs at: ${LOG_PATH}`);
+
+	console.log(
+		`Memory MCP Server running on stdio\nMonitoring logs at: ${LOG_PATH}`,
+	);
 }
 
 main().catch((error) => {
