@@ -66,7 +66,13 @@ export const registerMemoryMcpHandlers = (
 			description: "The very last log entry from the project history.",
 		},
 		async (uri) => {
-			await refreshCache();
+			try {
+				await refreshCache();
+			} catch (error) {
+				console.error("[last-log] Error refreshing cache:", error);
+				throw error;
+			}
+
 			const entry = logCache[logCache.length - 1];
 			if (!entry) {
 				return {
@@ -100,8 +106,15 @@ export const registerMemoryMcpHandlers = (
 			description: "Statistics about the log history.",
 		},
 		async (uri) => {
-			await refreshCache();
+			try {
+				await refreshCache();
+			} catch (error) {
+				console.error("[log-stats] Error refreshing cache:", error);
+				throw error;
+			}
+
 			const entries = logCache;
+
 			const stats = {
 				totalEntries: entries.length,
 				lastEntry: entries[entries.length - 1]?.["created-at"] || null,
