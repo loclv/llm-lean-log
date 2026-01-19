@@ -90,17 +90,39 @@ Add this to your `claude_config.json` (Desktop) or `.claude/settings.json` (Code
 
 ### Resources
 
-- `memory://recent`: View the last 50 log entries.
-- `memory://stats`: View statistics about your logs.
+- `memory://recent`: View the last 50 log entries from the project history.
+- `memory://stats`: View statistics about your logs (total entries, last entry date, unique tags).
+- `memory://last`: View the very last log entry from the project history.
+
+Example User Prompts:
+
+- "Show me the last 50 log entries to see what I've been working on recently"
+- "What are my project statistics? How many entries do I have and what tags have I used?"
+- "What was the very last thing I worked on?"
 
 ### Tools
 
-- `search_logs(query)`: Search for specific topics or errors in your history.
-- `get_task_history(taskName)`: Get all logs related to a specific task.
+- `search_logs(query)`: Search the log history for past problems, solutions, or topics.
+- `get_task_history(taskName)`: Get all log entries related to a specific task name.
+
+Example User Prompts:
+
+- "Search my logs for 'database migration' to see how I handled similar issues before"
+- "Find all entries related to 'authentication system' to understand the development history"
+- "Look up any past 'build errors' to see common solutions"
+- "Look up how I solved 'TypeScript compilation errors' in the past"
 
 ### Prompts
 
-- `recent_work`: A prompt template to summarize recent activities.
+- `up`: A prompt for daily standup meetings - "What did I do last time and what's next?"
+- `recent_work`: A prompt template to summarize recent activities based on logs.
+- `learned`: Review past mistakes and lessons learned to avoid repeating them.
+
+Example User Prompts:
+
+- "Help me with my daily standup - what did I do last time and what's next?"
+- "Summarize what I've been working on recently"
+- "Based on my past mistakes, what should I be careful about in this project?"
 
 ### Postinstall
 
