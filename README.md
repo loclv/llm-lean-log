@@ -1,9 +1,11 @@
 # ☘️ llm-lean-log
 
-- llm-lean-log-cli: ![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli) | ![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core) | [npm page](https://www.npmjs.com/package/llm-lean-log-cli)
-- llm-lean-log-core: ![llm-lean-log-core npm](https://img.shields.io/npm/v/llm-lean-log-core) | ![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis) | [npm page](https://www.npmjs.com/package/llm-lean-log-core)
-- l-log-vis: ![l-log-vis npm](https://img.shields.io/npm/v/l-log-vis) | ![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis) | [npm page](https://www.npmjs.com/package/l-log-vis)
-- l-log-mcp-server: ![l-log-mcp-server npm](https://img.shields.io/npm/v/l-log-mcp-server) | ![l-log-mcp-server npm](https://img.shields.io/npm/dw/l-log-mcp-server) | [npm page](https://www.npmjs.com/package/l-log-mcp-server)
+|Package|Version|Downloads|NPM Page|
+|---|---|---|---|
+|llm-lean-log-cli|![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli)|![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core)|[npm page](https://www.npmjs.com/package/llm-lean-log-cli)|
+|llm-lean-log-core|![llm-lean-log-core npm](https://img.shields.io/npm/v/llm-lean-log-core) | ![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/llm-lean-log-core)|
+|l-log-vis|![l-log-vis npm](https://img.shields.io/npm/v/l-log-vis)|![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/l-log-vis)|
+|l-log-mcp-server|![l-log-mcp-server npm](https://img.shields.io/npm/v/l-log-mcp-server)|![l-log-mcp-server npm](https://img.shields.io/npm/dw/l-log-mcp-server)|[npm page](https://www.npmjs.com/package/l-log-mcp-server)|
 
 [Vietnamese](README-vi.md) | [Japanese](README-ja.md) | [Chinese](README-zh.md)
 
