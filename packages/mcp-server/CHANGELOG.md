@@ -1,5 +1,17 @@
 # CHANGELOG - l-log-mcp-server
 
+## [0.1.6] - 2026-01-19
+
+### Changed
+
+- 📖 DOC: update npm page URL
+
+### Added
+
+- 📦 NEW: Add Biome linter/formatter as dev dependency
+- 📦 NEW: Add unit tests for MCP prompts and improve test coverage
+- 📦 NEW: add `learned` prompt for MCP
+
 ## [0.1.1] - 2026-01-19
 
 ### Added
