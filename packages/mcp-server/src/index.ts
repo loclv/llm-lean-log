@@ -3,6 +3,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { registerMemoryMcpHandlers } from "l-log-mcp";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { MCP_SERVER_VERSION } from "./utils/const";
 
 /**
  * Print configuration example for OpenCode and Claude Desktop.
@@ -64,7 +65,7 @@ export async function run(
 		args.includes("-V")
 	) {
 		// Update this when you release a new version of `l-log-mcp-server`
-		console.log("0.1.6");
+		console.log(MCP_SERVER_VERSION);
 		return;
 	}
 
@@ -108,7 +109,7 @@ Options:
 
 	const server = new McpServer({
 		name: "l-log-mcp-server",
-		version: "0.1.6",
+		version: MCP_SERVER_VERSION,
 	});
 
 	// Register memory MCP handlers from the package
@@ -123,7 +124,9 @@ Options:
 	console.error("MCP Server is running on stdio");
 }
 
-run().catch((error) => {
-	console.error("Fatal error in MCP server:", error);
-	process.exit(1);
-});
+if (import.meta.main) {
+	run().catch((error) => {
+		console.error("Fatal error in MCP server:", error);
+		process.exit(1);
+	});
+}

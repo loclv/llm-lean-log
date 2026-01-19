@@ -194,6 +194,68 @@ export const registerMemoryMcpHandlers = (
 	/**
 	 * Prompts
 	 */
+	// Daily standup prompt
+	// Summaries are great, but a prompt specifically for
+	// "What did I do last time and what's next?"
+	// can help keep development on track.
+	server.registerPrompt(
+		"up",
+		{
+			description: "A prompt for daily standup meetings.",
+		},
+		async () => {
+			await refreshCache();
+			if (logCache.length === 0) {
+				return {
+					messages: [
+						{
+							role: "user",
+							content: {
+								type: "text",
+								text: "What did I do last time and what's next?",
+							},
+						},
+					],
+				};
+			}
+
+			// Get the last active day's logs
+			const lastLog = logCache[logCache.length - 1];
+
+			if (!lastLog) {
+				return {
+					messages: [
+						{
+							role: "user",
+							content: {
+								type: "text",
+								text: "What did I do last time and what's next?",
+							},
+						},
+					],
+				};
+			}
+
+			const lastDate = lastLog["created-at"].split("T")[0];
+
+			const text = logCache
+				.map((row) => `- ${row.name}: ${row.problem}`)
+				.join("\n");
+
+			return {
+				messages: [
+					{
+						role: "user",
+						content: {
+							type: "text",
+							text: `Help me with my daily standup. Based on my logs from ${lastDate}:\n\n${text}\n\nWhat did I do? What's next? Any blockers?`,
+						},
+					},
+				],
+			};
+		},
+	);
+
 	server.registerPrompt(
 		"recent_work",
 		{

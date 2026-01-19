@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test";
 import fs from "node:fs";
 import path from "node:path";
 import { run } from "./index";
+import { MCP_SERVER_VERSION } from "./utils/const";
 
 /**
  * MCP App Tests
@@ -30,7 +31,7 @@ describe("MCP App", () => {
 	test("should print version with --version", async () => {
 		const logSpy = spyOn(console, "log").mockImplementation(() => {});
 		await run(["--version"]);
-		expect(logSpy).toHaveBeenCalledWith("0.1.1");
+		expect(logSpy).toHaveBeenCalledWith(MCP_SERVER_VERSION);
 		logSpy.mockRestore();
 	});
 
@@ -40,7 +41,7 @@ describe("MCP App", () => {
 	test("should print version with -v", async () => {
 		const logSpy = spyOn(console, "log").mockImplementation(() => {});
 		await run(["-v"]);
-		expect(logSpy).toHaveBeenCalledWith("0.1.1");
+		expect(logSpy).toHaveBeenCalledWith(MCP_SERVER_VERSION);
 		logSpy.mockRestore();
 	});
 

@@ -315,4 +315,47 @@ describe("MCP Handlers", () => {
 
 		fs.unlinkSync(testLogPath);
 	});
+
+	test("should handle up prompt", async () => {
+		const { mockServer, prompts } = setup();
+		fs.writeFileSync(
+			testLogPath,
+			"name,problem,solution,tags,created-at\n" +
+				"Yesterday Task 1,Prob 1,Sol 1,tag1,2024-01-01T10:00:00Z\n" +
+				"Today Task 2,Prob 2,Sol 2,tag2,2024-01-02T10:00:00Z\n" +
+				"Today Task 3,Prob 3,Sol 3,tag3,2024-01-02T11:00:00Z\n",
+		);
+		await registerMemoryMcpHandlers(mockServer, testLogPath)();
+
+		const handler = prompts.get("up");
+		if (!handler) {
+			throw new Error("up handler not found");
+		}
+		const result = await handler();
+		const text = result.messages[0].content.text;
+
+		expect(text).toContain("Today Task 2");
+		expect(text).toContain("Today Task 3");
+		expect(text).toContain("Yesterday Task 1");
+		expect(text).toContain("2024-01-02");
+
+		fs.unlinkSync(testLogPath);
+	});
+
+	test("should handle up prompt with no entries", async () => {
+		const { mockServer, prompts } = setup();
+		fs.writeFileSync(testLogPath, "name,problem,solution,tags,created-at\n");
+		await registerMemoryMcpHandlers(mockServer, testLogPath)();
+
+		const handler = prompts.get("up");
+		if (!handler) {
+			throw new Error("up handler not found");
+		}
+		const result = await handler();
+		expect(result.messages[0].content.text).toBe(
+			"What did I do last time and what's next?",
+		);
+
+		fs.unlinkSync(testLogPath);
+	});
 });
