@@ -14,3 +14,7 @@ Before run:
 - If need, run CLI help command: `l-log -h` for more information.
 - Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
 - log path: `./logs/chat.csv`.
+
+## When use `console.log` / `console.warn` / `console.error`
+
+Use `\n` to separate multiple lines of text if need.
