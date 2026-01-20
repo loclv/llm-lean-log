@@ -29,7 +29,7 @@ Add this to your `opencode.json` or `.opencode.json` (usually located at `~/.ope
    - Command path: `/absolute/path/to/llm-lean-log/packages/mcp-server/src/index.ts`
    - Log path: `/absolute/path/to/your/logs/chat.csv`
 4. Restart your OpenCode session.
-5. Create or update `AGENTS.md` in your project root to provide instructions to the AI agent on how to use these tools:
+5. Create or update `AGENTS.md` in your project root to provide instructions to the AI agent on how to use these tools (see the [AGENTS.md](../../AGENTS.md) file for an example):
 
 ```text
 # Project Rules for OpenCode
@@ -54,5 +54,7 @@ This project has an MCP server `llm-memory` configured. Use it to retrieve conte
 - Use `search_logs(query)` to find how previous problems were solved.
 - Use `get_task_history(taskName)` to see the progression of a specific feature.
 - Use the `recent_work` prompt to get an overview of what has been done recently.
+- Use the `learned` prompt to review past mistakes and lessons learned to avoid repeating them.
+- Use the `up` prompt to get an overview of what has been done recently.
 
 ```
