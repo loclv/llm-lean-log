@@ -65,14 +65,24 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     // Update version in parsed JSON
     root.put("version", .{ .string = new_version }) catch unreachable;
 
-    // Write back to file
-    var string_buf = std.ArrayList(u8).init(allocator);
-    defer string_buf.deinit();
-    try json.stringify(parsed.value, .{ .whitespace = .indent_2 }, string_buf.writer());
-    const new_contents = try string_buf.toOwnedSlice();
+    // Write back to file using simple string replacement
+    var new_contents = allocator.alloc(u8, contents.len + 10) catch unreachable;
     defer allocator.free(new_contents);
 
-    try std.fs.cwd().writeFile("package.json", new_contents);
+    // Find and replace version in the JSON string
+    const version_pattern = "\"version\": \"";
+    const version_start = std.mem.indexOf(u8, contents, version_pattern).? + version_pattern.len;
+    const version_end = std.mem.indexOf(u8, contents[version_start..], "\"").? + version_start;
+
+    // Copy before version
+    std.mem.copyForwards(u8, new_contents[0..version_start], contents[0..version_start]);
+    // Copy new version
+    std.mem.copyForwards(u8, new_contents[version_start .. version_start + new_version.len], new_version);
+    // Copy after version
+    std.mem.copyForwards(u8, new_contents[version_start + new_version.len ..], contents[version_end..]);
+
+    const actual_len = version_start + new_version.len + (contents.len - version_end);
+    try std.fs.cwd().writeFile(.{ .sub_path = "package.json", .data = new_contents[0..actual_len] });
 
     std.log.info("Updated version from {s} to {s}", .{ current_version, new_version });
     return new_version;
@@ -91,26 +101,26 @@ pub fn main() !void {
 
     // Build the package
     std.log.info("Building package...", .{});
-    try execCommand(allocator, &[_][]const u8{ "bun", "run", "build" });
+    _ = try execCommand(allocator, &[_][]const u8{ "bun", "run", "build" });
 
     // Run tests
     std.log.info("Running tests...", .{});
-    try execCommand(allocator, &[_][]const u8{ "bun", "test" });
+    _ = try execCommand(allocator, &[_][]const u8{ "bun", "test" });
 
     // Commit changes
     std.log.info("Committing changes...", .{});
-    try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json" });
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json" });
     const commit_message = try std.fmt.allocPrint(allocator, "chore: release v{s}", .{new_version});
     defer allocator.free(commit_message);
-    try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
 
     // Create and push tag
     std.log.info("Creating and pushing tag...", .{});
     const tag_name = try std.fmt.allocPrint(allocator, "v{s}", .{new_version});
     defer allocator.free(tag_name);
-    try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
-    try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
-    try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
 
     // TODO: Publish to npm
     // std.log.info("Publishing to npm...", .{});
