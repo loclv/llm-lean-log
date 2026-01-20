@@ -23,23 +23,11 @@ LLM runtime
 - analytics (token burn, drift, behavior change)
 - training data for fine-tuning or evals
 
-## Installation
+## How to use?
 
-### Global Installation (Recommended)
-
-Install globally using `bun`:
-
-```bash
-bun i -g l-log-mcp-server
-```
-
-### From Source
-
-```bash
-cd packages/mcp-server
-bun i
-bun run build
-```
+1. Install globally: `bun i -g l-log-mcp-server`.
+2. Add the configuration to your AI client's config file.
+3. Restart your AI client to pick up the new configuration.
 
 ## Quick Start Configuration
 
@@ -86,7 +74,7 @@ Add this to your `claude_config.json` (Desktop) or `.claude/settings.json` (Code
 }
 ```
 
-## Features
+## Features / usesage
 
 ### Resources
 
@@ -107,10 +95,10 @@ Example User Prompts:
 
 Example User Prompts:
 
-- "Search my logs for 'database migration' to see how I handled similar issues before"
-- "Find all entries related to 'authentication system' to understand the development history"
-- "Look up any past 'build errors' to see common solutions"
-- "Look up how I solved 'TypeScript compilation errors' in the past"
+- "Search my logs for 'database migration' using llm-memory MCP to see how I handled similar issues before"
+- "Find all entries related to 'authentication system' using llm-memory MCP to understand the development history"
+- "Look up any past 'build errors' using llm-memory MCP to see common solutions"
+- "Look up how I solved 'TypeScript compilation errors' using llm-memory MCP in the past"
 
 ### Prompts
 
@@ -120,6 +108,9 @@ Example User Prompts:
 
 Example User Prompts:
 
+- "up from llm-memory mcp"
+- "recent_work from llm-memory"
+- "learned from llm-memory"
 - "Help me with my daily standup - what did I do last time and what's next?"
 - "Summarize what I've been working on recently"
 - "Based on my past mistakes, what should I be careful about in this project?"
@@ -159,6 +150,14 @@ You can also get this config anytime by running: l-log-mcp-server --config
 
 ```bash
 l-log-mcp-server --help
+```
+
+### Install from source
+
+```bash
+cd packages/mcp-server
+bun i
+bun run build
 ```
 
 ---
