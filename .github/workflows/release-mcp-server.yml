@@ -1,9 +1,9 @@
 name: Release MCP Server
 
 on:
-  push:
-    tags:
-      - 'mcp-server-v*'
+  # push:
+  #   tags:
+  #     - 'mcp-server-v*'
   workflow_dispatch:
 
 jobs:
