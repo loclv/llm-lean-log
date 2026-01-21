@@ -1,5 +1,9 @@
 # ☘️ llm-lean-log
 
+<p align="center">
+  <img src="docs/imgs/logo.webp" alt="llm-lean-log logo" width="200">
+</p>
+
 使用 LLM 及其代理来读写日志：
 
 - Antigravity

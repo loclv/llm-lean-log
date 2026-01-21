@@ -1,5 +1,9 @@
 # ☘️ llm-lean-log
 
+<p align="center">
+  <img src="docs/imgs/logo.webp" alt="llm-lean-log logo" width="200">
+</p>
+
 |Package|Version|Downloads|NPM Page|
 |---|---|---|---|
 |llm-lean-log-cli|![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli)|![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core)|[npm page](https://www.npmjs.com/package/llm-lean-log-cli)|

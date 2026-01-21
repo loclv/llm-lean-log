@@ -1,5 +1,9 @@
 # ☘️ llm-lean-log
 
+<p align="center">
+  <img src="docs/imgs/logo.webp" alt="llm-lean-log logo" width="200">
+</p>
+
 Làm việc với các LLM và các agent của chúng để ghi và đọc nhật ký:
 
 - Antigravity

@@ -1,5 +1,9 @@
 # ☘️ llm-lean-log
 
+<p align="center">
+  <img src="docs/imgs/logo.webp" alt="llm-lean-log logo" width="200">
+</p>
+
 LLMとそのエージェントを使用して、ログの書き込みと読み取りを行います。
 
 - Antigravity

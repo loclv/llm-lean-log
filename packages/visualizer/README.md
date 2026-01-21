@@ -1,5 +1,8 @@
-
 # 🌐 Web Visualizer
+
+<p align="center">
+  <img src="../../docs/imgs/logo.webp" alt="llm-lean-log logo" width="128">
+</p>
 
 A beautiful, interactive web-based visualizer for your `llm-lean-log` files.
 
