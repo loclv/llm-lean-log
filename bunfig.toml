@@ -7,5 +7,7 @@ coveragePathIgnorePatterns = [
   "dist/**",
   "packages/core/dist/**",
   "packages/cli/dist/**",
-  "packages/visualizer/dist/**"
+  "packages/visualizer/dist/**",
+  "packages/mcp/dist/**",
+  "packages/mcp-server/dist/**"
 ]
