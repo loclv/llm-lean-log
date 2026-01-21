@@ -12,9 +12,6 @@ This is a monorepo with packages in `packages/*`. Use workspace commands:
 # Install dependencies
 bun i
 
-# Build all packages
-bun run build
-
 # Run all tests
 bun test
 
@@ -56,66 +53,63 @@ bun run mcp:start
 bun run example
 ```
 
-## Work Logging
+## Work Logging (Required)
 
-Whenever you finish a task or modify code, you must log your work using the `l-log` CLI.
+Whenever you finish a task or modify code, you must log your work using the `l-log` CLI:
 
-Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --cause="<cause>" --created-by-agent="OpenCode"`
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --cause="<cause>" --created-by-agent="OpenCode"`
 
-Steps before logging:
+Steps:
 
-1. Get the git short sha: `git rev-parse --short HEAD`
-2. Ensure you are using the correct log path: `./logs/chat.csv`
+1. Get git short sha: `git rev-parse --short HEAD`
+2. Ensure log path: `./logs/chat.csv`
 3. Install CLI if needed: `bun add -g llm-lean-log-cli`
 
 ## Context Retrieval (MCP)
 
-This project has an MCP server `llm-memory` configured. Use it to retrieve context from previous tasks:
+This project has an MCP server `llm-memory` configured:
 
-- Use `search_logs(query)` to find how previous problems were solved
-- Use `get_task_history(taskName)` to see the progression of a specific feature
-- Use `recent_work` prompt to get an overview of what has been done recently
-- Use `up` prompt for daily standup context
-- Use `learned` prompt to review past mistakes
+- `search_logs(query)` - Find how problems were solved
+- `get_task_history(taskName)` - See feature progression
+- `recent_work` - Overview of recent work
+- `up` - Daily standup context
+- `learned` - Review past mistakes
 
 ## Code Style Guidelines
 
 ### Imports & Dependencies
 
-- Use `node:` prefix for Node.js built-in modules: `import { readFile } from "node:fs/promises"`
-- Prefer absolute imports over relative imports when possible
-- Use Bun's built-in APIs over external packages:
-  - `Bun.file()` instead of `node:fs` for file operations
-  - `bun:sqlite` instead of `better-sqlite3`
-  - `Bun.serve()` instead of `express`
-  - `bun:sqlite` for SQLite, `Bun.redis` for Redis, `Bun.sql` for Postgres
+- Use `node:` prefix for Node.js built-ins: `import { readFile } from "node:fs/promises"`
+- Prefer Bun's built-in APIs over external packages
+- `Bun.file()` instead of `node:fs`
+- `bun:sqlite` instead of `better-sqlite3`
+- `Bun.serve()` instead of `express`
+- `Bun.redis` for Redis, `Bun.sql` for Postgres
+- Use `bunx <package>` instead of `npx <package>`
 
-### Formatting & Style
+### Formatting
 
 - **Indentation**: Use tabs (configured in biome.json)
 - **Quotes**: Use double quotes for strings
 - **Line endings**: Use LF
 - **Semicolons**: Required
 - **Trailing commas**: Required in multi-line structures
-- Run `bun run fmt` to format code automatically
-- Run `bun run lint` to check style compliance
+- Run `bun run fmt` and `bun run lint` to ensure compliance
 
 ### TypeScript Conventions
 
-- **Type annotations**: Always provide explicit return types for functions
-- **Optional fields**: Use optional chaining (`?.`) when accessing potentially undefined properties
-- **Error handling**: Use try-catch blocks with proper error logging
-- **Generics**: Prefer explicit type parameters over implicit inference
-- **Never use `any`**: Use `unknown` or proper typing instead
+- Always provide explicit return types for functions
+- Use optional chaining (`?.`) for potentially undefined properties
+- Never use `any` - use `unknown` or proper typing
+- Use try-catch with `console.error()` for async operations
 
 ### Naming Conventions
 
-- **Files**: kebab-case for filenames (`csv-utils.ts`, `logger.test.ts`)
+- **Files**: kebab-case (`csv-utils.ts`, `logger.test.ts`)
 - **Functions**: camelCase (`loadLogs`, `createLogEntry`)
-- **Constants**: UPPER_SNAKE_CASE for exported constants (`CSV_HEADERS`)
-- **Types**: PascalCase for interfaces/types (`LogEntry`, `CsvRow`)
-- **Variables**: camelCase for local variables
-- **Private functions**: Use descriptive names, no underscore prefix needed
+- **Constants**: UPPER_SNAKE_CASE for exports (`CSV_HEADERS`)
+- **Types**: PascalCase (`LogEntry`, `CsvRow`)
+- **Variables**: camelCase
 
 ### Function Documentation
 
@@ -132,45 +126,30 @@ export async function loadLogs(filePath: string): Promise<LogEntry[]> {
 }
 ```
 
-### Error Handling Patterns
+### Testing
 
-- Always handle async operations with try-catch
-- Log errors using `console.error()` with descriptive messages
-- Return empty arrays or null values for graceful degradation
-- Use proper TypeScript error types when available
+Write unit tests for ALL new functions and bug fixes:
 
-### Testing Requirements
-
-- Write unit tests for ALL new functions and bug fixes
 - Test files: `*.test.ts` in same directory as source
-- Use `bun:test` framework with `describe`, `test`, `expect`
+- Use `bun:test` with `describe`, `test`/`it`, `expect`
 - Test both happy path and error cases
-- Coverage is enabled automatically - aim for high coverage
+- Update tests when modifying source code
 
 ```typescript
-import { describe, expect, test } from "bun:test";
+import { describe, expect, it } from "bun:test";
 
 describe("functionName", () => {
-  test("should handle normal case", () => {
-    // test implementation
+  it("should handle normal case", () => {
+    // test
   });
 
-  test("should handle errors", () => {
-    // error test implementation
+  it("should handle errors", () => {
+    // error test
   });
 });
 ```
 
-## Technical Preferences
-
-### Runtime & Tooling
-
-- **Use Bun exclusively** - no Node.js, npm, pnpm, or yarn
-- Use `bun run` for scripts, `bun test` for testing, `bun i` for dependencies
-- Use `bunx <package>` instead of `npx <package>`
-- Bun automatically loads `.env` files - no dotenv needed
-
-### Architecture Principles
+## Architecture Principles
 
 - **Functional programming**: No classes or OOP patterns
 - Pure functions preferred over methods with side effects
@@ -178,25 +157,18 @@ describe("functionName", () => {
 - Composition over inheritance
 - Avoid mutation of function parameters
 
-### Package Management
+## Package Management
 
-- This is a monorepo using Bun workspaces
-- All dependencies go in root `package.json` unless package-specific
+- Monorepo using Bun workspaces
+- All dependencies in root `package.json` unless package-specific
 - Use `devDependencies` for build tools and testing frameworks
 - For CLI packages: move core dependencies to `devDependencies` and bundle
-
-### Frontend Guidelines
-
-- Use Vanilla CSS unless Tailwind explicitly requested
-- For React: prefer functional components with hooks
-- Use CSS modules or styled-components for component-specific styles
-- Ensure accessibility in all UI components
 
 ## Package-Specific Notes
 
 ### Core Package (`packages/core`)
 
-- Contains CSV utilities and logger functions
+- CSV utilities and logger functions
 - All functions must be pure and testable
 - TypeScript types exported for other packages
 
@@ -204,12 +176,10 @@ describe("functionName", () => {
 
 - Entry point: `src/index.ts`
 - Bundle with Bun, include all dependencies
-- Test CLI commands with integration tests
 
 ### Visualizer Package (`packages/visualizer`)
 
 - React-based web interface
-- Uses Vite for development builds
 - Import LogEntry type from core package
 
 ### MCP Server Package (`packages/mcp-server`)
@@ -224,5 +194,9 @@ describe("functionName", () => {
 - Use conventional commit messages when possible
 - Always include git short SHA in log entries
 - Run tests and lint before committing changes
+
+## Console Output
+
+Use `\n` to separate multiple lines in console.log/console.warn/console.error
 
 Remember: This file is your guide. When in doubt, check existing code for patterns and follow the established conventions.

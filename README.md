@@ -78,13 +78,14 @@ trigger: always_on
 
 Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"`
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --created-by-agent="<agent-name>"`
+
+Note: `--last-commit-short-sha` is optional and will be auto-populated by the CLI if not provided.
 
 Before run:
 
 - Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
 - If need, run CLI help command: `l-log -h` for more information.
-- Get the git short sha of the last commit by running: `git rev-parse --short HEAD`.
 - log path: `./logs/chat.csv`.
 
 ```
@@ -179,7 +180,7 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
     - Format: comma separated list of other log IDs, wrap with double quotes if multiple effect log IDs.
 
   - `last-commit-short-sha`: last git commit short SHA of the log (optional).
-
+    - If not input, it will be updated automatically by `l-log` CLI tool.
     - Example: `a1b2c3d`
     - Why not updated git commit?
       - git commit is usually updated before when LLMs write logs.
@@ -383,7 +384,16 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 - Publish docs: `./docs/publish.sh`
 - Release docs: `./docs/release.sh`
 
-More info at `./docs` folder.
+### Documentation
+
+- [AI Agents Integration](./docs/ai-agents.md) - Guide for configuring AI agents (Cursor, Windsurf, Claude Code, OpenCode, etc.)
+- [Development Guide](./docs/development.md) - Detailed development setup, commands, and workflow
+- [AGENTS.md](./AGENTS.md) - Comprehensive guide for AI agents working on this project
+- [CONTRIBUTING.md](./CONTRIBUTING.md) - Contribution guidelines and code style
+- [Project Structure](./docs/project-strcture.md) - Overview of project structure
+- [Graph](./docs/graph.md) - Basic workflow diagram
+- [Public](./docs/public.md) - How to publish packages
+- [Release](./docs/release.md) - Release process and changelog format
 
 ### 💻 Use with VS Code base editor
 
