@@ -4,6 +4,7 @@
 zig version
 # 0.15.2
 
+# Update version in `package.json`.
 zig run scripts/release.zig
 ```
 

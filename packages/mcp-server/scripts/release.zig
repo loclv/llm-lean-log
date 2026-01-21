@@ -148,20 +148,20 @@ pub fn main() !void {
     std.log.info("Running tests...", .{});
     _ = try execCommand(allocator, &[_][]const u8{ "bun", "test" });
 
-    // // Commit changes
-    // std.log.info("Committing changes...", .{});
-    // _ = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
-    // const commit_message = try std.fmt.allocPrint(allocator, "chore: release v{s}", .{new_version});
-    // defer allocator.free(commit_message);
-    // _ = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
+    // Commit changes
+    std.log.info("Committing changes...", .{});
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
+    const commit_message = try std.fmt.allocPrint(allocator, "chore: release v{s}", .{new_version});
+    defer allocator.free(commit_message);
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
 
-    // // Create and push tag
-    // std.log.info("Creating and pushing tag...", .{});
-    // const tag_name = try std.fmt.allocPrint(allocator, "v{s}", .{new_version});
-    // defer allocator.free(tag_name);
-    // _ = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
-    // _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
-    // _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
+    // Create and push tag
+    std.log.info("Creating and pushing tag...", .{});
+    const tag_name = try std.fmt.allocPrint(allocator, "v{s}", .{new_version});
+    defer allocator.free(tag_name);
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
+    _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
 
     // TODO: Publish to npm
     // std.log.info("Publishing to npm...", .{});
