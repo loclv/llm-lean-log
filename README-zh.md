@@ -27,7 +27,7 @@ bun add -g llm-lean-log-cli
 
 通过提示词让LLM写日志：
 
-> 使用 `l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --last-commit-short-sha="abc1234"` 命令行工具保存上面的聊天记录
+> 使用 `l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` 命令行工具保存上面的聊天记录
 
 或者对用户来说更简单但对LLM效率较低的方式：
 

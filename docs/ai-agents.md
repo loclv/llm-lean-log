@@ -29,7 +29,7 @@ This project uses llm-lean-log to maintain a history of development tasks. As an
 
 Whenever you finish a task or modify code, you must log your work using the l-log CLI:
 
-l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --cause="<cause>" --created-by-agent="OpenCode"
+l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="OpenCode"
 
 Steps before logging:
 1. Get the git short sha: git rev-parse --short HEAD
@@ -155,7 +155,7 @@ You can use different levels of specificity when asking AI agents to write logs:
 
 ### Detailed (most efficient for LLMs)
 
-> use l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --last-commit-short-sha="abc1234" CLI tool to save last chat logs / talk above
+> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --cause="<cause>" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
 
 ### Simple
 

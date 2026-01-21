@@ -1,9 +1,10 @@
 ----------------------------------------|---------|---------|-------------------
 File                                    | % Funcs | % Lines | Uncovered Line #s
 ----------------------------------------|---------|---------|-------------------
-All files                               |   91.52 |   95.03 |
+All files                               |   89.98 |   93.17 |
  packages/cli/src/utils/cli.ts          |  100.00 |  100.00 | 
  packages/cli/src/utils/const.ts        |  100.00 |  100.00 | 
+ packages/cli/src/utils/git.ts          |   71.43 |   70.83 | 18,25,27-29,34-35
  packages/core/src/csv-utils.ts         |  100.00 |   97.66 | 114,213,216
  packages/core/src/graph-utils.ts       |   96.77 |   96.99 | 257,322-328
  packages/core/src/indexer.ts           |  100.00 |  100.00 | 
@@ -16,7 +17,7 @@ All files                               |   91.52 |   95.03 |
  packages/mcp/src/index.ts              |  100.00 |   93.46 | 71-72,111-112,226-236,293-294
 ----------------------------------------|---------|---------|-------------------
 
- 211 pass
+ 221 pass
  0 fail
- 508 expect() calls
-Ran 211 tests across 14 files. [2.09s]
+ 545 expect() calls
+Ran 221 tests across 16 files. [4.07s]

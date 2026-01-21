@@ -40,12 +40,9 @@ This project uses `llm-lean-log` to maintain a history of development tasks. As 
 
 Whenever you finish a task or modify code, you must log your work using the `l-log` CLI.
 
-Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --cause="<cause>" --created-by-agent="OpenCode"`
+Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="OpenCode"`
 
-Steps before logging:
-
-1. Get the git short sha: `git rev-parse --short HEAD`
-2. Ensure you are using the correct log path: `./logs/chat.csv`
+Ensure log path: `./logs/chat.csv`
 
 ## Context Retrieval (MCP)
 

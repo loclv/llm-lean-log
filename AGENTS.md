@@ -57,13 +57,9 @@ bun run example
 
 Whenever you finish a task or modify code, you must log your work using the `l-log` CLI:
 
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --cause="<cause>" --created-by-agent="OpenCode"`
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="OpenCode"`
 
-Steps:
-
-1. Get git short sha: `git rev-parse --short HEAD`
-2. Ensure log path: `./logs/chat.csv`
-3. Install CLI if needed: `bun add -g llm-lean-log-cli`
+Ensure log path: `./logs/chat.csv`
 
 ## Context Retrieval (MCP)
 

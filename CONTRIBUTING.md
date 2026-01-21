@@ -270,15 +270,10 @@ This project is optimized for LLM token usage. When making changes:
 If you're an AI agent contributing to this project, you must log your work using the `l-log` CLI:
 
 ```bash
-l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --last-commit-short-sha="<short-sha>" --created-by-agent="<agent-name>"
+l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --created-by-agent="<agent-name>"
 ```
 
-Steps:
-
-1. Get git short sha: `git rev-parse --short HEAD`
-2. Ensure log path: `./logs/chat.csv`
-
-See [AGENTS.md](./AGENTS.md) for more details.
+Ensure log path: `./logs/chat.csv`
 
 ## Questions?
 

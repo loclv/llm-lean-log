@@ -36,7 +36,7 @@ bun add -g llm-lean-log-cli
 
 Ask LLMs to write a log by prompt:
 
-> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --last-commit-short-sha="abc1234"` CLI tool to save last chat logs / talk above
+> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
 
 Or simpler for user but less efficient for LLMs:
 

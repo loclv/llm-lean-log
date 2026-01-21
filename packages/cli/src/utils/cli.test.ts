@@ -7,9 +7,13 @@ import {
 	mock,
 	spyOn,
 } from "bun:test";
-import * as core from "llm-lean-log-core";
 import pkg from "../../package.json";
-import { main } from "./cli";
+
+// Mock git module - MUST be before importing ./cli
+const mockGetLastCommitShortSha = mock(() => Promise.resolve("abc1234"));
+mock.module("./git", () => ({
+	getLastCommitShortSha: mockGetLastCommitShortSha,
+}));
 
 // Mock core functions
 mock.module("llm-lean-log-core", () => ({
@@ -25,6 +29,10 @@ mock.module("llm-lean-log-core", () => ({
 	visualizeStats: mock(() => "visualized stats"),
 	visualizeTable: mock(() => "visualized table"),
 }));
+
+// Import after mocks are set up
+import * as core from "llm-lean-log-core";
+import { main } from "./cli";
 
 describe("CLI", () => {
 	let consoleLogSpy: any;
@@ -159,8 +167,9 @@ describe("CLI", () => {
 		expect(saveLogs).toHaveBeenCalled();
 		expect(consoleLogSpy).toHaveBeenCalledWith("Log entry added successfully");
 
-		// Verify that saveLogs was called with the expected entries
-		const savedEntries = (saveLogs as any).mock.calls[0][1];
+		// Verify that saveLogs was called with the expected entries (use last call since mocks accumulate)
+		let callIndex = (saveLogs as any).mock.calls.length - 1;
+		const savedEntries = (saveLogs as any).mock.calls[callIndex][1];
 		const lastEntry = savedEntries[savedEntries.length - 1];
 
 		expect(lastEntry.name).toBe("New Log");
@@ -169,6 +178,42 @@ describe("CLI", () => {
 		expect(lastEntry.cause).toBe("Test Cause");
 		expect(lastEntry["created-at"]).toBeDefined();
 		expect(lastEntry.id).toBeDefined();
+	});
+
+	it("should auto-populate last-commit-short-sha when not provided", async () => {
+		const { saveLogs, addLogEntry } = core;
+
+		await runCommand(["add", "New Log", "--problem=Test Problem"]);
+
+		expect(addLogEntry).toHaveBeenCalled();
+		expect(mockGetLastCommitShortSha).toHaveBeenCalled();
+
+		// Verify that saveLogs was called with the auto-populated SHA (use last call since mocks accumulate)
+		const callIndex = (saveLogs as any).mock.calls.length - 1;
+		const savedEntries = (saveLogs as any).mock.calls[callIndex][1];
+		const lastEntry = savedEntries[savedEntries.length - 1];
+
+		expect(lastEntry["last-commit-short-sha"]).toBe("abc1234");
+	});
+
+	it("should use provided last-commit-short-sha when specified", async () => {
+		const { saveLogs, addLogEntry } = core;
+
+		await runCommand([
+			"add",
+			"New Log",
+			"--problem=Test Problem",
+			"--last-commit-short-sha=xyz7890",
+		]);
+
+		expect(addLogEntry).toHaveBeenCalled();
+
+		// Verify that the user-provided SHA is used (use last call since mocks accumulate)
+		const callIndex = (saveLogs as any).mock.calls.length - 1;
+		const savedEntries = (saveLogs as any).mock.calls[callIndex][1];
+		const lastEntry = savedEntries[savedEntries.length - 1];
+
+		expect(lastEntry["last-commit-short-sha"]).toBe("xyz7890");
 	});
 
 	it("should show error and exit if 'add' is missing problem", async () => {

@@ -27,7 +27,7 @@ bun add -g llm-lean-log-cli
 
 プロンプトでLLMにログを書かせる：
 
-> `l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --last-commit-short-sha="abc1234"` CLIツールを使用して上記のチャットログ/会話を保存
+> `l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLIツールを使用して上記のチャットログ/会話を保存
 
 またはユーザーにとってはより簡単だがLLMには効率が悪い方法：
 

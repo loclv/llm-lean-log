@@ -5,16 +5,17 @@
  */
 
 import {
-	addLogEntry,
-	filterByTags,
-	loadLogs,
-	saveLogs,
-	searchLogs,
-	visualizeEntry,
-	visualizeStats,
-	visualizeTable,
+    addLogEntry,
+    filterByTags,
+    loadLogs,
+    saveLogs,
+    searchLogs,
+    visualizeEntry,
+    visualizeStats,
+    visualizeTable,
 } from "llm-lean-log-core";
 import { helpText, helpTextForHuman } from "./const";
+import { getLastCommitShortSha } from "./git";
 
 export async function main(version: string) {
 	const args = process.argv.slice(2);
@@ -121,6 +122,12 @@ export async function main(version: string) {
 				process.exit(1);
 			}
 
+			// Auto-populate last-commit-short-sha if not provided
+			let lastCommitShortSha = findFlag("--last-commit-short-sha");
+			if (!lastCommitShortSha) {
+				lastCommitShortSha = await getLastCommitShortSha();
+			}
+
 			entries = addLogEntry(entries, {
 				name,
 				problem,
@@ -134,7 +141,7 @@ export async function main(version: string) {
 				cause: findFlag("--cause"),
 				causeIds: findFlag("--causeIds"),
 				effectIds: findFlag("--effectIds"),
-				"last-commit-short-sha": findFlag("--last-commit-short-sha"),
+				"last-commit-short-sha": lastCommitShortSha,
 				"created-at": findFlag("--created-at"),
 				"updated-at": findFlag("--updated-at"),
 				"created-by-agent": findFlag("--created-by-agent"),
