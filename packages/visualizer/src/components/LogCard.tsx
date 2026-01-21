@@ -6,6 +6,7 @@ import {
 	CheckCircle2,
 	Cpu,
 	FileCode,
+	GitBranch,
 	Info,
 	Layers,
 	MessageSquare,
@@ -232,6 +233,15 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 							>
 								<MessageSquare size={14} />
 								<span>{entry["created-by-agent"]}</span>
+							</div>
+						)}
+						{entry["last-commit-short-sha"] && (
+							<div
+								className="flex items-center gap-1"
+								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+							>
+								<GitBranch size={14} />
+								<span>{entry["last-commit-short-sha"]}</span>
 							</div>
 						)}
 					</div>

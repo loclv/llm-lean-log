@@ -250,6 +250,12 @@ export function visualizeTable(
 				metadata.push(colorize("Model: ", "dim", useColors) + entry.model);
 			}
 
+			if (entry["last-commit-short-sha"]) {
+				metadata.push(
+					colorize("Git: ", "dim", useColors) + entry["last-commit-short-sha"],
+				);
+			}
+
 			lines.push(colorize(`  ${metadata.join(" | ")}`, "gray", useColors));
 			lines.push("");
 		}
@@ -347,6 +353,10 @@ export function visualizeEntry(
 
 		if (entry["created-by-agent"]) {
 			lines.push(`  Log Created By: ${entry["created-by-agent"]}`);
+		}
+
+		if (entry["last-commit-short-sha"]) {
+			lines.push(`  Git SHA: ${entry["last-commit-short-sha"]}`);
 		}
 	}
 
