@@ -7,37 +7,73 @@ import { useCallback, useEffect, useState } from "react";
 import { LogCard } from "./components/LogCard";
 
 /**
+ * Storage key for localStorage persistence
+ */
+const LOGS_STORAGE_KEY = "l";
+
+/**
+ * Gets initial logs from localStorage
+ */
+const getInitialLogs = (): LogEntry[] => {
+	try {
+		const storedLogs = localStorage.getItem(LOGS_STORAGE_KEY);
+		if (storedLogs) {
+			return JSON.parse(storedLogs) as LogEntry[];
+		}
+	} catch (error) {
+		console.error("Error parsing stored logs:", error);
+		localStorage.removeItem(LOGS_STORAGE_KEY);
+	}
+	return [];
+};
+
+/**
  * Main application component for the LLM Lean Log Visualizer.
  */
 function App() {
-	const [logs, setLogs] = useState<LogEntry[]>([]);
+	const [logs, setLogs] = useState<LogEntry[]>(getInitialLogs());
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isDragging, setIsDragging] = useState(false);
 
 	/**
-	 * Fetches logs from the API if available.
+	 * Load logs from API only if no stored logs exist
 	 */
 	useEffect(() => {
-		fetch("/api/logs")
-			.then((res) => {
-				if (res.ok) return res.text();
-				throw new Error("No initial data");
-			})
-			.then((text) => {
-				if (text) {
-					Papa.parse(text, {
-						header: true,
-						skipEmptyLines: true,
-						complete: (results) => {
-							setLogs(results.data as LogEntry[]);
-						},
-					});
-				}
-			})
-			.catch(() => {
-				// Silently fail if API is not available or returns error
-			});
+		const storedLogs = localStorage.getItem(LOGS_STORAGE_KEY);
+
+		// Only fetch from API if no stored logs exist
+		if (!storedLogs) {
+			fetch("/api/logs")
+				.then((res) => {
+					if (res.ok) return res.text();
+					throw new Error("No initial data");
+				})
+				.then((text) => {
+					if (text) {
+						Papa.parse(text, {
+							header: true,
+							skipEmptyLines: true,
+							complete: (results) => {
+								const apiLogs = results.data as LogEntry[];
+								setLogs(apiLogs);
+							},
+						});
+					}
+				})
+				.catch(() => {
+					// Silently fail if API is not available or returns error
+				});
+		}
 	}, []);
+
+	/**
+	 * Save logs to localStorage whenever they change
+	 */
+	useEffect(() => {
+		if (logs.length > 0) {
+			localStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify(logs));
+		}
+	}, [logs]);
 
 	/**
 	 * Handles CSV file parsing and state update.
@@ -47,13 +83,23 @@ function App() {
 			header: true,
 			skipEmptyLines: true,
 			complete: (results) => {
-				setLogs(results.data as LogEntry[]);
+				const parsedLogs = results.data as LogEntry[];
+				setLogs(parsedLogs);
+				localStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify(parsedLogs));
 			},
 			error: (error) => {
 				console.error("Error parsing CSV:", error);
 				alert("Failed to parse CSV file.");
 			},
 		});
+	};
+
+	/**
+	 * Clears logs from both state and localStorage
+	 */
+	const clearLogs = () => {
+		setLogs([]);
+		localStorage.removeItem(LOGS_STORAGE_KEY);
 	};
 
 	/**
@@ -217,7 +263,7 @@ function App() {
 							<button
 								className="btn btn-secondary"
 								type="button"
-								onClick={() => setLogs([])}
+								onClick={clearLogs}
 							>
 								<Trash2 size={18} />
 								Clear
