@@ -19,4 +19,4 @@ All files                               |   99.18 |   98.14 |
  230 pass
  0 fail
  559 expect() calls
-Ran 230 tests across 16 files. [2.08s]
+Ran 230 tests across 16 files. [2.26s]

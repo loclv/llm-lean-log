@@ -42,17 +42,17 @@ describe("CLI Commands Integration", () => {
 	const testCsv = join(import.meta.dir, "test-logs.csv");
 
 	// Clean up after tests
-	const cleanup = () => {
+	const cleanup = async () => {
 		try {
 			const file = Bun.file(testCsv);
-			if (file.exists()) {
+			if (await file.exists()) {
 				spawnSync(["rm", testCsv]);
 			}
-		} catch (e) {}
+		} catch (_e) {}
 	};
 
-	it("should add a log entry successfully", () => {
-		cleanup();
+	it("should add a log entry successfully", async () => {
+		await cleanup();
 		const { stdout, exitCode, stderr } = spawnSync([
 			"bun",
 			"run",
@@ -154,7 +154,7 @@ describe("CLI Commands Integration", () => {
 	});
 
 	it("should clean up test file", async () => {
-		cleanup();
+		await cleanup();
 		const file = Bun.file(testCsv);
 		expect(await file.exists()).toBe(false);
 	});

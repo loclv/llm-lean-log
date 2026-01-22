@@ -4,11 +4,11 @@
  * CLI tool for llm-lean-log
  */
 
-import pkg from "../package.json" assert { type: "json" };
 import { main } from "./utils/cli";
+import { VERSION } from "./utils/const";
 
 if (import.meta.main) {
-	main(pkg.version).catch((error) => {
+	main(VERSION).catch((error) => {
 		console.error("Error:", error.message);
 		process.exit(1);
 	});
