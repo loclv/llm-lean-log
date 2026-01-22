@@ -54,51 +54,6 @@ fn execCommand(allocator: std.mem.Allocator, args: []const []const u8) ![]const 
     return allocator.dupe(u8, std.mem.trim(u8, result.stdout, "\n"));
 }
 
-/// Update version in TypeScript const file
-fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !void {
-    const file = std.fs.cwd().openFile("src/utils/const.ts", .{}) catch |err| switch (err) {
-        error.FileNotFound => {
-            std.log.err("src/utils/const.ts not found", .{});
-            return error.FileNotFound;
-        },
-        else => return err,
-    };
-    defer file.close();
-
-    const contents = try file.readToEndAlloc(allocator, SIZE_1MB);
-    defer allocator.free(contents);
-
-    // Find and replace version in the TypeScript file
-    const version_pattern = "export const MCP_SERVER_VERSION = \"";
-    const version_start = std.mem.indexOf(u8, contents, version_pattern) orelse {
-        std.log.err("Version pattern not found in src/utils/const.ts", .{});
-        return error.VersionPatternNotFound;
-    };
-    const start_idx = version_start + version_pattern.len;
-
-    const version_end_offset = std.mem.indexOf(u8, contents[start_idx..], "\"") orelse {
-        std.log.err("Version end quote not found in src/utils/const.ts", .{});
-        return error.VersionPatternNotFound;
-    };
-    const end_idx = start_idx + version_end_offset;
-
-    const new_len = start_idx + new_version.len + (contents.len - end_idx);
-    var new_contents = try allocator.alloc(u8, new_len);
-    defer allocator.free(new_contents);
-
-    // Copy before version
-    std.mem.copyForwards(u8, new_contents[0..start_idx], contents[0..start_idx]);
-    // Copy new version
-    std.mem.copyForwards(u8, new_contents[start_idx .. start_idx + new_version.len], new_version);
-    // Copy after version
-    std.mem.copyForwards(u8, new_contents[start_idx + new_version.len ..], contents[end_idx..]);
-
-    // Write new contents to the TypeScript file
-    try std.fs.cwd().writeFile(.{ .sub_path = "src/utils/const.ts", .data = new_contents });
-
-    std.log.info("Updated version in src/utils/const.ts to {s}", .{new_version});
-}
-
 /// Read package.json and update version
 fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     const file = std.fs.cwd().openFile("package.json", .{}) catch |err| switch (err) {
@@ -110,7 +65,7 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     };
     defer file.close();
 
-    const contents = try file.readToEndAlloc(allocator, 1024 * 1024);
+    const contents = try file.readToEndAlloc(allocator, SIZE_1MB);
     defer allocator.free(contents);
 
     var parsed = try json.parseFromSlice(json.Value, allocator, contents, .{});
@@ -174,14 +129,11 @@ pub fn main() !void {
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
-    std.log.info("Starting release process...", .{});
+    std.log.info("Starting release process for cores...", .{});
 
     // Update version in package.json
     const new_version = try updatePackageVersion(allocator);
     defer allocator.free(new_version);
-
-    // Update version in TypeScript const file
-    try updateConstVersion(allocator, new_version);
 
     // Build the package
     std.log.info("Building package...", .{});
@@ -200,10 +152,10 @@ pub fn main() !void {
     // Commit changes
     std.log.info("Committing changes...", .{});
     {
-        const output = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
+        const output = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json" });
         allocator.free(output);
     }
-    const commit_message = try std.fmt.allocPrint(allocator, "chore: release mcp-server-v{s}", .{new_version});
+    const commit_message = try std.fmt.allocPrint(allocator, "chore: release core-v{s}", .{new_version});
     defer allocator.free(commit_message);
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
@@ -212,7 +164,7 @@ pub fn main() !void {
 
     // Create and push tag
     std.log.info("Creating and pushing tag...", .{});
-    const tag_name = try std.fmt.allocPrint(allocator, "mcp-server-v{s}", .{new_version});
+    const tag_name = try std.fmt.allocPrint(allocator, "core-v{s}", .{new_version});
     defer allocator.free(tag_name);
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
@@ -227,5 +179,5 @@ pub fn main() !void {
         allocator.free(output);
     }
 
-    std.log.info("Release mcp-server-v{s} completed successfully!", .{new_version});
+    std.log.info("Release core-v{s} completed successfully!", .{new_version});
 }
