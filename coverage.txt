@@ -1,22 +1,22 @@
 ----------------------------------------|---------|---------|-------------------
 File                                    | % Funcs | % Lines | Uncovered Line #s
 ----------------------------------------|---------|---------|-------------------
-All files                               |   94.92 |   95.34 |
+All files                               |   99.18 |   98.14 |
  packages/cli/src/utils/cli.ts          |  100.00 |  100.00 | 
  packages/cli/src/utils/const.ts        |  100.00 |  100.00 | 
- packages/cli/src/utils/git.ts          |   71.43 |   70.83 | 18,25,27-29,34-35
- packages/core/src/csv-utils.ts         |  100.00 |   97.66 | 114,213,216
+ packages/cli/src/utils/git.ts          |  100.00 |  100.00 | 
+ packages/cli/src/utils/visualizer.ts   |  100.00 |  100.00 | 
+ packages/core/src/csv-utils.ts         |   93.33 |   89.71 | 114,136-149,213,216
  packages/core/src/graph-utils.ts       |   96.77 |   96.99 | 257,322-328
  packages/core/src/indexer.ts           |  100.00 |  100.00 | 
  packages/core/src/logger.ts            |  100.00 |   92.00 | 19,21-24
- packages/core/src/visualizer.ts        |   95.83 |   96.42 | 55-56,78-79,101-102,127-128,141-142,290-291
- packages/mcp-server/src/index.ts       |   75.00 |   96.67 | 128-129
+ packages/mcp-server/src/index.ts       |  100.00 |   98.94 | 
  packages/mcp-server/src/utils/const.ts |  100.00 |  100.00 | 
  packages/mcp/src/data-access.ts        |  100.00 |  100.00 | 
- packages/mcp/src/index.ts              |  100.00 |   93.46 | 71-72,111-112,226-236,293-294
+ packages/mcp/src/index.ts              |  100.00 |  100.00 | 
 ----------------------------------------|---------|---------|-------------------
 
- 221 pass
+ 230 pass
  0 fail
- 545 expect() calls
-Ran 221 tests across 16 files. [2.00s]
+ 559 expect() calls
+Ran 230 tests across 16 files. [2.08s]

@@ -18,6 +18,9 @@
       "bin": {
         "l-log": "dist/index.js",
       },
+      "dependencies": {
+        "cli-highlight": "^2.1.11",
+      },
       "devDependencies": {
         "@types/bun": "latest",
         "llm-lean-log-core": "workspace:*",
@@ -27,9 +30,6 @@
     "packages/core": {
       "name": "llm-lean-log-core",
       "version": "0.2.4",
-      "dependencies": {
-        "cli-highlight": "^2.1.11",
-      },
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -54,7 +54,7 @@
     },
     "packages/mcp-server": {
       "name": "l-log-mcp-server",
-      "version": "0.1.6",
+      "version": "0.1.8",
       "bin": {
         "l-log-mcp-server": "dist/index.js",
       },

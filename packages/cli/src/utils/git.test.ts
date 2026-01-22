@@ -1,126 +1,93 @@
-import { describe, expect, it, spyOn } from "bun:test";
-import { spawn } from "node:child_process";
+import { describe, expect, it, mock, spyOn } from "bun:test";
+import { EventEmitter } from "node:events";
 import { getLastCommitShortSha } from "./git";
+
+// Create a mock for stdout/stderr
+class MockStream extends EventEmitter {
+	setEncoding() {}
+	pause() {}
+	resume() {}
+}
+
+const mockSpawn = mock(() => {
+	const mockProcess: any = new EventEmitter();
+	mockProcess.stdout = new MockStream();
+	mockProcess.stderr = new MockStream();
+	return mockProcess;
+});
+
+// Mock child_process
+mock.module("node:child_process", () => ({
+	spawn: mockSpawn,
+}));
 
 describe("git utilities", () => {
 	describe("getLastCommitShortSha", () => {
-		it("should return a short SHA when in a git repository", async () => {
-			const sha = await getLastCommitShortSha();
-
-			// We're running in the llm-lean-log repository, so this should return a value
-			expect(sha).toBeDefined();
-			expect(typeof sha).toBe("string");
-			// Git short SHA is typically 7 characters by default
-			expect(sha?.length).toBeGreaterThanOrEqual(7);
-			// Should only contain hex characters
-			expect(sha).toMatch(/^[a-f0-9]+$/);
-		});
-
-		it("should return the same value as git rev-parse --short HEAD", async () => {
-			// Get the expected value directly from git
-			const expectedSha = await new Promise<string>((resolve, reject) => {
-				const git = spawn("git", ["rev-parse", "--short", "HEAD"]);
-				let stdout = "";
-
-				git.stdout.on("data", (data) => {
-					stdout += data.toString();
-				});
-
-				git.on("close", (code) => {
-					if (code === 0) {
-						resolve(stdout.trim());
-					} else {
-						reject(new Error("git command failed"));
-					}
-				});
+		it("should return a short SHA when git succeeds", async () => {
+			mockSpawn.mockImplementation(() => {
+				const p: any = new EventEmitter();
+				p.stdout = new MockStream();
+				p.stderr = new MockStream();
+				setTimeout(() => {
+					p.stdout.emit("data", Buffer.from("abc1234\n"));
+					p.emit("close", 0);
+				}, 10);
+				return p;
 			});
 
 			const sha = await getLastCommitShortSha();
-			expect(sha).toBe(expectedSha);
+			expect(sha).toBe("abc1234");
 		});
 
-		it("should log stderr when git command fails with error output", async () => {
-			const consoleErrorSpy = spyOn(console, "error").mockImplementation(
-				() => {},
-			);
-
-			// Run git with an invalid ref to trigger an error
-			const result = await new Promise<string | undefined>((resolve) => {
-				const git = spawn("git", ["rev-parse", "--short", "INVALID_REF_12345"]);
-
-				let stdout = "";
-				let stderr = "";
-
-				git.stdout.on("data", (data) => {
-					stdout += data.toString();
-				});
-
-				git.stderr.on("data", (data) => {
-					stderr += data.toString();
-				});
-
-				git.on("close", (code) => {
-					if (code === 0 && stdout.trim()) {
-						resolve(stdout.trim());
-					} else {
-						if (stderr) {
-							console.error(`[git] error: ${stderr}`);
-						}
-						resolve(undefined);
-					}
-				});
-
-				git.on("error", () => {
-					resolve(undefined);
-				});
+		it("should return undefined and log error when git fails with stderr", async () => {
+			const consoleSpy = spyOn(console, "error").mockImplementation(() => {});
+			mockSpawn.mockImplementation(() => {
+				const p: any = new EventEmitter();
+				p.stdout = new MockStream();
+				p.stderr = new MockStream();
+				setTimeout(() => {
+					p.stderr.emit("data", Buffer.from("fatal: not a git repository"));
+					p.emit("close", 128);
+				}, 10);
+				return p;
 			});
 
-			// Should return undefined for invalid ref
-			expect(result).toBeUndefined();
-
-			// Should have logged the error
-			expect(consoleErrorSpy).toHaveBeenCalled();
-			expect(consoleErrorSpy.mock.calls[0]?.[0]).toContain("[git] error:");
-
-			consoleErrorSpy.mockRestore();
+			const sha = await getLastCommitShortSha();
+			expect(sha).toBeUndefined();
+			expect(consoleSpy).toHaveBeenCalledWith(
+				"[git] error: fatal: not a git repository",
+			);
+			consoleSpy.mockRestore();
 		});
 
-		it("should not log when git command fails without stderr", async () => {
-			const consoleErrorSpy = spyOn(console, "error").mockImplementation(
-				() => {},
-			);
-
-			// Simulate a scenario where git fails but produces no stderr
-			// This is harder to test directly, so we test the logic manually
-			const result = await new Promise<string | undefined>((resolve) => {
-				const git = spawn("git", ["rev-parse", "--short", "HEAD"]);
-
-				let stdout = "";
-				const stderr = ""; // Force empty stderr
-
-				git.stdout.on("data", (data) => {
-					stdout += data.toString();
-				});
-
-				// Ignore actual stderr
-				git.stderr.on("data", () => {});
-
-				git.on("close", () => {
-					// Force failure path with empty stderr
-					if (stderr) {
-						console.error(`[git] error: ${stderr}`);
-					}
-					resolve(undefined);
-				});
+		it("should return undefined when git fails without stderr", async () => {
+			mockSpawn.mockImplementation(() => {
+				const p: any = new EventEmitter();
+				p.stdout = new MockStream();
+				p.stderr = new MockStream();
+				setTimeout(() => {
+					p.emit("close", 1);
+				}, 10);
+				return p;
 			});
 
-			// Should return undefined
-			expect(result).toBeUndefined();
+			const sha = await getLastCommitShortSha();
+			expect(sha).toBeUndefined();
+		});
 
-			// Should NOT have logged (stderr was empty)
-			expect(consoleErrorSpy).not.toHaveBeenCalled();
+		it("should return undefined when git spawn fails (on error)", async () => {
+			mockSpawn.mockImplementation(() => {
+				const p: any = new EventEmitter();
+				p.stdout = new MockStream();
+				p.stderr = new MockStream();
+				setTimeout(() => {
+					p.emit("error", new Error("spawn ENOENT"));
+				}, 10);
+				return p;
+			});
 
-			consoleErrorSpy.mockRestore();
+			const sha = await getLastCommitShortSha();
+			expect(sha).toBeUndefined();
 		});
 	});
 });

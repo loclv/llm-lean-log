@@ -5,17 +5,15 @@
  */
 
 import {
-    addLogEntry,
-    filterByTags,
-    loadLogs,
-    saveLogs,
-    searchLogs,
-    visualizeEntry,
-    visualizeStats,
-    visualizeTable,
+	addLogEntry,
+	filterByTags,
+	loadLogs,
+	saveLogs,
+	searchLogs,
 } from "llm-lean-log-core";
 import { helpText, helpTextForHuman } from "./const";
 import { getLastCommitShortSha } from "./git";
+import { visualizeEntry, visualizeStats, visualizeTable } from "./visualizer";
 
 export async function main(version: string) {
 	const args = process.argv.slice(2);
@@ -166,8 +164,7 @@ export async function main(version: string) {
 
 		default:
 			if (command) {
-				console.error(`Error: Unknown command "${command}"`);
-				console.log(helpText);
+				console.error(`Error: Unknown command "${command}"\n${helpText}`);
 				process.exit(1);
 			} else {
 				console.log(helpText);

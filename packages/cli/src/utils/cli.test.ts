@@ -25,9 +25,17 @@ mock.module("llm-lean-log-core", () => ({
 	]),
 	filterByTags: mock(() => []),
 	searchLogs: mock(() => []),
-	visualizeEntry: mock(() => "visualized entry"),
-	visualizeStats: mock(() => "visualized stats"),
-	visualizeTable: mock(() => "visualized table"),
+}));
+
+// Mock visualizer utilities
+const mockVisualizeEntry = mock(() => "visualized entry");
+const mockVisualizeStats = mock(() => "visualized stats");
+const mockVisualizeTable = mock(() => "visualized table");
+
+mock.module("./visualizer", () => ({
+	visualizeEntry: mockVisualizeEntry,
+	visualizeStats: mockVisualizeStats,
+	visualizeTable: mockVisualizeTable,
 }));
 
 // Import after mocks are set up
@@ -124,7 +132,7 @@ describe("CLI", () => {
 	});
 
 	it("should call loadLogs and visualizeTable for 'list' command", async () => {
-		const { loadLogs, visualizeTable } = core as any;
+		const { loadLogs } = core as any;
 		loadLogs.mockResolvedValueOnce([
 			{ id: "1", name: "test", problem: "p", "created-at": "t" },
 		]);
@@ -132,23 +140,21 @@ describe("CLI", () => {
 		await runCommand(["list"]);
 
 		expect(loadLogs).toHaveBeenCalled();
-		expect(visualizeTable).toHaveBeenCalled();
+		expect(mockVisualizeTable).toHaveBeenCalled();
 		expect(consoleLogSpy).toHaveBeenCalledWith("visualized table");
 	});
 
 	it("should work with 'ls' alias", async () => {
-		const { loadLogs, visualizeTable } = core as any;
+		const { loadLogs } = core as any;
 		await runCommand(["ls"]);
 		expect(loadLogs).toHaveBeenCalled();
-		expect(visualizeTable).toHaveBeenCalled();
+		expect(mockVisualizeTable).toHaveBeenCalled();
 	});
 
 	it("should call visualizeStats for 'stats' command", async () => {
-		const { visualizeStats } = core as any;
-
 		await runCommand(["stats"]);
 
-		expect(visualizeStats).toHaveBeenCalled();
+		expect(mockVisualizeStats).toHaveBeenCalled();
 		expect(consoleLogSpy).toHaveBeenCalledWith("visualized stats");
 	});
 
@@ -168,7 +174,7 @@ describe("CLI", () => {
 		expect(consoleLogSpy).toHaveBeenCalledWith("Log entry added successfully");
 
 		// Verify that saveLogs was called with the expected entries (use last call since mocks accumulate)
-		let callIndex = (saveLogs as any).mock.calls.length - 1;
+		const callIndex = (saveLogs as any).mock.calls.length - 1;
 		const savedEntries = (saveLogs as any).mock.calls[callIndex][1];
 		const lastEntry = savedEntries[savedEntries.length - 1];
 
@@ -239,13 +245,13 @@ describe("CLI", () => {
 	});
 
 	it("should search logs with 'search' command", async () => {
-		const { searchLogs, visualizeTable } = core as any;
+		const { searchLogs } = core as any;
 		searchLogs.mockReturnValueOnce([]);
 
 		await runCommand(["search", "query"]);
 
 		expect(searchLogs).toHaveBeenCalled();
-		expect(visualizeTable).toHaveBeenCalled();
+		expect(mockVisualizeTable).toHaveBeenCalled();
 	});
 
 	it("should show error and exit if 'search' is missing query", async () => {
@@ -260,13 +266,13 @@ describe("CLI", () => {
 	});
 
 	it("should filter logs by tags with 'tags' command", async () => {
-		const { filterByTags, visualizeTable } = core as any;
+		const { filterByTags } = core as any;
 		filterByTags.mockReturnValueOnce([]);
 
 		await runCommand(["tags", "tag1", "tag2"]);
 
 		expect(filterByTags).toHaveBeenCalled();
-		expect(visualizeTable).toHaveBeenCalled();
+		expect(mockVisualizeTable).toHaveBeenCalled();
 	});
 
 	it("should show error and exit if 'tags' is missing tags", async () => {
@@ -281,19 +287,19 @@ describe("CLI", () => {
 	});
 
 	it("should view entry at index", async () => {
-		const { loadLogs, visualizeEntry } = core as any;
+		const { loadLogs } = core as any;
 		loadLogs.mockResolvedValueOnce([
 			{ id: "1", name: "test", problem: "p", "created-at": "t" },
 		]);
 
 		await runCommand(["view", "0"]);
 
-		expect(visualizeEntry).toHaveBeenCalled();
+		expect(mockVisualizeEntry).toHaveBeenCalled();
 		expect(consoleLogSpy).toHaveBeenCalledWith("visualized entry");
 	});
 
 	it("should view last entry with --last flag", async () => {
-		const { loadLogs, visualizeEntry } = core as any;
+		const { loadLogs } = core as any;
 		loadLogs.mockResolvedValueOnce([
 			{ id: "1", name: "test1", problem: "p1", "created-at": "t1" },
 			{ id: "2", name: "test2", problem: "p2", "created-at": "t2" },
@@ -301,7 +307,7 @@ describe("CLI", () => {
 
 		await runCommand(["view", "--last"]);
 
-		expect(visualizeEntry).toHaveBeenCalledWith(
+		expect(mockVisualizeEntry).toHaveBeenCalledWith(
 			expect.objectContaining({ id: "2" }),
 			expect.any(Object),
 		);
@@ -370,9 +376,9 @@ describe("CLI", () => {
 		} catch (e: any) {
 			expect(e.message).toBe("process.exit(1)");
 		}
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining('Unknown command "unknown"'),
-		);
+		const errorOutput = consoleErrorSpy.mock.calls[0][0];
+		expect(errorOutput).toContain('Unknown command "unknown"');
+		expect(errorOutput).toContain("l-log CLI"); // Help text starts with this
 	});
 
 	it("should show help when no command is provided", async () => {

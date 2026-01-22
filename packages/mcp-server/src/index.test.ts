@@ -146,4 +146,45 @@ describe("MCP App", () => {
 		errorSpy.mockRestore();
 		connectSpy.mockRestore();
 	});
+
+	/**
+	 * Test for fatal error in main()
+	 */
+	test("should handle fatal error in main()", async () => {
+		const errorSpy = spyOn(console, "error").mockImplementation(() => {});
+		const exitSpy = spyOn(process, "exit").mockImplementation((() => {
+			throw new Error("process.exit");
+		}) as any);
+
+		// Mock run to throw
+		const { main, run: originalRun } = require("./index");
+		const _runSpy = spyOn({ run: originalRun }, "run").mockImplementation(
+			async () => {
+				throw new Error("test error");
+			},
+		);
+
+		// We need to use the exported main but with mocked run
+		// Since they are in the same file, we might need a different approach if they are closely bound
+		// Let's try to just make run() throw by using invalid env
+		const invalidPath = path.resolve(process.cwd(), "test-dir-error-main");
+		if (!fs.existsSync(invalidPath)) fs.mkdirSync(invalidPath);
+		process.env.LLM_LOG_PATH = invalidPath;
+
+		try {
+			await main();
+		} catch (e: any) {
+			expect(e.message).toBe("process.exit");
+		}
+
+		expect(errorSpy).toHaveBeenCalledWith(
+			expect.stringContaining("Fatal error in MCP server:"),
+			expect.any(Error),
+		);
+
+		delete process.env.LLM_LOG_PATH;
+		fs.rmdirSync(invalidPath);
+		errorSpy.mockRestore();
+		exitSpy.mockRestore();
+	});
 });

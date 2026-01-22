@@ -26,6 +26,15 @@ export const registerMemoryMcpHandlers = (
 
 	const RECENT_LOGS_LIMIT = 50;
 
+	const safeRefresh = async (context: string) => {
+		try {
+			await refreshCache();
+		} catch (error) {
+			console.error(`[${context}] Error refreshing cache:`, error);
+			throw error;
+		}
+	};
+
 	/**
 	 * Resources
 	 */
@@ -37,7 +46,7 @@ export const registerMemoryMcpHandlers = (
 			description: "The last 50 log entries from the project history.",
 		},
 		async (uri) => {
-			await refreshCache();
+			await safeRefresh("recent-logs");
 			const entries = getLastNEntries(logCache, RECENT_LOGS_LIMIT);
 			// Format as simple text/markdown for easy consumption
 			const text = entries
@@ -66,12 +75,7 @@ export const registerMemoryMcpHandlers = (
 			description: "The very last log entry from the project history.",
 		},
 		async (uri) => {
-			try {
-				await refreshCache();
-			} catch (error) {
-				console.error("[last-log] Error refreshing cache:", error);
-				throw error;
-			}
+			await safeRefresh("last-log");
 
 			const entry = logCache[logCache.length - 1];
 			if (!entry) {
@@ -106,12 +110,7 @@ export const registerMemoryMcpHandlers = (
 			description: "Statistics about the log history.",
 		},
 		async (uri) => {
-			try {
-				await refreshCache();
-			} catch (error) {
-				console.error("[log-stats] Error refreshing cache:", error);
-				throw error;
-			}
+			await safeRefresh("log-stats");
 
 			const entries = logCache;
 
@@ -221,22 +220,7 @@ export const registerMemoryMcpHandlers = (
 
 			// Get the last active day's logs
 			const lastLog = logCache[logCache.length - 1];
-
-			if (!lastLog) {
-				return {
-					messages: [
-						{
-							role: "user",
-							content: {
-								type: "text",
-								text: "What did I do last time and what's next?",
-							},
-						},
-					],
-				};
-			}
-
-			const lastDate = lastLog["created-at"].split("T")[0];
+			const lastDate = lastLog?.["created-at"].split("T")[0];
 
 			const text = logCache
 				.map((row) => `- ${row.name}: ${row.problem}`)
@@ -288,12 +272,7 @@ export const registerMemoryMcpHandlers = (
 				"Review past mistakes and lessons learned to avoid repeating them.",
 		},
 		async () => {
-			try {
-				await refreshCache();
-			} catch (error) {
-				console.error("[learned] Error refreshing cache:", error);
-				throw error;
-			}
+			await safeRefresh("learned");
 
 			// Filter for logs that might contain important lessons
 			const lessons = logCache

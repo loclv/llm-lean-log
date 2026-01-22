@@ -4,8 +4,8 @@
  */
 
 import { highlight } from "cli-highlight";
-import { logEntriesToCSVMinimal } from "./csv-utils";
-import type { LogEntry } from "./types";
+import type { LogEntry } from "llm-lean-log-core";
+import { logEntriesToCSVMinimal } from "llm-lean-log-core";
 
 interface VisualizerOptions {
 	/** Show full details or compact view */
@@ -292,9 +292,6 @@ export function visualizeEntry(
 		lines.push(colorize("═".repeat(80), "cyan", useColors));
 		lines.push(colorize(`  ${entry.name}`, "bright", useColors));
 		lines.push(colorize("═".repeat(80), "cyan", useColors));
-		lines.push("");
-	} else {
-		lines.push(`## ${entry.name}`);
 		lines.push("");
 	}
 

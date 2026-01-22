@@ -43,8 +43,5 @@
 		"csv",
 		"token-optimization"
 	],
-	"license": "MIT",
-	"dependencies": {
-		"cli-highlight": "^2.1.11"
-	}
+	"license": "MIT"
 }

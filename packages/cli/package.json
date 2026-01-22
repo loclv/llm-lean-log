@@ -35,7 +35,9 @@
 	"publishConfig": {
 		"access": "public"
 	},
-
+	"dependencies": {
+		"cli-highlight": "^2.1.11"
+	},
 	"devDependencies": {
 		"@types/bun": "latest",
 		"llm-lean-log-core": "workspace:*",

@@ -25,8 +25,8 @@ describe("CLI Basic Checks", () => {
 		expect(stdout.toString()).toContain("Usage:");
 	});
 
-	it("should exit with error for unknown command", () => {
-		const { stderr, exitCode } = spawnSync([
+	it("should exit with error for unknown command and show help in stderr", () => {
+		const { stdout, stderr, exitCode } = spawnSync([
 			"bun",
 			"run",
 			cliPath,
@@ -34,6 +34,8 @@ describe("CLI Basic Checks", () => {
 		]);
 		expect(exitCode).toBe(1);
 		expect(stderr.toString()).toContain("Error: Unknown command");
+		expect(stderr.toString()).toContain("command,options,description"); // part of help text
+		expect(stdout.toString()).toBe("");
 	});
 });
 

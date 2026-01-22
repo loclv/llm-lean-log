@@ -8,6 +8,7 @@ export {
 	csvRowToLogEntry,
 	csvToLogEntries,
 	logEntriesToCSV,
+	logEntriesToCSVMinimal,
 	logEntryToCSVRow,
 } from "./csv-utils";
 export {
@@ -46,4 +47,3 @@ export {
 	updateLogEntry,
 } from "./logger";
 export type { LogEntry } from "./types";
-export { visualizeEntry, visualizeStats, visualizeTable } from "./visualizer";

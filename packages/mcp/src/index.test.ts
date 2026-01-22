@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, spyOn, test } from "bun:test";
 import fs from "node:fs";
 import path from "node:path";
 import { registerMemoryMcpHandlers } from "./index";
@@ -357,5 +357,73 @@ describe("MCP Handlers", () => {
 		);
 
 		fs.unlinkSync(testLogPath);
+	});
+
+	test("should handle refreshCache errors in resources", async () => {
+		const { mockServer, resources } = setup();
+		const errorSpy = spyOn(console, "error").mockImplementation(() => {});
+
+		// Passing an invalid path that will cause throw during refresh (EISDIR if it's a directory)
+		const invalidPath = path.resolve(process.cwd(), "test-dir-error");
+		if (!fs.existsSync(invalidPath)) fs.mkdirSync(invalidPath);
+
+		const refresh = registerMemoryMcpHandlers(mockServer, invalidPath);
+		// Initial refresh will fail
+		try {
+			await refresh();
+		} catch (_e) {
+			// Expected
+		}
+
+		const lastLogHandler = resources.get("last-log");
+		const statsHandler = resources.get("log-stats");
+
+		if (!lastLogHandler || !statsHandler) {
+			throw new Error("Handlers not found");
+		}
+
+		try {
+			await lastLogHandler({ href: "memory://last" });
+			expect(true).toBe(false); // Should not reach here
+		} catch (error) {
+			expect(error).toBeDefined();
+		}
+
+		try {
+			if (!statsHandler) throw new Error("statsHandler not found");
+			await statsHandler({ href: "memory://stats" });
+			expect(true).toBe(false); // Should not reach here
+		} catch (error) {
+			expect(error).toBeDefined();
+		}
+
+		fs.rmdirSync(invalidPath);
+		errorSpy.mockRestore();
+	});
+
+	test("should handle refreshCache errors in learned prompt", async () => {
+		const { mockServer, prompts } = setup();
+		const errorSpy = spyOn(console, "error").mockImplementation(() => {});
+		const invalidPath = path.resolve(process.cwd(), "test-dir-error-2");
+		if (!fs.existsSync(invalidPath)) fs.mkdirSync(invalidPath);
+
+		const refresh = registerMemoryMcpHandlers(mockServer, invalidPath);
+		try {
+			await refresh();
+		} catch (_e) {
+			// Expected
+		}
+
+		const learnedHandler = prompts.get("learned");
+		if (!learnedHandler) throw new Error("learnedHandler not found");
+		try {
+			await learnedHandler();
+			expect(true).toBe(false); // Should not reach here
+		} catch (error) {
+			expect(error).toBeDefined();
+		}
+
+		fs.rmdirSync(invalidPath);
+		errorSpy.mockRestore();
 	});
 });

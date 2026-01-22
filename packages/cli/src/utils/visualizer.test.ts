@@ -1,5 +1,16 @@
-import { describe, expect, it } from "bun:test";
-import type { LogEntry } from "./types";
+import { describe, expect, it, mock } from "bun:test";
+
+// Mock cli-highlight to test error handling
+mock.module("cli-highlight", () => ({
+	highlight: (code: string) => {
+		if (code.includes("THROW_ERROR")) {
+			throw new Error("Mocked highlight error");
+		}
+		return `HIGHLIGHTED:${code}`;
+	},
+}));
+
+import type { LogEntry } from "llm-lean-log-core";
 import { visualizeEntry, visualizeStats, visualizeTable } from "./visualizer";
 
 describe("visualizer", () => {
@@ -111,6 +122,15 @@ describe("visualizer", () => {
 			expect(output).not.toContain("Metadata:");
 		});
 
+		it("should show Git SHA in table if provided", () => {
+			const entryWithGit: LogEntry = {
+				...mockEntry1,
+				"last-commit-short-sha": "abc1234",
+			};
+			const output = stripAnsi(visualizeTable([entryWithGit]));
+			expect(output).toContain("Git: abc1234");
+		});
+
 		it("should handle long text truncation", () => {
 			const longEntry: LogEntry = {
 				...mockEntry2,
@@ -145,13 +165,22 @@ describe("visualizer", () => {
 			expect(output).not.toContain("Action:");
 		});
 
+		it("should show Git SHA in single entry view", () => {
+			const entryWithGit: LogEntry = {
+				...mockEntry1,
+				"last-commit-short-sha": "abc1234",
+			};
+			const output = visualizeEntry(entryWithGit);
+			expect(output).toContain("Git SHA: abc1234");
+		});
+
 		it("should handle llm mode for single entry (CSV output)", () => {
 			const output = visualizeEntry(mockEntry1, { llm: true });
-			expect(output).not.toContain("##");
 			expect(output).toContain(
 				"id,name,tags,problem,solution,action,files,tech-stack",
 			);
 			expect(output).toContain("1,Test Entry 1");
+			expect(output).not.toContain("##");
 		});
 	});
 
@@ -170,6 +199,30 @@ describe("visualizer", () => {
 			expect(output).toContain("Entries with Solutions: 1 (50.0%)");
 		});
 
+		it("should handle multiple entries with different models and tags for sort coverage", () => {
+			const entryA: LogEntry = {
+				...mockEntry1,
+				model: "model-a",
+				tags: "tag-a",
+				"tech-stack": "tech-a",
+				solution: "yes",
+			};
+			const entryB: LogEntry = {
+				...mockEntry1,
+				model: "model-b",
+				tags: "tag-b",
+				"tech-stack": "tech-b",
+				solution: "yes",
+			};
+			const output = visualizeStats([entryA, entryB]);
+			expect(output).toContain("model-a: 1");
+			expect(output).toContain("model-b: 1");
+			expect(output).toContain("tag-a: 1");
+			expect(output).toContain("tag-b: 1");
+			expect(output).toContain("tech-a: 1");
+			expect(output).toContain("tech-b: 1");
+		});
+
 		it("should handle empty list for stats", () => {
 			const output = visualizeStats([], { llm: true });
 			expect(output).toContain("Total Entries: 0");
@@ -186,6 +239,37 @@ describe("visualizer", () => {
 			const output = stripAnsi(visualizeEntry(entry));
 			// Since new Date("invalid") doesn't throw but returns "Invalid Date"
 			expect(output).toContain("Created: Invalid Date");
+		});
+
+		it("should fallback to raw date string if formatDate throws", () => {
+			const entry: LogEntry = {
+				...mockEntry2,
+				// @ts-expect-error - testing invalid input that might cause throw
+				"created-at": 123456789012345678901234567890n,
+			};
+			const output = stripAnsi(visualizeEntry(entry));
+			expect(output).toContain("Created: 123456789012345678901234567890");
+		});
+
+		it("should handle highlight errors in all block types", () => {
+			const entry: LogEntry = {
+				...mockEntry2,
+				problem: "```ts\nTHROW_ERROR\n```",
+				solution: "ts`THROW_ERROR`",
+				action: "function THROW_ERROR() {}",
+			};
+			const output = visualizeEntry(entry, { colors: true, highlight: true });
+			// Should contain original text even if highlight fails
+			expect(stripAnsi(output)).toContain("THROW_ERROR");
+		});
+
+		it("should handle highlight errors in inline code", () => {
+			const entry: LogEntry = {
+				...mockEntry2,
+				problem: "Check the `THROW_ERROR and some bits` part.",
+			};
+			const output = visualizeEntry(entry, { colors: true, highlight: true });
+			expect(stripAnsi(output)).toContain("THROW_ERROR");
 		});
 	});
 });

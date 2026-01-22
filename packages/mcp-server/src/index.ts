@@ -124,9 +124,18 @@ Options:
 	console.error("MCP Server is running on stdio");
 }
 
-if (import.meta.main) {
-	run().catch((error) => {
+/**
+ * Entry point for the MCP server when run directly.
+ */
+export async function main() {
+	try {
+		await run();
+	} catch (error) {
 		console.error("Fatal error in MCP server:", error);
 		process.exit(1);
-	});
+	}
+}
+
+if (import.meta.main) {
+	main();
 }
