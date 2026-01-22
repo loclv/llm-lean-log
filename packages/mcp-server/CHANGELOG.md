@@ -1,5 +1,12 @@
 # CHANGELOG - l-log-mcp-server
 
+## [0.1.11] - 2026-01-22
+
+### Changed
+
+- **Package Structure**: CLI source code moved from core package to dedicated CLI package
+- Improved package separation and modularity across the monorepo
+
 ## [0.1.6] - 2026-01-19
 
 ### Changed

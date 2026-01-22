@@ -2,6 +2,18 @@
 
 All notable changes to the `llm-lean-log-core` package will be documented in this file.
 
+## [0.2.5] - 2026-01-22
+
+### ⚠️ BREAKING CHANGES
+
+- **Package Structure**: CLI source code moved from core package to dedicated CLI package
+
+### Changed
+
+- Moved CLI source code from `packages/core/src/cli/` to `packages/cli/src/`
+- Core package now focuses purely on CSV utilities and logging functions
+- Improved package separation and modularity
+
 ## [0.2.4] - 2026-01-18
 
 ### Added
