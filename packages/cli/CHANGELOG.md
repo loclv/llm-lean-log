@@ -2,6 +2,30 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.8] - 2026-01-22
+
+### Added
+
+- **Release Automation**: Added Zig-based release script (`scripts/release.zig`) for automated version management
+  - Automatic version increment in `package.json`
+  - Version synchronization with TypeScript constants
+  - Automated build and test validation
+  - Git commit and tag creation with semantic versioning
+  - Integration with npm publishing workflow
+
+- **Git Integration**: Enhanced `last-commit-short-sha` field with automatic population
+  - Auto-populates git short SHA when not explicitly provided via `--last-commit-short-sha` flag
+  - Uses `git rev-parse --short HEAD` command to retrieve current commit SHA
+  - Gracefully handles non-git repositories and git command failures
+  - Maintains backward compatibility with manual SHA specification
+
+### Changed
+
+- **Release Process**: Enhanced release workflow with comprehensive automation
+  - Version bumping now handled programmatically
+  - Consistent commit message formatting (`chore: release mcp-server-v{version}`)
+  - Automated tag creation and pushing to GitHub
+
 ## [0.2.7] - 2026-01-18
 
 ### Changed
