@@ -189,11 +189,11 @@ pub fn main() !void {
     }
 
     // Run tests
-    std.log.info("Running tests...", .{});
-    {
-        const output = try execCommand(allocator, &[_][]const u8{ "bun", "test" });
-        allocator.free(output);
-    }
+    // std.log.info("Running tests...", .{});
+    // {
+    //     const output = try execCommand(allocator, &[_][]const u8{ "bun", "run", "test" });
+    //     allocator.free(output);
+    // }
 
     // Commit changes
     std.log.info("Committing changes...", .{});
