@@ -1,6 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import type { LogEntry } from "llm-lean-log-core";
-import { Search, Trash2, Upload } from "lucide-react";
+import {
+	ArrowDownWideNarrow,
+	ArrowUpNarrowWide,
+	Search,
+	Trash2,
+	Upload,
+} from "lucide-react";
 import Papa from "papaparse";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
@@ -33,6 +39,7 @@ const getInitialLogs = (): LogEntry[] => {
 function App() {
 	const [logs, setLogs] = useState<LogEntry[]>(getInitialLogs());
 	const [searchTerm, setSearchTerm] = useState("");
+	const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 	const [isDragging, setIsDragging] = useState(false);
 
 	/**
@@ -105,6 +112,12 @@ function App() {
 			log["tech-stack"]?.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			log.cause?.toLowerCase().includes(searchTerm.toLowerCase()),
 	);
+
+	const sortedLogs = [...filteredLogs].sort((a, b) => {
+		const timeA = new Date(a["created-at"] || 0).getTime();
+		const timeB = new Date(b["created-at"] || 0).getTime();
+		return sortOrder === "asc" ? timeA - timeB : timeB - timeA;
+	});
 
 	return (
 		<div className="container" style={{ paddingBottom: "4rem" }}>
@@ -229,6 +242,25 @@ function App() {
 							/>
 						</div>
 						<div className="flex gap-2">
+							<button
+								className="btn btn-secondary"
+								type="button"
+								onClick={() =>
+									setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
+								}
+								title={
+									sortOrder === "asc"
+										? "Sort Newest First"
+										: "Sort Oldest First"
+								}
+							>
+								{sortOrder === "asc" ? (
+									<ArrowUpNarrowWide size={18} />
+								) : (
+									<ArrowDownWideNarrow size={18} />
+								)}
+								{sortOrder === "asc" ? "Oldest" : "Newest"}
+							</button>
 							<label
 								className="btn btn-secondary"
 								style={{ cursor: "pointer" }}
@@ -266,8 +298,8 @@ function App() {
 					</div>
 
 					<AnimatePresence mode="popLayout">
-						{filteredLogs.map((log, index) => (
-							<LogCard key={index} entry={log} index={index} />
+						{sortedLogs.map((log, index) => (
+							<LogCard key={log.id || index} entry={log} index={index} />
 						))}
 					</AnimatePresence>
 				</div>
