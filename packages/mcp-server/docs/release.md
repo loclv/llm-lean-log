@@ -6,6 +6,12 @@ zig version
 
 # Update version in `package.json`.
 zig run scripts/release.zig
+
+# Build the script.
+zig build-exe scripts/release.zig -femit-bin=build/release
+
+# Run the script.
+./build/release
 ```
 
 Read more at `scripts/release.zig`.

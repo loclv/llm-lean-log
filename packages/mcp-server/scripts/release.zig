@@ -9,16 +9,27 @@ const std = @import("std");
 const json = std.json;
 const process = std.process;
 
+const Error = error{
+    InvalidVersionFormat,
+    VersionPatternNotFound,
+    VersionFieldNotFound,
+    CommandFailed,
+};
+
 /// Parse version string and increment patch version
 fn incrementVersion(version: []const u8, allocator: std.mem.Allocator) ![]const u8 {
     var iter = std.mem.splitScalar(u8, version, '.');
-    const major = try std.fmt.parseInt(u32, iter.next().?, 10);
-    const minor = try std.fmt.parseInt(u32, iter.next().?, 10);
-    var patch = try std.fmt.parseInt(u32, iter.next().?, 10);
+    const major_str = iter.next() orelse return error.InvalidVersionFormat;
+    const minor_str = iter.next() orelse return error.InvalidVersionFormat;
+    const patch_str = iter.next() orelse return error.InvalidVersionFormat;
 
-    patch += 1;
+    const major = try std.fmt.parseInt(u32, major_str, 10);
+    const minor = try std.fmt.parseInt(u32, minor_str, 10);
+    const patch = try std.fmt.parseInt(u32, patch_str, 10);
 
-    return std.fmt.allocPrint(allocator, "{}.{}.{}", .{ major, minor, patch });
+    const new_patch = patch + 1;
+
+    return std.fmt.allocPrint(allocator, "{}.{}.{}", .{ major, minor, new_patch });
 }
 
 /// Execute a command and return output
@@ -57,23 +68,31 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
 
     // Find and replace version in the TypeScript file
     const version_pattern = "export const MCP_SERVER_VERSION = \"";
-    const version_start =
-        std.mem.indexOf(u8, contents, version_pattern).? + version_pattern.len;
+    const version_start = std.mem.indexOf(u8, contents, version_pattern) orelse {
+        std.log.err("Version pattern not found in src/utils/const.ts", .{});
+        return error.VersionPatternNotFound;
+    };
+    const start_idx = version_start + version_pattern.len;
 
-    const version_end = std.mem.indexOf(u8, contents[version_start..], "\"").? + version_start;
+    const version_end_offset = std.mem.indexOf(u8, contents[start_idx..], "\"") orelse {
+        std.log.err("Version end quote not found in src/utils/const.ts", .{});
+        return error.VersionPatternNotFound;
+    };
+    const end_idx = start_idx + version_end_offset;
 
-    var new_contents = allocator.alloc(u8, contents.len + 10) catch unreachable;
+    const new_len = start_idx + new_version.len + (contents.len - end_idx);
+    var new_contents = try allocator.alloc(u8, new_len);
     defer allocator.free(new_contents);
 
     // Copy before version
-    std.mem.copyForwards(u8, new_contents[0..version_start], contents[0..version_start]);
+    std.mem.copyForwards(u8, new_contents[0..start_idx], contents[0..start_idx]);
     // Copy new version
-    std.mem.copyForwards(u8, new_contents[version_start .. version_start + new_version.len], new_version);
+    std.mem.copyForwards(u8, new_contents[start_idx .. start_idx + new_version.len], new_version);
     // Copy after version
-    std.mem.copyForwards(u8, new_contents[version_start + new_version.len ..], contents[version_end..]);
+    std.mem.copyForwards(u8, new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
-    const actual_len = version_start + new_version.len + (contents.len - version_end);
-    try std.fs.cwd().writeFile(.{ .sub_path = "src/utils/const.ts", .data = new_contents[0..actual_len] });
+    // Write new contents to the TypeScript file
+    try std.fs.cwd().writeFile(.{ .sub_path = "src/utils/const.ts", .data = new_contents });
 
     std.log.info("Updated version in src/utils/const.ts to {s}", .{new_version});
 }
@@ -96,31 +115,53 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     defer parsed.deinit();
 
     var root = parsed.value.object;
-    const current_version = root.get("version").?.string;
+    // Find version field in package.json
+    const version_entry = root.get("version") orelse {
+        std.log.err("version field not found in package.json", .{});
+        return error.VersionFieldNotFound;
+    };
+
+    // Check if version is a string
+    if (version_entry != .string) {
+        std.log.err("version field is not a string in package.json", .{});
+        return error.InvalidVersionFormat;
+    }
+
+    const current_version = version_entry.string;
     const new_version = try incrementVersion(current_version, allocator);
 
-    // Update version in parsed JSON
-    root.put("version", .{ .string = new_version }) catch unreachable;
+    // Update version in package.json
+    try root.put("version", .{ .string = new_version });
 
-    // Write back to file using simple string replacement
-    var new_contents = allocator.alloc(u8, contents.len + 10) catch unreachable;
+    // Find version pattern in package.json
+    const version_pattern = "\"version\": \"";
+    const version_start = std.mem.indexOf(u8, contents, version_pattern) orelse {
+        std.log.err("Version pattern not found in package.json", .{});
+        return error.VersionPatternNotFound;
+    };
+    const start_idx = version_start + version_pattern.len;
+
+    // Find version end quote in package.json
+    const version_end_offset = std.mem.indexOf(u8, contents[start_idx..], "\"") orelse {
+        std.log.err("Version end quote not found in package.json", .{});
+        return error.VersionPatternNotFound;
+    };
+    const end_idx = start_idx + version_end_offset;
+
+    // Update version in package.json
+    const new_len = start_idx + new_version.len + (contents.len - end_idx);
+    var new_contents = try allocator.alloc(u8, new_len);
     defer allocator.free(new_contents);
 
-    // Find and replace version in the JSON string
-    const version_pattern = "\"version\": \"";
-    const version_start = std.mem.indexOf(u8, contents, version_pattern).? + version_pattern.len;
-
-    const version_end = std.mem.indexOf(u8, contents[version_start..], "\"").? + version_start;
-
     // Copy before version
-    std.mem.copyForwards(u8, new_contents[0..version_start], contents[0..version_start]);
+    std.mem.copyForwards(u8, new_contents[0..start_idx], contents[0..start_idx]);
     // Copy new version
-    std.mem.copyForwards(u8, new_contents[version_start .. version_start + new_version.len], new_version);
+    std.mem.copyForwards(u8, new_contents[start_idx .. start_idx + new_version.len], new_version);
     // Copy after version
-    std.mem.copyForwards(u8, new_contents[version_start + new_version.len ..], contents[version_end..]);
+    std.mem.copyForwards(u8, new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
-    const actual_len = version_start + new_version.len + (contents.len - version_end);
-    try std.fs.cwd().writeFile(.{ .sub_path = "package.json", .data = new_contents[0..actual_len] });
+    // Write new package.json
+    try std.fs.cwd().writeFile(.{ .sub_path = "package.json", .data = new_contents });
 
     std.log.info("Updated version from {s} to {s}", .{ current_version, new_version });
     return new_version;
@@ -142,30 +183,47 @@ pub fn main() !void {
 
     // Build the package
     std.log.info("Building package...", .{});
-    _ = try execCommand(allocator, &[_][]const u8{ "bun", "run", "build" });
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "bun", "run", "build" });
+        allocator.free(output);
+    }
 
     // Run tests
     std.log.info("Running tests...", .{});
-    _ = try execCommand(allocator, &[_][]const u8{ "bun", "test" });
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "bun", "test" });
+        allocator.free(output);
+    }
 
     // Commit changes
     std.log.info("Committing changes...", .{});
-    _ = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
+        allocator.free(output);
+    }
     const commit_message = try std.fmt.allocPrint(allocator, "chore: release v{s}", .{new_version});
     defer allocator.free(commit_message);
-    _ = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
+        allocator.free(output);
+    }
 
     // Create and push tag
     std.log.info("Creating and pushing tag...", .{});
     const tag_name = try std.fmt.allocPrint(allocator, "v{s}", .{new_version});
     defer allocator.free(tag_name);
-    _ = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
-    _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
-    _ = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
-
-    // TODO: Publish to npm
-    // std.log.info("Publishing to npm...", .{});
-    // try execCommand(allocator, &[_][]const u8{ "npm", "publish" });
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
+        allocator.free(output);
+    }
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
+        allocator.free(output);
+    }
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
+        allocator.free(output);
+    }
 
     std.log.info("Release v{s} completed successfully!", .{new_version});
 }
