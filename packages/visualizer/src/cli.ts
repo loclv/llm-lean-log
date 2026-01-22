@@ -72,6 +72,6 @@ const openCmd =
 Bun.spawn([
 	openCmd,
 	csvPath
-		? `http://localhost:${server.port}/path=${encodeURIComponent(csvPath)}`
+		? `http://localhost:${server.port}/?path=${encodeURIComponent(csvPath)}`
 		: `http://localhost:${server.port}`,
 ]);

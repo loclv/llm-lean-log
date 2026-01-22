@@ -2,6 +2,17 @@
 
 All notable changes to the `l-log-vis` package will be documented in this file.
 
+## [0.2.7] - 2026-01-23
+
+### Changed
+
+- Refactored state management to use localStorage for persistence of uploaded logs
+- Simplified CLI URL generation and improved robustness
+
+### Added
+
+- Vite proxy configuration for easier development of API-related features
+
 ## [0.2.6] - 2026-01-22
 
 ### Added
