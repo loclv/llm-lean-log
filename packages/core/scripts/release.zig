@@ -14,6 +14,7 @@ const Error = error{
     VersionPatternNotFound,
     VersionFieldNotFound,
     CommandFailed,
+    ChangelogVersionNotFound,
 };
 
 // 1MB = 1024 * 1024
@@ -52,6 +53,48 @@ fn execCommand(allocator: std.mem.Allocator, args: []const []const u8) ![]const 
     }
 
     return allocator.dupe(u8, std.mem.trim(u8, result.stdout, "\n"));
+}
+
+/// Check if CHANGELOG.md contains the new version
+fn checkChangelog(allocator: std.mem.Allocator, version: []const u8) !void {
+    const file = std.fs.cwd().openFile("CHANGELOG.md", .{}) catch |err| switch (err) {
+        error.FileNotFound => {
+            std.log.err("CHANGELOG.md not found", .{});
+            return error.FileNotFound;
+        },
+        else => return err,
+    };
+    defer file.close();
+
+    const contents = try file.readToEndAlloc(allocator, SIZE_1MB);
+    defer allocator.free(contents);
+
+    const version_pattern = try std.fmt.allocPrint(allocator, "## [{s}]", .{version});
+    defer allocator.free(version_pattern);
+
+    if (std.mem.indexOf(u8, contents, version_pattern) == null) {
+        std.log.err("Version {s} not found in CHANGELOG.md. Please update it before releasing.", .{version});
+        return error.ChangelogVersionNotFound;
+    }
+
+    std.log.info("Version {s} found in CHANGELOG.md", .{version});
+}
+
+/// Check if a command is available in the system
+fn isCommandAvailable(allocator: std.mem.Allocator, command: []const u8) bool {
+    const result = process.Child.run(.{
+        .allocator = allocator,
+        .argv = &[_][]const u8{ command, "--version" },
+        .max_output_bytes = 1024,
+    }) catch |err| {
+        if (err == error.FileNotFound) return false;
+        return false;
+    };
+
+    allocator.free(result.stdout);
+    allocator.free(result.stderr);
+
+    return result.term.Exited == 0;
 }
 
 /// Read package.json and update version
@@ -127,6 +170,7 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
+    // Allocator for the release process
     const allocator = gpa.allocator();
 
     std.log.info("Starting release process for cores...", .{});
@@ -134,6 +178,13 @@ pub fn main() !void {
     // Update version in package.json
     const new_version = try updatePackageVersion(allocator);
     defer allocator.free(new_version);
+
+    // Check if ./CHANGELOG.md contains the new version
+    const changelog_check = try checkChangelog(allocator, new_version);
+    if (changelog_check != null) {
+        std.log.err("Version {s} not found in CHANGELOG.md. Please update it before releasing.", .{new_version});
+        return error.ChangelogVersionNotFound;
+    }
 
     // Build the package
     std.log.info("Building package...", .{});
@@ -180,6 +231,23 @@ pub fn main() !void {
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
         allocator.free(output);
+    }
+
+    // Create GitHub release if `gh` is available
+    if (isCommandAvailable(allocator, "gh")) {
+        std.log.info("Creating GitHub release...", .{});
+        const output = try execCommand(allocator, &[_][]const u8{
+            "gh",
+            "release",
+            "create",
+            tag_name,
+            "--title",
+            tag_name,
+            "--generate-notes",
+        });
+        allocator.free(output);
+    } else {
+        std.log.info("`gh` command not found, skipping GitHub release creation.", .{});
     }
 
     std.log.info("Release {s} completed successfully!", .{tag_name});
