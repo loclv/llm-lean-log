@@ -36,37 +36,6 @@ function App() {
 	const [isDragging, setIsDragging] = useState(false);
 
 	/**
-	 * Load logs from API only if no stored logs exist
-	 */
-	useEffect(() => {
-		const storedLogs = localStorage.getItem(LOGS_STORAGE_KEY);
-
-		// Only fetch from API if no stored logs exist
-		if (!storedLogs) {
-			fetch("/api/logs")
-				.then((res) => {
-					if (res.ok) return res.text();
-					throw new Error("No initial data");
-				})
-				.then((text) => {
-					if (text) {
-						Papa.parse(text, {
-							header: true,
-							skipEmptyLines: true,
-							complete: (results) => {
-								const apiLogs = results.data as LogEntry[];
-								setLogs(apiLogs);
-							},
-						});
-					}
-				})
-				.catch(() => {
-					// Silently fail if API is not available or returns error
-				});
-		}
-	}, []);
-
-	/**
 	 * Save logs to localStorage whenever they change
 	 */
 	useEffect(() => {
@@ -260,6 +229,21 @@ function App() {
 							/>
 						</div>
 						<div className="flex gap-2">
+							<label
+								className="btn btn-secondary"
+								style={{ cursor: "pointer" }}
+							>
+								<input
+									type="file"
+									accept=".csv"
+									style={{ display: "none" }}
+									onChange={(e) =>
+										e.target.files?.[0] && handleFileUpload(e.target.files[0])
+									}
+								/>
+								<Upload size={18} />
+								Upload
+							</label>
 							<button
 								className="btn btn-secondary"
 								type="button"
