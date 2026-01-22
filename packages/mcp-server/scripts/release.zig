@@ -290,5 +290,12 @@ pub fn main() !void {
         std.log.info("`gh` command not found, skipping GitHub release creation.", .{});
     }
 
+    // run `bun publish`
+    std.log.info("Publishing package...", .{});
+    {
+        const output = try execCommand(allocator, &[_][]const u8{ "bun", "publish" });
+        allocator.free(output);
+    }
+
     std.log.info("Release mcp-server-v{s} completed successfully!", .{new_version});
 }

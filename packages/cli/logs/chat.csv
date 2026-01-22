@@ -65,3 +65,31 @@ LEARN MORE
   Read the manual at https://cli.github.com/manual
   Learn about exit codes using `gh help exit-codes`
   Learn about accessibility experiences using `gh help accessibility` CLI if available.","Modified scripts/release.zig in cli, core, and mcp-server packages.","packages/cli/scripts/release.zig,packages/core/scripts/release.zig,packages/mcp-server/scripts/release.zig","Zig, GitHub CLI",,,,,2026-01-22T02:58:10.711Z,,,Antigravity
+451b839e-8ff1-4d40-a090-17bb30938fbc,Complete Publish Automation in Release Scripts,"release,zig,publish,automation",Release scripts for mcp-server and core were missing or had typos in the publish step.,"Implemented [0m[1mbun publish [0m[2mv1.3.6 (d530ed99)[0m
+[32mBundled 239 modules in 66ms[0m
+
+  [34mindex.js[33m  1.69 MB  [2m(entry point)[0m
+
+
+[0m[1m[36mpacked[0m 1.49KB package.json
+[0m[1m[36mpacked[0m 1.1KB LICENSE
+[0m[1m[36mpacked[0m 2.90KB README.md
+[0m[1m[36mpacked[0m 106B dist/index.bun.d.ts
+[0m[1m[36mpacked[0m 123B dist/index.bun.d.ts.map
+[0m[1m[36mpacked[0m 102B dist/index.d.ts
+[0m[1m[36mpacked[0m 115B dist/index.d.ts.map
+[0m[1m[36mpacked[0m 1.69MB dist/index.js
+[0m[1m[36mpacked[0m 175B dist/src/index.d.ts
+[0m[1m[36mpacked[0m 155B dist/src/index.d.ts.map
+[0m[1m[36mpacked[0m 151B dist/utils/cli.d.ts
+[0m[1m[36mpacked[0m 165B dist/utils/cli.d.ts.map
+[0m[1m[36mpacked[0m 3.62KB dist/utils/const.d.ts
+[0m[1m[36mpacked[0m 224B dist/utils/const.d.ts.map
+[0m[1m[36mpacked[0m 237B dist/utils/git.d.ts
+[0m[1m[36mpacked[0m 181B dist/utils/git.d.ts.map
+[0m[1m[36mpacked[0m 0.99KB dist/utils/visualizer.d.ts
+[0m[1m[36mpacked[0m 0.70KB dist/utils/visualizer.d.ts.map
+
+[0m[1m[34mTotal files[0m: 18
+[1m[34mShasum[0m: 96b0323b0f1ab4eab9d2e6cf6c8820df5dc1767f
+[1m[34mIntegrity[0m: sha512-PMzN6PZoOWQNT[...]iNNm48JYumdHQ",Modified packages/mcp-server/scripts/release.zig and packages/core/scripts/release.zig.,"packages/mcp-server/scripts/release.zig,packages/core/scripts/release.zig","Zig, Bun",,,,,2026-01-22T03:32:27.140Z,,,Antigravity
