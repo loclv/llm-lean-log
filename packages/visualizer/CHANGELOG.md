@@ -2,6 +2,12 @@
 
 All notable changes to the `l-log-vis` package will be documented in this file.
 
+## [0.2.5] - 2026-01-22
+
+### Added
+
+- `last-commit-short-sha` field viewing support
+
 ## [0.2.4] - 2026-01-18
 
 ### Added
