@@ -3,6 +3,7 @@
 	"version": "0.2.6",
 	"description": "A beautiful visualizer for LLM interaction logs",
 	"scripts": {
+		"d": "vite",
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",

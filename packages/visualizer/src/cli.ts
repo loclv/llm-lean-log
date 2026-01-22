@@ -69,4 +69,9 @@ const openCmd =
 // bun run src/cli ../../logs/example.csv
 // ```
 // to open browser
-Bun.spawn([openCmd, `http://localhost:${server.port}`]);
+Bun.spawn([
+	openCmd,
+	csvPath
+		? `http://localhost:${server.port}/path=${encodeURIComponent(csvPath)}`
+		: `http://localhost:${server.port}`,
+]);

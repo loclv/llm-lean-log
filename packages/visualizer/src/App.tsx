@@ -46,31 +46,31 @@ function App() {
 	 * Load logs from API only if no stored logs exist
 	 */
 	useEffect(() => {
-		const storedLogs = localStorage.getItem(LOGS_STORAGE_KEY);
-
-		// Only fetch from API if no stored logs exist
-		if (!storedLogs) {
-			fetch("/api/logs")
-				.then((res) => {
-					if (res.ok) return res.text();
-					throw new Error("No initial data");
-				})
-				.then((text) => {
-					if (text) {
-						Papa.parse(text, {
-							header: true,
-							skipEmptyLines: true,
-							complete: (results) => {
-								const apiLogs = results.data as LogEntry[];
+		fetch("/api/logs")
+			.then((res) => {
+				if (res.ok) return res.text();
+				throw new Error("No initial data");
+			})
+			.then((text) => {
+				if (text && !text.trim().startsWith("<!doctype")) {
+					Papa.parse(text, {
+						header: true,
+						skipEmptyLines: true,
+						complete: (results) => {
+							const apiLogs = (results.data as LogEntry[]).filter(
+								(l) => l.name || l.problem,
+							);
+							if (apiLogs.length > 0) {
 								setLogs(apiLogs);
-							},
-						});
-					}
-				})
-				.catch(() => {
-					// Silently fail if API is not available or returns error
-				});
-		}
+							}
+						},
+					});
+				}
+			})
+			.catch((err: Error) => {
+				console.error("Failed to load logs from API", err);
+				// Silently fail if API is not available or returns error
+			});
 	}, []);
 
 	/**
