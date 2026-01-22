@@ -224,11 +224,7 @@ pub fn main() !void {
     defer allocator.free(new_version);
 
     // Check if ./CHANGELOG.md contains the new version
-    const changelog_check = try checkChangelog(allocator, new_version);
-    if (changelog_check != null) {
-        std.log.err("Version {s} not found in CHANGELOG.md. Please update it before releasing.", .{new_version});
-        return error.ChangelogVersionNotFound;
-    }
+    try checkChangelog(allocator, new_version);
 
     // Update version in TypeScript const file
     try updateConstVersion(allocator, new_version);
