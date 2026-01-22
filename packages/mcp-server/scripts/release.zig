@@ -201,7 +201,7 @@ pub fn main() !void {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
         allocator.free(output);
     }
-    const commit_message = try std.fmt.allocPrint(allocator, "chore: release v{s}", .{new_version});
+    const commit_message = try std.fmt.allocPrint(allocator, "chore: release mcp-server-v{s}", .{new_version});
     defer allocator.free(commit_message);
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
@@ -210,7 +210,7 @@ pub fn main() !void {
 
     // Create and push tag
     std.log.info("Creating and pushing tag...", .{});
-    const tag_name = try std.fmt.allocPrint(allocator, "v{s}", .{new_version});
+    const tag_name = try std.fmt.allocPrint(allocator, "mcp-server-v{s}", .{new_version});
     defer allocator.free(tag_name);
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
@@ -225,5 +225,5 @@ pub fn main() !void {
         allocator.free(output);
     }
 
-    std.log.info("Release v{s} completed successfully!", .{new_version});
+    std.log.info("Release mcp-server-v{s} completed successfully!", .{new_version});
 }
