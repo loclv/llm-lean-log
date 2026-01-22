@@ -151,11 +151,15 @@ pub fn main() !void {
 
     // Commit changes
     std.log.info("Committing changes...", .{});
+
+    const tag_name = try std.fmt.allocPrint(allocator, "core-v{s}", .{new_version});
+    defer allocator.free(tag_name);
+
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json" });
         allocator.free(output);
     }
-    const commit_message = try std.fmt.allocPrint(allocator, "chore: release core-v{s}", .{new_version});
+    const commit_message = try std.fmt.allocPrint(allocator, "chore: release {s}", .{tag_name});
     defer allocator.free(commit_message);
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
@@ -164,8 +168,7 @@ pub fn main() !void {
 
     // Create and push tag
     std.log.info("Creating and pushing tag...", .{});
-    const tag_name = try std.fmt.allocPrint(allocator, "core-v{s}", .{new_version});
-    defer allocator.free(tag_name);
+
     {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
         allocator.free(output);
@@ -179,5 +182,5 @@ pub fn main() !void {
         allocator.free(output);
     }
 
-    std.log.info("Release core-v{s} completed successfully!", .{new_version});
+    std.log.info("Release {s} completed successfully!", .{tag_name});
 }
