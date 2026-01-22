@@ -219,7 +219,7 @@ function App() {
 							/>
 							<input
 								type="text"
-								placeholder="Search logs..."
+								placeholder="Search logs by name, problem, solution, tags, files, tech-stack, cause"
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
 								style={{

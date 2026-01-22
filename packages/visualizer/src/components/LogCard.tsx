@@ -217,40 +217,41 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 					}}
 				>
 					<div className="flex gap-4">
-						{entry.model && (
-							<div
-								className="flex items-center gap-1"
-								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
-							>
-								<Cpu size={14} />
-								<span>{entry.model}</span>
-							</div>
-						)}
-						{entry["created-by-agent"] && (
-							<div
-								className="flex items-center gap-1"
-								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
-							>
-								<MessageSquare size={14} />
-								<span>{entry["created-by-agent"]}</span>
-							</div>
-						)}
-						{entry["last-commit-short-sha"] && (
-							<div
-								className="flex items-center gap-1"
-								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
-							>
-								<GitBranch size={14} />
-								<span>{entry["last-commit-short-sha"]}</span>
-							</div>
-						)}
+						<div
+							className="flex items-center gap-1"
+							style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+						>
+							<Cpu size={14} />
+							<span style={{ marginLeft: "4px" }}>{entry.model}</span>
+						</div>
+
+						<div
+							className="flex items-center gap-1"
+							style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+						>
+							<MessageSquare size={14} />
+							<span style={{ marginLeft: "4px" }}>
+								{entry["created-by-agent"]}
+							</span>
+						</div>
+
+						<div
+							className="flex items-center gap-1"
+							style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+						>
+							<GitBranch size={14} />
+							<span style={{ marginLeft: "4px" }}>
+								{entry["last-commit-short-sha"]}
+							</span>
+						</div>
 					</div>
+
 					<div
 						className="flex items-center gap-1"
 						style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
 					>
 						<Calendar size={14} />
-						<span>{createdAt}</span>
+						<span style={{ marginLeft: "4px" }}>{createdAt}</span>
 					</div>
 				</div>
 			</div>
