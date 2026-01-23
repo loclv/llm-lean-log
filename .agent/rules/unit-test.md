@@ -2,6 +2,7 @@
 trigger: always_on
 ---
 
-# Unit Test
+# Unit test
 
-After updated source-code, update Unit Test for that changing.
+When change code, always update and run unit tests before commit.
+Use `bun test` to run unit tests.

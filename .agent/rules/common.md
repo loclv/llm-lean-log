@@ -19,8 +19,3 @@ Before run:
 ## When use `console.log` / `console.warn` / `console.error`
 
 Use `\n` to separate multiple lines of text if need.
-
-## Unit test
-
-When change code, always update and run unit tests before commit.
-Use `bun test` to run unit tests.

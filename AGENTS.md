@@ -196,3 +196,8 @@ describe("functionName", () => {
 Use `\n` to separate multiple lines in console.log/console.warn/console.error
 
 Remember: This file is your guide. When in doubt, check existing code for patterns and follow the established conventions.
+
+## Unit test
+
+When change code, always update and run unit tests before commit.
+Use `bun test` to run unit tests.
