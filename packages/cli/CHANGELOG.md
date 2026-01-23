@@ -2,6 +2,12 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.9] - 2026-01-24
+
+### Added
+
+- **Git Integration**: Added git diff auto-save feature
+
 ## [0.2.8] - 2026-01-22
 
 ### Added
