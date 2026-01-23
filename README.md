@@ -209,15 +209,19 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
 
 ## Another problems
 
-CSV format is sometimes hard to read since it's not human-friendly, too long lines, no code-blocks support.
+Problem: CSV format is sometimes hard to read since it's not human-friendly, too long lines, no code-blocks support.
 
-### Solution
-
-Use `llm-lean-log-cli` CLI tool for viewing logs in a more human-friendly way.
+- Solution: Use `llm-lean-log-cli` CLI tool for viewing logs in a more human-friendly way.
 
 ```bash
 bun add -g llm-lean-log-cli
 ```
+
+User want to view `git diff` from log:
+
+- Solution: `llm-lean-log-cli` CLI tool will auto save `git diff` to `.diff` file.
+  - When LLM/ Human write logs, it will auto save `git diff` to `.diff` file.
+    - use `git diff -- . ':(exclude)*.lock' ':(exclude)yarn.lock' ':(exclude)package-lock.json' > <UUID>.diff` to exclude `*.lock` files.
 
 ## 💻 Usage
 

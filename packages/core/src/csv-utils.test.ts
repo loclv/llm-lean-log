@@ -4,6 +4,7 @@ import {
 	csvRowToLogEntry,
 	csvToLogEntries,
 	logEntriesToCSV,
+	logEntriesToCSVMinimal,
 	logEntryToCSVRow,
 } from "./csv-utils";
 import type { LogEntry } from "./types";
@@ -146,6 +147,52 @@ describe("csv-utils", () => {
 			expect(entry?.problem).toBe("Problem 1");
 			expect(entry?.["created-at"]).toBe("2024-01-01");
 		});
+
+		it("should auto-fill missing id and created-at in csvRowToLogEntry", () => {
+			// CSV order: id,name,tags,problem,solution,action,files,tech-stack,cause,causeIds,effectIds,last-commit-short-sha,created-at,updated-at,model,created-by-agent
+			const entry = csvRowToLogEntry(",Name 1,,Problem 1,,,,,,,,");
+			expect(entry).not.toBeNull();
+			expect(entry?.name).toBe("Name 1");
+			expect(entry?.problem).toBe("Problem 1");
+			expect(entry?.id).toBeDefined();
+			expect(entry?.id).not.toBe("");
+			expect(entry?.["created-at"]).toBeDefined();
+			expect(entry?.["created-at"]).not.toBe("");
+			// Should be valid UUID and ISO date formats
+			expect(
+				/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+					entry?.id || "",
+				),
+			).toBe(true);
+			expect(
+				/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(
+					entry?.["created-at"] || "",
+				),
+			).toBe(true);
+		});
+
+		it("should generate unique UUIDs for multiple entries missing IDs", () => {
+			// Test the crypto.randomUUID() line specifically
+			const entry1 = csvRowToLogEntry(",Name 1,,Problem 1,,,,,,,,");
+			const entry2 = csvRowToLogEntry(",Name 2,,Problem 2,,,,,,,,");
+
+			expect(entry1?.id).toBeDefined();
+			expect(entry2?.id).toBeDefined();
+			expect(entry1?.id).not.toBe(entry2?.id);
+			expect(entry1?.id).not.toBe("");
+			expect(entry2?.id).not.toBe("");
+		});
+
+		it("should preserve existing id and created-at when provided", () => {
+			const existingId = "existing-id-123";
+			// Fields: id(0),name(1),tags(2),problem(3),solution(4),action(5),files(6),tech-stack(7),cause(8),causeIds(9),effectIds(10),last-commit-short-sha(11),created-at(12),updated-at(13),model(14),created-by-agent(15)
+			const entry = csvRowToLogEntry(
+				`${existingId},Name 1,,Problem 1,,,,,,,,,2024-01-01T00:00:00.000Z,updated,model,agent`,
+			);
+			expect(entry?.id).toBe(existingId);
+			expect(entry?.["created-at"]).toBe("2024-01-01T00:00:00.000Z");
+			expect(entry?.["updated-at"]).toBe("updated");
+		});
 	});
 
 	/**
@@ -168,6 +215,92 @@ describe("csv-utils", () => {
 		it("should handle empty array", () => {
 			const csv = logEntriesToCSV([]);
 			expect(csv).toBe(CSV_HEADERS.join(","));
+		});
+	});
+
+	/**
+	 * Tests for logEntriesToCSVMinimal
+	 */
+	describe("logEntriesToCSVMinimal", () => {
+		it("should return only headers for empty array", () => {
+			const csv = logEntriesToCSVMinimal([]);
+			expect(csv).toBe(CSV_HEADERS.join(","));
+		});
+
+		it("should include only columns that have values in any entry", () => {
+			const entries = [
+				{
+					id: "e1",
+					name: "E1",
+					problem: "P1",
+					tags: "test",
+					"created-at": "D1",
+				},
+				{
+					id: "e2",
+					name: "E2",
+					problem: "P2",
+					"created-at": "D2",
+				},
+			] as LogEntry[];
+
+			const csv = logEntriesToCSVMinimal(entries);
+			const lines = csv.split("\n");
+
+			// Should include headers that have values: id, name, tags, problem, created-at
+			expect(lines[0]).toBe("id,name,tags,problem,created-at");
+			expect(lines[1]).toBe("e1,E1,test,P1,D1");
+			expect(lines[2]).toBe("e2,E2,,P2,D2");
+		});
+
+		it("should handle entries with only required fields", () => {
+			const entries = [
+				{
+					name: "E1",
+					problem: "P1",
+				},
+				{
+					name: "E2",
+					problem: "P2",
+				},
+			] as LogEntry[];
+
+			const csv = logEntriesToCSVMinimal(entries);
+			const lines = csv.split("\n");
+
+			// Should only include name and problem since those are the only non-empty fields
+			expect(lines[0]).toBe("name,problem");
+			expect(lines[1]).toBe("E1,P1");
+			expect(lines[2]).toBe("E2,P2");
+		});
+
+		it("should preserve all headers when all fields are used", () => {
+			const entries = [
+				{
+					id: "e1",
+					name: "E1",
+					tags: "test",
+					problem: "P1",
+					solution: "S1",
+					action: "A1",
+					files: "F1",
+					"tech-stack": "TS1",
+					cause: "C1",
+					causeIds: "CI1",
+					effectIds: "EI1",
+					"last-commit-short-sha": "SHA1",
+					"created-at": "D1",
+					"updated-at": "U1",
+					model: "M1",
+					"created-by-agent": "Agent1",
+				},
+			] as LogEntry[];
+
+			const csv = logEntriesToCSVMinimal(entries);
+			const lines = csv.split("\n");
+
+			// Should include all headers since all are used
+			expect(lines[0]).toBe(CSV_HEADERS.join(","));
 		});
 	});
 
@@ -314,6 +447,42 @@ describe("csv-utils", () => {
 
 		it("should handle CSV with only a newline", () => {
 			expect(csvToLogEntries("\n")).toEqual([]);
+		});
+
+		it("should auto-fill missing id and created-at in csvToLogEntries", () => {
+			const csv = "id,name,problem,created-at\n,Name1,Prob1,\n,Name2,Prob2,";
+			const entries = csvToLogEntries(csv);
+
+			expect(entries).toHaveLength(2);
+
+			// Check first entry
+			expect(entries[0].name).toBe("Name1");
+			expect(entries[0].problem).toBe("Prob1");
+			expect(entries[0].id).toBeDefined();
+			expect(entries[0].id).not.toBe("");
+			expect(entries[0]["created-at"]).toBeDefined();
+			expect(entries[0]["created-at"]).not.toBe("");
+
+			// Check second entry
+			expect(entries[1].name).toBe("Name2");
+			expect(entries[1].problem).toBe("Prob2");
+			expect(entries[1].id).toBeDefined();
+			expect(entries[1].id).not.toBe("");
+			expect(entries[1]["created-at"]).toBeDefined();
+			expect(entries[1]["created-at"]).not.toBe("");
+
+			// Ensure they have different UUIDs (timestamps might be the same if called quickly)
+			expect(entries[0].id).not.toBe(entries[1].id);
+		});
+
+		it("should preserve existing id and created-at in csvToLogEntries", () => {
+			const csv =
+				"id,name,problem,created-at\nexisting-id,Name1,Prob1,2024-01-01T00:00:00.000Z";
+			const entries = csvToLogEntries(csv);
+
+			expect(entries).toHaveLength(1);
+			expect(entries[0].id).toBe("existing-id");
+			expect(entries[0]["created-at"]).toBe("2024-01-01T00:00:00.000Z");
 		});
 	});
 

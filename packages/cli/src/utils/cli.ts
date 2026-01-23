@@ -12,7 +12,7 @@ import {
 	searchLogs,
 } from "llm-lean-log-core";
 import { helpText, helpTextForHuman } from "./const";
-import { getLastCommitShortSha } from "./git";
+import { getLastCommitShortSha, saveGitDiffExcludeLockFiles } from "./git";
 import { visualizeEntry, visualizeStats, visualizeTable } from "./visualizer";
 
 export async function main(version: string) {
@@ -126,7 +126,7 @@ export async function main(version: string) {
 				lastCommitShortSha = await getLastCommitShortSha();
 			}
 
-			entries = addLogEntry(entries, {
+			const newEntry = {
 				name,
 				problem,
 				tags: findFlag("--tags"),
@@ -143,9 +143,29 @@ export async function main(version: string) {
 				"created-at": findFlag("--created-at"),
 				"updated-at": findFlag("--updated-at"),
 				"created-by-agent": findFlag("--created-by-agent"),
-			});
+			};
+
+			entries = addLogEntry(entries, newEntry);
 
 			await saveLogs(logFile, entries);
+
+			// Auto-save git diff to .diff file using the log entry ID.
+			// After saved log, git diff will be saved to .diff file,
+			// and diff file include the log itself too.
+			const logId = entries[entries.length - 1]?.id;
+			if (logId) {
+				const diffFileName = `logs/diff/${logId}.diff`;
+				const diffSuccess = await saveGitDiffExcludeLockFiles(diffFileName);
+				if (diffSuccess) {
+					console.log(`Git diff saved to ${diffFileName}`);
+				} else {
+					console.error(`Failed to save git diff to ${diffFileName}`);
+				}
+			} else {
+				console.error("Error: Log entry ID is missing");
+				process.exit(1);
+			}
+
 			console.log("Log entry added successfully");
 			break;
 		}

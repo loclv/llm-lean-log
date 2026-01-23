@@ -10,7 +10,7 @@ dist
 coverage
 *.lcov
 
-# logs
+logs/diff
 *.log
 
 # dot-env environment variable files
