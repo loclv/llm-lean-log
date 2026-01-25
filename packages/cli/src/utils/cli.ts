@@ -12,6 +12,7 @@ import {
 	searchLogs,
 } from "llm-lean-log-core";
 import { helpText, helpTextForHuman } from "./const";
+import { getLogFolderPathFromLogFilePath, mkdirIfNotExists } from "./files";
 import { getLastCommitShortSha, saveGitDiffExcludeLockFiles } from "./git";
 import { visualizeEntry, visualizeStats, visualizeTable } from "./visualizer";
 
@@ -154,7 +155,9 @@ export async function main(version: string) {
 			// and diff file include the log itself too.
 			const logId = entries[entries.length - 1]?.id;
 			if (logId) {
-				const diffFileName = `logs/diff/${logId}.diff`;
+				const folderPath = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
+				mkdirIfNotExists(folderPath);
+				const diffFileName = `${folderPath}/${logId}.diff`;
 				const diffSuccess = await saveGitDiffExcludeLockFiles(diffFileName);
 				if (diffSuccess) {
 					console.log(`Git diff saved to ${diffFileName}`);
