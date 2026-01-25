@@ -57,3 +57,23 @@ export const formatDate = (dateStr: string): string => {
 		return dateStr;
 	}
 };
+
+/**
+ * Fetches git diff content by log UUID.
+ * @param logId - The UUID of the log entry
+ * @returns Promise resolving to diff content string or null if not found
+ */
+export const fetchDiffByLogId = async (
+	logId: string,
+): Promise<string | null> => {
+	try {
+		const response = await fetch(`/api/diff/${logId}`);
+		if (response.ok) {
+			return await response.text();
+		}
+		return null;
+	} catch (error) {
+		console.error("Failed to fetch diff:", error);
+		return null;
+	}
+};

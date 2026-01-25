@@ -4,6 +4,7 @@ import {
 	AlertCircle,
 	Calendar,
 	CheckCircle2,
+	Code2,
 	Cpu,
 	FileCode,
 	GitBranch,
@@ -13,8 +14,10 @@ import {
 	Tag,
 } from "lucide-react";
 import type React from "react";
-import { extractCode, formatDate, parseTags } from "../utils";
+import { useState } from "react";
+import { extractCode, fetchDiffByLogId, formatDate, parseTags } from "../utils";
 import { CodeBlock } from "./CodeBlock";
+import { DiffViewer } from "./DiffViewer";
 
 interface LogCardProps {
 	entry: LogEntry;
@@ -28,233 +31,303 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 	const tags = parseTags(entry.tags);
 	const codeInfo = extractCode(entry.action);
 	const createdAt = formatDate(entry["created-at"]);
+	const [isDiffViewerOpen, setIsDiffViewerOpen] = useState(false);
+	const [diffContent, setDiffContent] = useState<string>("");
+	const [isLoadingDiff, setIsLoadingDiff] = useState(false);
+
+	/**
+	 * Handles viewing diff content for this log entry
+	 */
+	const handleViewDiff = async () => {
+		if (isLoadingDiff) return;
+
+		setIsLoadingDiff(true);
+		try {
+			const content = await fetchDiffByLogId(entry.id);
+			if (content) {
+				setDiffContent(content);
+				setIsDiffViewerOpen(true);
+			} else {
+				alert("No diff content found for this log entry");
+			}
+		} catch (error) {
+			console.error("Failed to load diff:", error);
+			alert("Failed to load diff content");
+		} finally {
+			setIsLoadingDiff(false);
+		}
+	};
 
 	return (
-		<motion.div
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ delay: index * 0.05 }}
-			style={{ marginBottom: "1.5rem" }}
-		>
-			<div
-				className="glass"
-				style={{
-					padding: "1.5rem",
-					display: "flex",
-					flexDirection: "column",
-					gap: "1rem",
-				}}
+		<>
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: index * 0.05 }}
+				style={{ marginBottom: "1.5rem" }}
 			>
-				<div className="flex justify-between items-center">
-					<h3 style={{ fontSize: "1.25rem", color: "var(--text-primary)" }}>
-						{entry.name}
-					</h3>
-					<div className="flex gap-2">
-						{tags.map((tag) => (
-							<span key={tag} className="badge badge-blue">
-								<Tag size={12} style={{ marginRight: "4px" }} />
-								{tag}
-							</span>
-						))}
-					</div>
-				</div>
-
 				<div
+					className="glass"
 					style={{
-						display: "grid",
-						gridTemplateColumns: "1fr 1fr",
-						gap: "1.5rem",
+						padding: "1.5rem",
+						display: "flex",
+						flexDirection: "column",
+						gap: "1rem",
 					}}
 				>
-					<div className="flex flex-col gap-2">
-						<div
-							className="flex items-center gap-2"
-							style={{ color: "var(--error)" }}
-						>
-							<AlertCircle size={16} />
-							<strong style={{ fontSize: "0.875rem" }}>Problem</strong>
+					<div className="flex justify-between items-center">
+						<h3 style={{ fontSize: "1.25rem", color: "var(--text-primary)" }}>
+							{entry.name}
+						</h3>
+						<div className="flex gap-2">
+							{tags.map((tag) => (
+								<span key={tag} className="badge badge-blue">
+									<Tag size={12} style={{ marginRight: "4px" }} />
+									{tag}
+								</span>
+							))}
 						</div>
-						<p style={{ color: "var(--text-secondary)", fontSize: "0.925rem" }}>
-							{entry.problem}
-						</p>
 					</div>
 
-					<div className="flex flex-col gap-2">
-						<div
-							className="flex items-center gap-2"
-							style={{ color: "var(--success)" }}
-						>
-							<CheckCircle2 size={16} />
-							<strong style={{ fontSize: "0.875rem" }}>Solution</strong>
-						</div>
-						<p style={{ color: "var(--text-secondary)", fontSize: "0.925rem" }}>
-							{entry.solution}
-						</p>
-					</div>
-
-					{entry.cause && (
+					<div
+						style={{
+							display: "grid",
+							gridTemplateColumns: "1fr 1fr",
+							gap: "1.5rem",
+						}}
+					>
 						<div className="flex flex-col gap-2">
 							<div
 								className="flex items-center gap-2"
-								style={{ color: "var(--warning)" }}
+								style={{ color: "var(--error)" }}
 							>
-								<Info size={16} />
-								<strong style={{ fontSize: "0.875rem" }}>Cause</strong>
+								<AlertCircle size={16} />
+								<strong style={{ fontSize: "0.875rem" }}>Problem</strong>
 							</div>
 							<p
 								style={{ color: "var(--text-secondary)", fontSize: "0.925rem" }}
 							>
-								{entry.cause}
+								{entry.problem}
 							</p>
 						</div>
-					)}
-				</div>
 
-				<div className="flex flex-col gap-2">
-					<div
-						className="flex items-center gap-2"
-						style={{ color: "var(--info)" }}
-					>
-						<MessageSquare size={16} />
-						<strong style={{ fontSize: "0.875rem" }}>Action</strong>
-					</div>
-					{codeInfo ? (
-						<div>
+						<div className="flex flex-col gap-2">
+							<div
+								className="flex items-center gap-2"
+								style={{ color: "var(--success)" }}
+							>
+								<CheckCircle2 size={16} />
+								<strong style={{ fontSize: "0.875rem" }}>Solution</strong>
+							</div>
 							<p
+								style={{ color: "var(--text-secondary)", fontSize: "0.925rem" }}
+							>
+								{entry.solution}
+							</p>
+						</div>
+
+						{entry.cause && (
+							<div className="flex flex-col gap-2">
+								<div
+									className="flex items-center gap-2"
+									style={{ color: "var(--warning)" }}
+								>
+									<Info size={16} />
+									<strong style={{ fontSize: "0.875rem" }}>Cause</strong>
+								</div>
+								<p
+									style={{
+										color: "var(--text-secondary)",
+										fontSize: "0.925rem",
+									}}
+								>
+									{entry.cause}
+								</p>
+							</div>
+						)}
+					</div>
+
+					<div className="flex flex-col gap-2">
+						<div
+							className="flex items-center gap-2"
+							style={{ color: "var(--info)" }}
+						>
+							<MessageSquare size={16} />
+							<strong style={{ fontSize: "0.875rem" }}>Action</strong>
+						</div>
+						{codeInfo ? (
+							<div>
+								<p
+									style={{
+										color: "var(--text-secondary)",
+										fontSize: "0.925rem",
+										marginBottom: "0.5rem",
+									}}
+								>
+									{entry.action?.replace(
+										`${codeInfo.language}\`${codeInfo.code}\``,
+										"",
+									)}
+								</p>
+								<CodeBlock code={codeInfo.code} language={codeInfo.language} />
+							</div>
+						) : (
+							<p
+								style={{ color: "var(--text-secondary)", fontSize: "0.925rem" }}
+							>
+								{entry.action}
+							</p>
+						)}
+					</div>
+
+					{entry.files && (
+						<div className="flex flex-col gap-2">
+							<div
+								className="flex items-center gap-2"
+								style={{ color: "var(--accent-primary)" }}
+							>
+								<FileCode size={16} />
+								<strong style={{ fontSize: "0.875rem" }}>Files</strong>
+							</div>
+							<div className="flex flex-wrap gap-2">
+								{entry.files
+									.split(",")
+									.map((f) => f.trim())
+									.filter(Boolean)
+									.map((file) => (
+										<span
+											key={file}
+											className="badge"
+											style={{
+												background: "var(--bg-tertiary)",
+												color: "var(--text-secondary)",
+												border: "1px solid var(--border-color)",
+												fontSize: "0.75rem",
+												padding: "2px 8px",
+												borderRadius: "6px",
+											}}
+										>
+											{file.trim()}
+										</span>
+									))}
+							</div>
+						</div>
+					)}
+
+					{entry["tech-stack"] && (
+						<div className="flex flex-col gap-2">
+							<div
+								className="flex items-center gap-2"
+								style={{ color: "var(--accent-secondary, #a855f7)" }}
+							>
+								<Layers size={16} />
+								<strong style={{ fontSize: "0.875rem" }}>Tech Stack</strong>
+							</div>
+							<div className="flex flex-wrap gap-2">
+								{entry["tech-stack"]
+									.split(",")
+									.map((t) => t.trim())
+									.filter(Boolean)
+									.map((tech) => (
+										<span
+											key={tech}
+											className="badge"
+											style={{
+												background: "var(--bg-tertiary)",
+												color: "var(--text-secondary)",
+												border: "1px solid var(--border-color)",
+												fontSize: "0.75rem",
+												padding: "2px 8px",
+												borderRadius: "6px",
+											}}
+										>
+											{tech.trim()}
+										</span>
+									))}
+							</div>
+						</div>
+					)}
+
+					<div
+						className="flex justify-between items-center mt-4"
+						style={{
+							paddingTop: "1rem",
+							borderTop: "1px solid var(--border-color)",
+						}}
+					>
+						<div className="flex gap-4">
+							<div
+								className="flex items-center gap-1"
+								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+							>
+								<Cpu size={14} />
+								<span style={{ marginLeft: "4px" }}>{entry.model}</span>
+							</div>
+
+							<div
+								className="flex items-center gap-1"
+								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+							>
+								<MessageSquare size={14} />
+								<span style={{ marginLeft: "4px" }}>
+									{entry["created-by-agent"]}
+								</span>
+							</div>
+
+							<div
+								className="flex items-center gap-1"
+								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+							>
+								<GitBranch size={14} />
+								<span style={{ marginLeft: "4px" }}>
+									{entry["last-commit-short-sha"]}
+								</span>
+							</div>
+						</div>
+
+						<div className="flex items-center gap-4">
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={handleViewDiff}
+								disabled={isLoadingDiff}
 								style={{
-									color: "var(--text-secondary)",
-									fontSize: "0.925rem",
-									marginBottom: "0.5rem",
+									padding: "0.375rem 0.75rem",
+									borderRadius: "6px",
+									fontSize: "0.75rem",
+									display: "flex",
+									alignItems: "center",
+									gap: "0.375rem",
+									background: isLoadingDiff
+										? "var(--bg-tertiary)"
+										: "var(--accent-primary)",
+									border: "1px solid var(--accent-primary)",
+									color: "white",
+									cursor: isLoadingDiff ? "not-allowed" : "pointer",
+									opacity: isLoadingDiff ? 0.7 : 1,
 								}}
 							>
-								{entry.action?.replace(
-									`${codeInfo.language}\`${codeInfo.code}\``,
-									"",
-								)}
-							</p>
-							<CodeBlock code={codeInfo.code} language={codeInfo.language} />
-						</div>
-					) : (
-						<p style={{ color: "var(--text-secondary)", fontSize: "0.925rem" }}>
-							{entry.action}
-						</p>
-					)}
-				</div>
+								<Code2 size={14} />
+								{isLoadingDiff ? "Loading..." : "View Diff"}
+							</button>
 
-				{entry.files && (
-					<div className="flex flex-col gap-2">
-						<div
-							className="flex items-center gap-2"
-							style={{ color: "var(--accent-primary)" }}
-						>
-							<FileCode size={16} />
-							<strong style={{ fontSize: "0.875rem" }}>Files</strong>
+							<div
+								className="flex items-center gap-1"
+								style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
+							>
+								<Calendar size={14} />
+								<span style={{ marginLeft: "4px" }}>{createdAt}</span>
+							</div>
 						</div>
-						<div className="flex flex-wrap gap-2">
-							{entry.files
-								.split(",")
-								.map((f) => f.trim())
-								.filter(Boolean)
-								.map((file) => (
-									<span
-										key={file}
-										className="badge"
-										style={{
-											background: "var(--bg-tertiary)",
-											color: "var(--text-secondary)",
-											border: "1px solid var(--border-color)",
-											fontSize: "0.75rem",
-											padding: "2px 8px",
-											borderRadius: "6px",
-										}}
-									>
-										{file.trim()}
-									</span>
-								))}
-						</div>
-					</div>
-				)}
-
-				{entry["tech-stack"] && (
-					<div className="flex flex-col gap-2">
-						<div
-							className="flex items-center gap-2"
-							style={{ color: "var(--accent-secondary, #a855f7)" }}
-						>
-							<Layers size={16} />
-							<strong style={{ fontSize: "0.875rem" }}>Tech Stack</strong>
-						</div>
-						<div className="flex flex-wrap gap-2">
-							{entry["tech-stack"]
-								.split(",")
-								.map((t) => t.trim())
-								.filter(Boolean)
-								.map((tech) => (
-									<span
-										key={tech}
-										className="badge"
-										style={{
-											background: "var(--bg-tertiary)",
-											color: "var(--text-secondary)",
-											border: "1px solid var(--border-color)",
-											fontSize: "0.75rem",
-											padding: "2px 8px",
-											borderRadius: "6px",
-										}}
-									>
-										{tech.trim()}
-									</span>
-								))}
-						</div>
-					</div>
-				)}
-
-				<div
-					className="flex justify-between items-center mt-4"
-					style={{
-						paddingTop: "1rem",
-						borderTop: "1px solid var(--border-color)",
-					}}
-				>
-					<div className="flex gap-4">
-						<div
-							className="flex items-center gap-1"
-							style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
-						>
-							<Cpu size={14} />
-							<span style={{ marginLeft: "4px" }}>{entry.model}</span>
-						</div>
-
-						<div
-							className="flex items-center gap-1"
-							style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
-						>
-							<MessageSquare size={14} />
-							<span style={{ marginLeft: "4px" }}>
-								{entry["created-by-agent"]}
-							</span>
-						</div>
-
-						<div
-							className="flex items-center gap-1"
-							style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
-						>
-							<GitBranch size={14} />
-							<span style={{ marginLeft: "4px" }}>
-								{entry["last-commit-short-sha"]}
-							</span>
-						</div>
-					</div>
-
-					<div
-						className="flex items-center gap-1"
-						style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}
-					>
-						<Calendar size={14} />
-						<span style={{ marginLeft: "4px" }}>{createdAt}</span>
 					</div>
 				</div>
-			</div>
-		</motion.div>
+			</motion.div>
+			<DiffViewer
+				isOpen={isDiffViewerOpen}
+				onClose={() => setIsDiffViewerOpen(false)}
+				diffContent={diffContent}
+				logId={entry.id}
+			/>
+		</>
 	);
 };

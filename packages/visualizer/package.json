@@ -8,7 +8,9 @@
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"preview": "vite preview",
-		"type": "tsc --noEmit"
+		"type": "tsc --noEmit",
+		"server": "bun run server.ts",
+		"dev:full": "bun run server.ts & bun run dev"
 	},
 	"repository": {
 		"type": "git",
