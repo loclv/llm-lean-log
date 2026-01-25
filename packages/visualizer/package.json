@@ -10,7 +10,10 @@
 		"preview": "vite preview",
 		"type": "tsc --noEmit",
 		"server": "bun run server.ts",
-		"dev:full": "bun run server.ts & bun run dev"
+		"dev:full": "bun run server.ts & bun run dev",
+		"test": "bun test",
+		"test:watch": "bun test --watch",
+		"test:coverage": "bun test --coverage"
 	},
 	"repository": {
 		"type": "git",

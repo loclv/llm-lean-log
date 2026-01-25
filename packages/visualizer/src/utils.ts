@@ -50,12 +50,13 @@ export const parseTags = (tags: string | undefined): string[] => {
  */
 export const formatDate = (dateStr: string): string => {
 	if (!dateStr) return "";
-	try {
-		return new Date(dateStr).toLocaleString();
-	} catch (err) {
-		console.error("Failed to parse date:", dateStr, err);
+
+	const date = new Date(dateStr);
+	// Check if the date is invalid
+	if (Number.isNaN(date.getTime())) {
 		return dateStr;
 	}
+	return date.toLocaleString();
 };
 
 /**
