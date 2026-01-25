@@ -3,7 +3,7 @@
 	"version": "0.2.9",
 	"description": "CLI tool for llm-lean-log",
 	"scripts": {
-		"start": "bun run src/index.ts",
+		"cli": "bun run src/index.ts",
 		"build": "bun build src/index.ts --outfile dist/index.js --target node && tsc --emitDeclarationOnly",
 		"compile": "bun build src/index.bun.ts --compile --outfile dist/l-log-bun --target bun",
 		"compile:mac": "bun build src/index.bun.ts --compile --target bun-darwin-arm64 --outfile dist/l-log-mac",
