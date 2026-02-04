@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "esnext",
+		"lib": ["ESNext"],
+		"sourceMap": true,
+		"rootDir": "src",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "out",
+		"resolveJsonModule": true,
+		"declaration": true,
+		"declarationMap": true,
+		"moduleResolution": "node",
+
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		// Some stricter flags
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noPropertyAccessFromIndexSignature": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", ".vscode-test", "out"]
+}

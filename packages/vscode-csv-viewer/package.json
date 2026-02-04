@@ -1,0 +1,79 @@
+{
+	"name": "vscode-csv-viewer",
+	"version": "0.1.0",
+	"scripts": {
+		"vscode:prepublish": "bun run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "bun run compile",
+		"test": "bun test",
+		"package": "vsce package --no-dependencies",
+		"lint": "biome check .",
+		"lint:fix": "biome check --fix .",
+		"fmt": "biome format ."
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/papaparse": "^5.3.16",
+		"@types/vscode": "^1.74.0",
+		"happy-dom": "^20.5.0",
+		"typescript": "^5.9.3",
+		"vsce": "^2.15.0"
+	},
+	"dependencies": {
+		"papaparse": "^5.5.3",
+		"llm-lean-log-core": "workspace:*"
+	},
+	"publisher": "loclv",
+	"displayName": "CSV Log Viewer",
+	"description": "A VSCode extension to view CSV log files with the same beautiful UI as the LLM Lean Log Visualizer",
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Other",
+		"Visualization"
+	],
+	"activationEvents": [
+		"onCommand:csvViewer.openFile",
+		"onView:csvViewer.logsView",
+		"onLanguage:csv"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "csvViewer.openFile",
+				"title": "Open CSV Log File",
+				"category": "CSV Viewer"
+			}
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "csv-viewer-container",
+					"title": "CSV Log Viewer",
+					"icon": "media/activity-bar.svg"
+				}
+			]
+		},
+		"views": {
+			"csv-viewer-container": [
+				{
+					"type": "webview",
+					"id": "csvViewer.logsView",
+					"name": "Logs"
+				}
+			]
+		},
+		"menus": {
+			"explorer/context": [
+				{
+					"when": "resourceExtname == .csv",
+					"command": "csvViewer.openFile",
+					"group": "navigation"
+				}
+			]
+		}
+	}
+}

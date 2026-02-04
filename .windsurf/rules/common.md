@@ -4,6 +4,9 @@ trigger: always_on
 
 # Common rules for LLM agent
 
+When change codes, always run unit tests: `bun test`.
+When change codes, always run TypeCheck: `bun tsc --noEmit`.
+
 Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
 `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --created-by-agent="<agent-name>"`

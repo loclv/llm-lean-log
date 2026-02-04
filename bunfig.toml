@@ -9,5 +9,6 @@ coveragePathIgnorePatterns = [
   "packages/cli/dist/**",
   "packages/visualizer/dist/**",
   "packages/mcp/dist/**",
-  "packages/mcp-server/dist/**"
+  "packages/mcp-server/dist/**",
+  "packages/vscode-csv-viewer/out/**"
 ]

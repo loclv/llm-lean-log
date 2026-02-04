@@ -1,0 +1,16 @@
+diff --git a/packages/vscode-csv-viewer/package.json b/packages/vscode-csv-viewer/package.json
+index 7a32810..e95105c 100644
+--- a/packages/vscode-csv-viewer/package.json
++++ b/packages/vscode-csv-viewer/package.json
+@@ -62,8 +62,10 @@
+ 		"package": "vsce package --no-dependencies"
+ 	},
+ 	"devDependencies": {
+-		"@types/vscode": "^1.74.0",
++		"@types/glob": "^8.1.0",
++		"@types/mocha": "^10.0.10",
+ 		"@types/node": "16.x",
++		"@types/vscode": "^1.74.0",
+ 		"@typescript-eslint/eslint-plugin": "^5.59.1",
+ 		"@typescript-eslint/parser": "^5.59.1",
+ 		"eslint": "^8.39.0",

@@ -147,7 +147,7 @@ describe("functionName", () => {
 
 ## Architecture Principles
 
-- **Functional programming**: No classes or OOP patterns
+- Functional programming: No classes or OOP patterns
 - Pure functions preferred over methods with side effects
 - Immutable data structures where possible
 - Composition over inheritance
@@ -197,7 +197,8 @@ Use `\n` to separate multiple lines in console.log/console.warn/console.error
 
 Remember: This file is your guide. When in doubt, check existing code for patterns and follow the established conventions.
 
-## Unit test
+## When change code
 
-When change code, always update and run unit tests before commit.
+When change code, always update unit tests and run type check before commit.
 Use `bun test` to run unit tests.
+Use `bun tsc --noEmit` to run type check.

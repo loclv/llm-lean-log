@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="-16 -16 544 544" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer container -->
+  <rect x="0" y="0" width="512" height="512" rx="40" fill="none" stroke="currentColor" stroke-width="32"/>
+  
+  <!-- Grid lines -->
+  <line x1="0" y1="170" x2="512" y2="170" stroke="currentColor" stroke-width="32"/>
+  <line x1="0" y1="340" x2="512" y2="340" stroke="currentColor" stroke-width="32"/>
+  <line x1="170" y1="0" x2="170" y2="512" stroke="currentColor" stroke-width="32"/>
+  <line x1="340" y1="0" x2="340" y2="512" stroke="currentColor" stroke-width="32"/>
+  
+  <!-- Highlighted Cell (Center) -->
+  <rect x="220" y="220" width="64" height="64" rx="20" fill="currentColor"/>
+</svg>
