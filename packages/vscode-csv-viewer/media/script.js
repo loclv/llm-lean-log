@@ -1,5 +1,5 @@
 /**
- * CSV Log Viewer Webview Script
+ * CSV LLM Log Viewer Webview Script
  *
  * This file is the client-side JavaScript for the VSCode CSV viewer extension.
  * It handles the user interface and data presentation in the webview panel.
@@ -119,7 +119,7 @@ window.addEventListener("message", (event) => {
 				showEmpty();
 			} else {
 				document.getElementById("fileName").textContent =
-					`CSV Log Viewer - ${getFileName(message.filePath)}`;
+					`CSV LLM Log Viewer - ${getFileName(message.filePath)}`;
 				showContent();
 				filterAndRender();
 			}

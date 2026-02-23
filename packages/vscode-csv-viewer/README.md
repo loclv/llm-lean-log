@@ -1,4 +1,4 @@
-# CSV Log Viewer
+# CSV LLM Log Viewer
 
 A VSCode extension to view CSV log files with the same beautiful UI as the LLM Lean Log Visualizer.
 
@@ -35,8 +35,8 @@ bun run compile
 
 ### Commands
 
-- `CSV Viewer: Open CSV Log File` - Open a CSV file manually
-- Right-click on any `.csv` file in the explorer and select "Open CSV Log File"
+- `CSV LLM Log Viewer: Open CSV Log File` - Open a CSV file manually
+- Right-click on any `.csv` file in the explorer and select "Open CSV LLM Log File"
 
 ### Building
 

@@ -10,7 +10,8 @@
 		"package": "vsce package --no-dependencies",
 		"lint": "biome check .",
 		"lint:fix": "biome check --fix .",
-		"fmt": "biome format ."
+		"fmt": "biome format .",
+		"dev": "bun run compile && code --extensionDevelopmentPath=\".\""
 	},
 	"devDependencies": {
 		"@types/bun": "latest",
@@ -25,7 +26,7 @@
 		"llm-lean-log-core": "workspace:*"
 	},
 	"publisher": "loclv",
-	"displayName": "CSV Log Viewer",
+	"displayName": "CSV LLM Log Viewer",
 	"description": "A VSCode extension to view CSV log files with the same beautiful UI as the LLM Lean Log Visualizer",
 	"engines": {
 		"vscode": "^1.74.0"
@@ -40,19 +41,37 @@
 		"onLanguage:csv"
 	],
 	"main": "./out/extension.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/loclv/llm-lean-log"
+	},
+	"homepage": "https://github.com/loclv/llm-lean-log/blob/main/packages/vscode-csv-viewer/README.md",
+	"bugs": {
+		"url": "https://github.com/loclv/llm-lean-log/issues"
+	},
+	"keywords": [
+		"csv",
+		"log",
+		"viewer",
+		"llm",
+		"lean",
+		"visualizer"
+	],
+	"author": "loclv",
+	"license": "MIT",
 	"contributes": {
 		"commands": [
 			{
 				"command": "csvViewer.openFile",
 				"title": "Open CSV Log File",
-				"category": "CSV Viewer"
+				"category": "CSV LLM Log Viewer"
 			}
 		],
 		"viewsContainers": {
 			"activitybar": [
 				{
 					"id": "csv-viewer-container",
-					"title": "CSV Log Viewer",
+					"title": "CSV LLM Log Viewer",
 					"icon": "media/activity-bar.svg"
 				}
 			]
@@ -62,7 +81,8 @@
 				{
 					"type": "webview",
 					"id": "csvViewer.logsView",
-					"name": "Logs"
+					"name": "Logs",
+					"icon": "media/activity-bar.svg"
 				}
 			]
 		},

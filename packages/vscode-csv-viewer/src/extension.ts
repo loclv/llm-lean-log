@@ -1,5 +1,5 @@
 /**
- * Main extension entry point for CSV Log Viewer
+ * Main extension entry point for CSV LLM Log Viewer
  */
 import * as vscode from "vscode";
 import { CsvViewerWebviewProvider } from "./CsvViewerWebviewProvider";

@@ -1,9 +1,9 @@
-import { type LogEntry } from "llm-lean-log-core";
+import type { LogEntry } from "llm-lean-log-core";
 import * as vscode from "vscode";
 import { parseCsvContent } from "./utils";
 
 /**
- * Webview provider for the CSV Log Viewer
+ * Webview provider for the CSV LLM Log Viewer
  */
 export class CsvViewerWebviewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = "csvViewer.logsView";
@@ -124,7 +124,7 @@ export class CsvViewerWebviewProvider implements vscode.WebviewViewProvider {
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>CSV Log Viewer</title>
+	<title>CSV LLM Log Viewer</title>
 	<link rel="stylesheet" href="${stylesUri}">
 </head>
 <body>
@@ -149,7 +149,7 @@ export class CsvViewerWebviewProvider implements vscode.WebviewViewProvider {
 		</div>
 		<div class="content" id="content" style="display: none;">
 			<div class="header">
-				<h1 id="fileName">CSV Log Viewer</h1>
+				<h1 id="fileName">CSV LLM Log Viewer</h1>
 				<div class="search-bar">
 					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
 						<circle cx="11" cy="11" r="8"></circle>
