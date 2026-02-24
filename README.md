@@ -4,12 +4,13 @@
   <img src="docs/imgs/logo.webp" alt="llm-lean-log logo" width="200">
 </p>
 
-|Package|Version|Downloads|NPM Page|
-|---|---|---|---|
-|llm-lean-log-cli|![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli)|![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core)|[npm page](https://www.npmjs.com/package/llm-lean-log-cli)|
-|llm-lean-log-core|![llm-lean-log-core npm](https://img.shields.io/npm/v/llm-lean-log-core)|![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/llm-lean-log-core)|
-|l-log-vis|![l-log-vis npm](https://img.shields.io/npm/v/l-log-vis)|![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/l-log-vis)|
-|l-log-mcp-server|![l-log-mcp-server npm](https://img.shields.io/npm/v/l-log-mcp-server)|![l-log-mcp-server npm](https://img.shields.io/npm/dw/l-log-mcp-server)|[npm page](https://www.npmjs.com/package/l-log-mcp-server)|
+|Package|What is it?|Version|Downloads|NPM Page|
+|---|---|---|---|---|
+|llm-lean-log-cli|CLI tool to save/read chat logs|![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli)|![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core)|[npm page](https://www.npmjs.com/package/llm-lean-log-cli)|
+|llm-lean-log-core|Core library to save/read chat logs|![llm-lean-log-core npm](https://img.shields.io/npm/v/llm-lean-log-core)|![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/llm-lean-log-core)|
+|bl-log|CLI tool to save/read chat logs for Bun only|![bl-log npm](https://img.shields.io/npm/v/bl-log)|![bl-log npm](https://img.shields.io/npm/dw/bl-log)|[npm page](https://www.npmjs.com/package/bl-log)|
+|l-log-vis|CLI tool to view chat logs|![l-log-vis npm](https://img.shields.io/npm/v/l-log-vis)|![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/l-log-vis)|
+|l-log-mcp-server|MCP Server to save/read chat logs|![l-log-mcp-server npm](https://img.shields.io/npm/v/l-log-mcp-server)|![l-log-mcp-server npm](https://img.shields.io/npm/dw/l-log-mcp-server)|[npm page](https://www.npmjs.com/package/l-log-mcp-server)|
 
 [Vietnamese](README-vi.md) | [Japanese](README-ja.md) | [Chinese](README-zh.md)
 
@@ -106,20 +107,20 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
 
 ## ❌ Problems
 
-- 🐥 `markdown` is not optimized for LLMs token usage, only for human readability.
-- 🐥 `json` is not optimized for LLMs token usage, only for machine readability.
-- 🐥 Best performance of LLMs token usage. This is pure tabular data, so CSV is smaller than `TOON` for flat tables. Refer to <https://github.com/toon-format/toon?tab=readme-ov-file#when-not-to-use-toon>.
-- 🐥 There are many best practices for system logging, but they are not optimized for LLMs token usage and missing data structure for understanding the context of the log chat.
+- `markdown` is not optimized for LLMs token usage, only for human readability.
+- `json` is not optimized for LLMs token usage, only for machine readability.
+- Best performance of LLMs token usage. This is pure tabular data, so CSV is smaller than `TOON` for flat tables. Refer to <https://github.com/toon-format/toon?tab=readme-ov-file#when-not-to-use-toon>.
+- There are many best practices for system logging, but they are not optimized for LLMs token usage and missing data structure for understanding the context of the log chat.
   - For example, log level WARNING is using for system logger, but what LLMs need to know?
-- 🐥 Clean, predictable and simple format for LLMs to read past seasons of logs.
-- 🐥 When LLMs write logs, should be use by a CLI tool to save logs, so LLMs no need to edit CSV file itself and it's saving time, tokens and energy.
-  - 🌳 We need a efficient way to save logs for LLMs.
-- 🐥 When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
-  - 🌳 We need a efficient way to read logs for humans.
-- 🌳 A local first, full control data storage for logs, documents of project, not dependent on external services like Cursor, Windsurf, TUI client, etc.
-- 🐥 Very long, long and long conversation history, but LLMs can summarize it in a few words and save important information only.
-  - 🌳 Do not save all conversation history, only save important information.
-- 🌳 We need a reasoning-based, human-like retrieval over long documents (like <https://github.com/VectifyAI/PageIndex>).
+- Clean, predictable and simple format for LLMs to read past seasons of logs.
+- When LLMs write logs, should be use by a CLI tool to save logs, so LLMs no need to edit CSV file itself and it's saving time, tokens and energy.
+  - -> We need a efficient way to save logs for LLMs.
+- When human read CSV logs, I want a tool to view long CSV logs in a more human-friendly way.
+  - -> We need a efficient way to read logs for humans.
+- A local first, full control data storage for logs, documents of project, not dependent on external services like Cursor, Windsurf, TUI client, etc.
+- Very long, long and long conversation history, but LLMs can summarize it in a few words and save important information only.
+  - -> Do not save all conversation history, only save important information.
+- We need a reasoning-based, human-like retrieval over long documents (like <https://github.com/VectifyAI/PageIndex>).
   - Data can be Directed Acyclic Graph (<https://en.wikipedia.org/wiki/Directed_acyclic_graph>) or Directed cyclic Graph (<https://en.wikipedia.org/wiki/Directed_graph>). Cause and effect is link between nodes - chats.
 
 ## ✅ Solution
