@@ -12,6 +12,12 @@ zig build-exe scripts/release.zig -femit-bin=build/release
 
 # Run the script.
 ./build/release
+
+# Build the package.
+bun run build
+
+# Publish to npm.
+bun run publish
 ```
 
 Read more at `scripts/release.zig`.
