@@ -25,6 +25,6 @@ Read more at `scripts/release.zig`.
 ## After release
 
 ```bash
-bun i -g llmlog
+bun i -g bl-log
 l-log -v
 ```
