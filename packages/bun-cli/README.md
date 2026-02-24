@@ -1,4 +1,4 @@
-# l-log (Bun CLI)
+# llmlog (Bun CLI)
 
 > Bun-only CLI tool for llm-lean-log - Logging for LLMs, but we cut the fat.
 
@@ -13,7 +13,7 @@ For more information, see the [main repository](https://github.com/loclv/llm-lea
 ## 🚀 Installation
 
 ```bash
-bun add -g l-log
+bun add -g llmlog
 ```
 
 ## 💻 Usage

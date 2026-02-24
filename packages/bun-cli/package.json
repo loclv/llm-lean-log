@@ -1,5 +1,5 @@
 {
-	"name": "l-l",
+	"name": "llmlog",
 	"version": "0.2.10",
 	"description": "CLI tool for llm-lean-log and Bun only",
 	"scripts": {

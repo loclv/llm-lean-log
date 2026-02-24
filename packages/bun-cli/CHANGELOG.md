@@ -1,6 +1,6 @@
 # Changelog - Bun CLI Tool
 
-All notable changes to the `l-log` package will be documented in this file.
+All notable changes to the `llmlog` package will be documented in this file.
 
 ## [0.2.10] - 2026-02-25
 

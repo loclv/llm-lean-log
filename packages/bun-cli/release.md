@@ -17,7 +17,7 @@ zig build-exe scripts/release.zig -femit-bin=build/release
 bun run build
 
 # Publish to npm.
-bun run publish
+bun publish
 ```
 
 Read more at `scripts/release.zig`.
@@ -25,6 +25,6 @@ Read more at `scripts/release.zig`.
 ## After release
 
 ```bash
-bun i -g l-log
+bun i -g llmlog
 l-log -v
 ```
