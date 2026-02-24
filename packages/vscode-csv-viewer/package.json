@@ -72,7 +72,7 @@
 				{
 					"id": "csv-viewer-container",
 					"title": "CSV LLM Log Viewer",
-					"icon": "media/activity-bar.svg"
+					"icon": "media/logo.png"
 				}
 			]
 		},
@@ -82,7 +82,7 @@
 					"type": "webview",
 					"id": "csvViewer.logsView",
 					"name": "Logs",
-					"icon": "media/activity-bar.svg"
+					"icon": "media/logo.png"
 				}
 			]
 		},
