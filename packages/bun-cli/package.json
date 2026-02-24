@@ -1,0 +1,53 @@
+{
+	"name": "l-log",
+	"version": "0.2.10",
+	"description": "CLI tool for llm-lean-log and Bun only",
+	"scripts": {
+		"cli": "bun run src/index.ts",
+		"build": "bun build src/index.ts --compile --outfile dist/l-log --target bun",
+		"compile:mac": "bun build src/index.ts --compile --target bun-darwin-arm64 --outfile dist/l-log-mac",
+		"compile:win": "bun build src/index.ts --compile --target bun-windows-x64 --outfile dist/l-log-win.exe",
+		"compile:linux": "bun build src/index.ts --compile --target bun-linux-x64 --outfile dist/l-log-linux",
+		"prepublishOnly": "bun run build",
+		"type": "tsc --noEmit"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/loclv/llm-lean-log.git",
+		"directory": "packages/bun-cli"
+	},
+	"bugs": {
+		"url": "https://github.com/loclv/llm-lean-log/issues"
+	},
+	"homepage": "https://github.com/loclv/llm-lean-log/tree/main/packages/bun-cli#readme",
+	"main": "dist/l-log",
+	"module": "dist/l-log",
+	"type": "module",
+	"bin": {
+		"l-log": "dist/l-log"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"cli-highlight": "^2.1.11"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"llm-lean-log-core": "workspace:*",
+		"typescript": "^5.9.3"
+	},
+	"keywords": [
+		"llm",
+		"logging",
+		"cli",
+		"csv",
+		"token-optimization"
+	],
+	"license": "MIT"
+}

@@ -18,10 +18,10 @@ const Error = error{
 };
 
 // 1MB = 1024 * 1024
-const SIZE_1MB = 1048576;
+const size_1mb = 1048576;
 
 /// Parse version string and increment patch version
-fn incrementVersion(version: []const u8, allocator: std.mem.Allocator) ![]const u8 {
+fn incrementVersion(allocator: std.mem.Allocator, version: []const u8) ![]const u8 {
     var iter = std.mem.splitScalar(u8, version, '.');
     const major_str = iter.next() orelse return error.InvalidVersionFormat;
     const minor_str = iter.next() orelse return error.InvalidVersionFormat;
@@ -41,7 +41,7 @@ fn execCommand(allocator: std.mem.Allocator, args: []const []const u8) ![]const 
     const result = try process.Child.run(.{
         .allocator = allocator,
         .argv = args,
-        .max_output_bytes = SIZE_1MB,
+        .max_output_bytes = size_1mb,
     });
 
     defer allocator.free(result.stdout);
@@ -66,7 +66,7 @@ fn checkChangelog(allocator: std.mem.Allocator, version: []const u8) !void {
     };
     defer file.close();
 
-    const contents = try file.readToEndAlloc(allocator, SIZE_1MB);
+    const contents = try file.readToEndAlloc(allocator, size_1mb);
     defer allocator.free(contents);
 
     const version_pattern = try std.fmt.allocPrint(allocator, "## [{s}]", .{version});
@@ -108,7 +108,7 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     };
     defer file.close();
 
-    const contents = try file.readToEndAlloc(allocator, SIZE_1MB);
+    const contents = try file.readToEndAlloc(allocator, size_1mb);
     defer allocator.free(contents);
 
     var parsed = try json.parseFromSlice(json.Value, allocator, contents, .{});
@@ -128,7 +128,7 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     }
 
     const current_version = version_entry.string;
-    const new_version = try incrementVersion(current_version, allocator);
+    const new_version = try incrementVersion(allocator, current_version);
 
     // Update version in package.json
     try root.put("version", .{ .string = new_version });
@@ -154,11 +154,11 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     defer allocator.free(new_contents);
 
     // Copy before version
-    std.mem.copyForwards(u8, new_contents[0..start_idx], contents[0..start_idx]);
+    @memmove(new_contents[0..start_idx], contents[0..start_idx]);
     // Copy new version
-    std.mem.copyForwards(u8, new_contents[start_idx .. start_idx + new_version.len], new_version);
+    @memmove(new_contents[start_idx .. start_idx + new_version.len], new_version);
     // Copy after version
-    std.mem.copyForwards(u8, new_contents[start_idx + new_version.len ..], contents[end_idx..]);
+    @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
     // Write new package.json
     try std.fs.cwd().writeFile(.{ .sub_path = "package.json", .data = new_contents });
@@ -168,10 +168,8 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
 }
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer _ = gpa.deinit();
-    // Allocator for the release process
-    const allocator = gpa.allocator();
+    //
+    const allocator = std.heap.raw_c_allocator;
 
     std.log.info("Starting release process for cores...", .{});
 
