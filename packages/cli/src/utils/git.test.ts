@@ -30,16 +30,28 @@ mock.module("node:child_process", () => ({
 // Mock fs/promises
 const mockMkdir = mock(() => Promise.resolve());
 const mockWriteFile = mock(() => Promise.resolve());
+const mockReadFile = mock(() => Promise.resolve(""));
+const mockReaddir = mock(() => Promise.resolve([]));
 
 mock.module("node:fs/promises", () => ({
 	mkdir: mockMkdir,
 	writeFile: mockWriteFile,
+	readFile: mockReadFile,
+	readdir: mockReaddir,
+}));
+
+// Mock node:fs
+const mockExistsSync = mock(() => true);
+
+mock.module("node:fs", () => ({
+	existsSync: mockExistsSync,
 }));
 
 // Mock node:path
 mock.module("node:path", () => ({
 	dirname: (path: string) => {
 		const parts = path.split("/");
+		if (parts.length <= 1) return ".";
 		return parts.slice(0, -1).join("/");
 	},
 }));
@@ -117,7 +129,12 @@ describe("git utilities", () => {
 	describe("saveGitDiffExcludeLockFiles", () => {
 		beforeEach(() => {
 			mockMkdir.mockClear();
+			mockMkdir.mockReset();
 			mockWriteFile.mockClear();
+			mockWriteFile.mockReset();
+			mockReadFile.mockClear();
+			mockReaddir.mockClear();
+			mockExistsSync.mockClear();
 		});
 
 		it("should save git diff successfully when git diff succeeds", async () => {
