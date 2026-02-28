@@ -73,6 +73,13 @@ export async function saveGitDiffExcludeLockFiles(
 
 		git.on("close", async (code) => {
 			if (code === 0) {
+				// Check if diff output is empty
+				if (!stdout.trim()) {
+					// No changes to write
+					resolve(false);
+					return;
+				}
+
 				try {
 					// Ensure directory exists before writing file
 					const dir = dirname(outputPath);

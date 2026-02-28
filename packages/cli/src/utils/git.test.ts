@@ -161,6 +161,26 @@ describe("git utilities", () => {
 			);
 		});
 
+		it("should return false and not write file when git diff succeeds but output is empty", async () => {
+			mockSpawn.mockImplementation(() => {
+				const p: MockProcess = new EventEmitter() as MockProcess;
+				p.stdout = new MockStream();
+				p.stderr = new MockStream();
+				setTimeout(() => {
+					// Empty stdout (no changes)
+					p.stdout.emit("data", Buffer.from(""));
+					p.emit("close", 0);
+				}, 10);
+				return p;
+			});
+
+			const result = await saveGitDiffExcludeLockFiles("logs/diff/test.diff");
+
+			expect(result).toBe(false);
+			expect(mockMkdir).not.toHaveBeenCalled();
+			expect(mockWriteFile).not.toHaveBeenCalled();
+		});
+
 		it("should return false when git diff fails with error", async () => {
 			const consoleSpy = spyOn(console, "error").mockImplementation(() => {});
 			let callCount = 0;
