@@ -372,7 +372,7 @@ function updateStats() {
 	statsEl.textContent = `Showing ${filteredData.length} of ${currentData.length} entries`;
 }
 
-if (typeof module !== 'undefined') {
+if (typeof module !== "undefined") {
 	module.exports = {
 		showContent,
 		showEmpty,
@@ -391,6 +391,6 @@ if (typeof module !== 'undefined') {
 			if (state.searchTerm !== undefined) searchTerm = state.searchTerm;
 			if (state.sortOrder) sortOrder = state.sortOrder;
 		},
-		getState: () => ({ currentData, filteredData, searchTerm, sortOrder })
+		getState: () => ({ currentData, filteredData, searchTerm, sortOrder }),
 	};
 }

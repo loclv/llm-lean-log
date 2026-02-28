@@ -33,7 +33,7 @@ describe("media/script.js", () => {
 				const input = '<script>alert("xss")</script>';
 				const output = script.escapeHtml(input);
 				expect(output).toContain("&lt;script&gt;");
-				expect(output).toContain("\"");
+				expect(output).toContain('"');
 			});
 			it("should return empty string for null/undefined", () => {
 				expect(script.escapeHtml(null)).toBe("");
