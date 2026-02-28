@@ -49,7 +49,7 @@
 		"ai"
 	],
 	"engines": {
-		"bun": ">=1.3.5",
+		"bun": ">=1.3.9",
 		"npm": "please-use-bun"
 	},
 	"license": "MIT"

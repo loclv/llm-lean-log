@@ -95,6 +95,19 @@ Before pushing to NPM, ensure that the files being packaged are correct. Run thi
 ...
 ```
 
+## Development
+
+```bash
+bun run build
+```
+
+Output: "dist/l-log" file.
+Move "dist/l-log" to "/usr/local/bin/l-log-dev":
+
+```bash
+sudo mv dist/l-log /usr/local/bin/l-log-dev
+```
+
 ## 📖 Additional information
 
 This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

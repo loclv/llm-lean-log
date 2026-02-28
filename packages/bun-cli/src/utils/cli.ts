@@ -16,8 +16,16 @@ import { getLogFolderPathFromLogFilePath, mkdirIfNotExists } from "./files";
 import { getLastCommitShortSha, saveGitDiffExcludeLockFiles } from "./git";
 import { visualizeEntry, visualizeStats, visualizeTable } from "./visualizer";
 
-export async function main(version: string) {
-	const args = process.argv.slice(2);
+export async function main(
+	version: string,
+	args: string[] = process.argv.slice(2),
+) {
+	/**
+	 * Get the command from the first argument.
+	 * 'list' | 'ls' | 'stats' | 'view' | 'search'
+	 *  | 'tags' | 'add' | 'help' | '--help' | '-h'
+	 *  | '-v' | '-V' | '--version'
+	 */
 	const command = args[0];
 
 	// Check if second argument is a file (ends with .csv) or a parameter
