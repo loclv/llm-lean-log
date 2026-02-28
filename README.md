@@ -269,8 +269,14 @@ l-log search ./logs/example.csv "Database"
 # Filter by tags, output is CSV format
 l-log tags ./logs/example.csv error api
 
-# Add a new log entry
+# Add a new log entry (auto-saves git diff by default)
 l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+
+# Add a new log entry without saving git diff
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --no-diff
+
+# Add a new log entry and explicitly save git diff (default behavior)
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --diff
 ```
 
 For human users viewing logs with `--human` option:
