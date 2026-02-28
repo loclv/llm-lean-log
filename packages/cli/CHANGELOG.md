@@ -2,6 +2,19 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.11] - 2026-03-01
+
+### Added
+
+- **Git Diff Control**: Added `--diff` flag to explicitly enable saving git diff file
+- **Git Diff Control**: Added `--no-diff` flag to `add` command to skip saving git diff file
+
+## [0.2.10] - 2026-03-01
+
+### Added
+
+- **Git Diff Control**: Added `--no-diff` flag to `add` command to skip saving git diff file
+
 ## [0.2.9] - 2026-01-24
 
 ### Added

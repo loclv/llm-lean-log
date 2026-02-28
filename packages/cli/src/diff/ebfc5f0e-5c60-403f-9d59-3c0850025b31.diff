@@ -1,0 +1,38 @@
+diff --git a/.ralph/ralph-loop.state.json b/.ralph/ralph-loop.state.json
+index 4ae9e2b..6787887 100644
+--- a/.ralph/ralph-loop.state.json
++++ b/.ralph/ralph-loop.state.json
+@@ -1,6 +1,6 @@
+ {
+   "active": true,
+-  "iteration": 5,
++  "iteration": 6,
+   "minIterations": 1,
+   "maxIterations": 50,
+   "completionPromise": "COMPLETE",
+diff --git a/packages/bun-cli/src/utils/cli.ts b/packages/bun-cli/src/utils/cli.ts
+index a1c5202..9ef4dcd 100644
+--- a/packages/bun-cli/src/utils/cli.ts
++++ b/packages/bun-cli/src/utils/cli.ts
+@@ -163,7 +163,7 @@ export async function main(
+ 			// and diff file include the log itself too.
+ 			const hasDiffFlag = args.includes("--diff");
+ 			const hasNoDiffFlag = args.includes("--no-diff");
+-			const shouldSaveDiff = hasDiffFlag ? true : hasNoDiffFlag ? false : true;
++			const shouldSaveDiff = hasDiffFlag ? true : !hasNoDiffFlag;
+ 			const logId = entries[entries.length - 1]?.id;
+ 			if (logId && shouldSaveDiff) {
+ 				const folderPath = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
+diff --git a/packages/cli/src/utils/cli.ts b/packages/cli/src/utils/cli.ts
+index c82e4c3..b9add48 100644
+--- a/packages/cli/src/utils/cli.ts
++++ b/packages/cli/src/utils/cli.ts
+@@ -155,7 +155,7 @@ export async function main(version: string) {
+ 			// and diff file include the log itself too.
+ 			const hasDiffFlag = args.includes("--diff");
+ 			const hasNoDiffFlag = args.includes("--no-diff");
+-			const shouldSaveDiff = hasDiffFlag ? true : hasNoDiffFlag ? false : true;
++			const shouldSaveDiff = hasDiffFlag ? true : !hasNoDiffFlag;
+ 			const logId = entries[entries.length - 1]?.id;
+ 			if (logId && shouldSaveDiff) {
+ 				const folderPath = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;

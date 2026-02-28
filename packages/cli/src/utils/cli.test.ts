@@ -11,14 +11,20 @@ import pkg from "../../package.json";
 
 // Mock git module - MUST be before importing ./cli
 const mockGetLastCommitShortSha = mock(() => Promise.resolve("abc1234"));
+const mockSaveGitDiff = mock(() => Promise.resolve(true));
 mock.module("./git", () => ({
 	getLastCommitShortSha: mockGetLastCommitShortSha,
+	saveGitDiffExcludeLockFiles: mockSaveGitDiff,
 }));
 
 // Mock core functions
 const mockAddLogEntry = mock((entries: unknown[], entry: unknown) => [
-	...entries,
-	{ ...entry, id: "test-id", "created-at": "2024-01-01" },
+	...(entries as unknown[]),
+	{
+		...(entry as Record<string, unknown>),
+		id: "test-id",
+		"created-at": "2024-01-01",
+	},
 ]);
 
 mock.module("llm-lean-log-core", () => ({
@@ -412,5 +418,67 @@ describe("CLI", () => {
 		const { loadLogs } = core as any;
 		await runCommand(["list", "custom.csv"]);
 		expect(loadLogs).toHaveBeenCalledWith("custom.csv");
+	});
+
+	it("should save git diff by default when adding log entry", async () => {
+		mockAddLogEntry.mockReturnValue([
+			{
+				id: "test-id-diff",
+				name: "Test Log",
+				problem: "Test Problem",
+				"created-at": "2023-01-01T00:00:00.000Z",
+			},
+		]);
+		mockSaveGitDiff.mockClear();
+
+		await runCommand(["add", "Test Log", "--problem=Test Problem"]);
+
+		expect(mockSaveGitDiff).toHaveBeenCalled();
+		expect(consoleLogSpy).toHaveBeenCalledWith(
+			"Git diff saved to ./logs/diff/test-id-diff.diff",
+		);
+	});
+
+	it("should skip saving git diff when --no-diff flag is provided", async () => {
+		mockAddLogEntry.mockReturnValue([
+			{
+				id: "test-id-no-diff",
+				name: "Test Log",
+				problem: "Test Problem",
+				"created-at": "2023-01-01T00:00:00.000Z",
+			},
+		]);
+		mockSaveGitDiff.mockClear();
+
+		await runCommand([
+			"add",
+			"Test Log",
+			"--problem=Test Problem",
+			"--no-diff",
+		]);
+
+		expect(mockSaveGitDiff).not.toHaveBeenCalled();
+		expect(consoleLogSpy).toHaveBeenCalledWith(
+			"Git diff save skipped (--no-diff flag provided)",
+		);
+	});
+
+	it("should save git diff when --diff flag is explicitly provided", async () => {
+		mockAddLogEntry.mockReturnValue([
+			{
+				id: "test-id-explicit-diff",
+				name: "Test Log",
+				problem: "Test Problem",
+				"created-at": "2023-01-01T00:00:00.000Z",
+			},
+		]);
+		mockSaveGitDiff.mockClear();
+
+		await runCommand(["add", "Test Log", "--problem=Test Problem", "--diff"]);
+
+		expect(mockSaveGitDiff).toHaveBeenCalled();
+		expect(consoleLogSpy).toHaveBeenCalledWith(
+			"Git diff saved to ./logs/diff/test-id-explicit-diff.diff",
+		);
 	});
 });

@@ -1,0 +1,319 @@
+diff --git a/.ralph/ralph-opencode.config.json b/.ralph/ralph-opencode.config.json
+index f23c3f9..9a6efbc 100644
+--- a/.ralph/ralph-opencode.config.json
++++ b/.ralph/ralph-opencode.config.json
+@@ -1,20 +1,20 @@
+ {
+-  "$schema": "https://opencode.ai/config.json",
+-  "permission": {
+-    "read": "allow",
+-    "edit": "allow",
+-    "glob": "allow",
+-    "grep": "allow",
+-    "list": "allow",
+-    "bash": "allow",
+-    "task": "allow",
+-    "webfetch": "allow",
+-    "websearch": "allow",
+-    "codesearch": "allow",
+-    "todowrite": "allow",
+-    "todoread": "allow",
+-    "question": "allow",
+-    "lsp": "allow",
+-    "external_directory": "allow"
+-  }
+-}
+\ No newline at end of file
++	"$schema": "https://opencode.ai/config.json",
++	"permission": {
++		"read": "allow",
++		"edit": "allow",
++		"glob": "allow",
++		"grep": "allow",
++		"list": "allow",
++		"bash": "allow",
++		"task": "allow",
++		"webfetch": "allow",
++		"websearch": "allow",
++		"codesearch": "allow",
++		"todowrite": "allow",
++		"todoread": "allow",
++		"question": "allow",
++		"lsp": "allow",
++		"external_directory": "allow"
++	}
++}
+diff --git a/packages/bun-cli/CHANGELOG.md b/packages/bun-cli/CHANGELOG.md
+index 55c5ac3..b882a03 100644
+--- a/packages/bun-cli/CHANGELOG.md
++++ b/packages/bun-cli/CHANGELOG.md
+@@ -2,6 +2,12 @@
+ 
+ All notable changes to the `bl-log` package will be documented in this file.
+ 
++## [0.2.11] - 2026-03-01
++
++### Added
++
++- **Git Diff Control**: Added `--no-diff` flag to `add` command to skip saving git diff file
++
+ ## [0.2.10] - 2026-02-25
+ 
+ ### Added
+diff --git a/packages/bun-cli/src/utils/cli.test.ts b/packages/bun-cli/src/utils/cli.test.ts
+index bcdb982..be0c931 100644
+--- a/packages/bun-cli/src/utils/cli.test.ts
++++ b/packages/bun-cli/src/utils/cli.test.ts
+@@ -11,14 +11,20 @@ import pkg from "../../package.json";
+ 
+ // Mock git module - MUST be before importing ./cli
+ const mockGetLastCommitShortSha = mock(() => Promise.resolve("abc1234"));
++const mockSaveGitDiff = mock(() => Promise.resolve(true));
+ mock.module("./git", () => ({
+ 	getLastCommitShortSha: mockGetLastCommitShortSha,
++	saveGitDiffExcludeLockFiles: mockSaveGitDiff,
+ }));
+ 
+ // Mock core functions
+ const mockAddLogEntry = mock((entries: unknown[], entry: unknown) => [
+-	...entries,
+-	{ ...entry, id: "test-id", "created-at": "2024-01-01" },
++	...(entries as unknown[]),
++	{
++		...(entry as Record<string, unknown>),
++		id: "test-id",
++		"created-at": "2024-01-01",
++	},
+ ]);
+ 
+ mock.module("llm-lean-log-core", () => ({
+@@ -413,4 +419,47 @@ describe("CLI", () => {
+ 		await runCommand(["list", "custom.csv"]);
+ 		expect(loadLogs).toHaveBeenCalledWith("custom.csv");
+ 	});
++
++	it("should save git diff by default when adding log entry", async () => {
++		mockAddLogEntry.mockReturnValue([
++			{
++				id: "test-id-diff",
++				name: "Test Log",
++				problem: "Test Problem",
++				"created-at": "2023-01-01T00:00:00.000Z",
++			},
++		]);
++		mockSaveGitDiff.mockClear();
++
++		await runCommand(["add", "Test Log", "--problem=Test Problem"]);
++
++		expect(mockSaveGitDiff).toHaveBeenCalled();
++		expect(consoleLogSpy).toHaveBeenCalledWith(
++			"Git diff saved to ./logs/diff/test-id-diff.diff",
++		);
++	});
++
++	it("should skip saving git diff when --no-diff flag is provided", async () => {
++		mockAddLogEntry.mockReturnValue([
++			{
++				id: "test-id-no-diff",
++				name: "Test Log",
++				problem: "Test Problem",
++				"created-at": "2023-01-01T00:00:00.000Z",
++			},
++		]);
++		mockSaveGitDiff.mockClear();
++
++		await runCommand([
++			"add",
++			"Test Log",
++			"--problem=Test Problem",
++			"--no-diff",
++		]);
++
++		expect(mockSaveGitDiff).not.toHaveBeenCalled();
++		expect(consoleLogSpy).toHaveBeenCalledWith(
++			"Git diff save skipped (--no-diff flag provided)",
++		);
++	});
+ });
+diff --git a/packages/bun-cli/src/utils/cli.ts b/packages/bun-cli/src/utils/cli.ts
+index a746372..a1e1b72 100644
+--- a/packages/bun-cli/src/utils/cli.ts
++++ b/packages/bun-cli/src/utils/cli.ts
+@@ -161,8 +161,9 @@ export async function main(
+ 			// Auto-save git diff to .diff file using the log entry ID.
+ 			// After saved log, git diff will be saved to .diff file,
+ 			// and diff file include the log itself too.
++			const shouldSaveDiff = !args.includes("--no-diff");
+ 			const logId = entries[entries.length - 1]?.id;
+-			if (logId) {
++			if (logId && shouldSaveDiff) {
+ 				const folderPath = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
+ 				mkdirIfNotExists(folderPath);
+ 				const diffFileName = `${folderPath}/${logId}.diff`;
+@@ -172,6 +173,8 @@ export async function main(
+ 				} else {
+ 					console.error(`Failed to save git diff to ${diffFileName}`);
+ 				}
++			} else if (!shouldSaveDiff) {
++				console.log("Git diff save skipped (--no-diff flag provided)");
+ 			} else {
+ 				console.error("Error: Log entry ID is missing");
+ 				process.exit(1);
+diff --git a/packages/bun-cli/src/utils/const.ts b/packages/bun-cli/src/utils/const.ts
+index 4e943ea..5e6f8d0 100644
+--- a/packages/bun-cli/src/utils/const.ts
++++ b/packages/bun-cli/src/utils/const.ts
+@@ -11,7 +11,7 @@ stats,--human,Show log statistics
+ view <index>,"--last,--human",View detailed entry at index
+ search <query>,--human,Search logs by name/problem/solution
+ tags <tag1> [tag2],--human,Filter logs by tags
+-add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>",Add a new log entry
++add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>,--no-diff",Add a new log entry
+ help|-h|--help,--human,Show this help message
+ -v|-V|--version,,Show version number
+ 
+@@ -62,6 +62,7 @@ Commands:
+     --created-at=<time> Creation time (ISO 8601 formatted string)
+     --updated-at=<time> Update time (ISO 8601 formatted string)
+     --created-by-agent=<name> Agent model name
++    --no-diff           Skip saving git diff file
+   
+   help, -h, --help      Show this help message
+     --human             Show human-readable output (default for terminal)
+diff --git a/packages/cli/CHANGELOG.md b/packages/cli/CHANGELOG.md
+index f66bd4d..4ba2078 100644
+--- a/packages/cli/CHANGELOG.md
++++ b/packages/cli/CHANGELOG.md
+@@ -2,6 +2,12 @@
+ 
+ All notable changes to the `llm-lean-log-cli` package will be documented in this file.
+ 
++## [0.2.10] - 2026-03-01
++
++### Added
++
++- **Git Diff Control**: Added `--no-diff` flag to `add` command to skip saving git diff file
++
+ ## [0.2.9] - 2026-01-24
+ 
+ ### Added
+diff --git a/packages/cli/src/utils/cli.test.ts b/packages/cli/src/utils/cli.test.ts
+index bcdb982..be0c931 100644
+--- a/packages/cli/src/utils/cli.test.ts
++++ b/packages/cli/src/utils/cli.test.ts
+@@ -11,14 +11,20 @@ import pkg from "../../package.json";
+ 
+ // Mock git module - MUST be before importing ./cli
+ const mockGetLastCommitShortSha = mock(() => Promise.resolve("abc1234"));
++const mockSaveGitDiff = mock(() => Promise.resolve(true));
+ mock.module("./git", () => ({
+ 	getLastCommitShortSha: mockGetLastCommitShortSha,
++	saveGitDiffExcludeLockFiles: mockSaveGitDiff,
+ }));
+ 
+ // Mock core functions
+ const mockAddLogEntry = mock((entries: unknown[], entry: unknown) => [
+-	...entries,
+-	{ ...entry, id: "test-id", "created-at": "2024-01-01" },
++	...(entries as unknown[]),
++	{
++		...(entry as Record<string, unknown>),
++		id: "test-id",
++		"created-at": "2024-01-01",
++	},
+ ]);
+ 
+ mock.module("llm-lean-log-core", () => ({
+@@ -413,4 +419,47 @@ describe("CLI", () => {
+ 		await runCommand(["list", "custom.csv"]);
+ 		expect(loadLogs).toHaveBeenCalledWith("custom.csv");
+ 	});
++
++	it("should save git diff by default when adding log entry", async () => {
++		mockAddLogEntry.mockReturnValue([
++			{
++				id: "test-id-diff",
++				name: "Test Log",
++				problem: "Test Problem",
++				"created-at": "2023-01-01T00:00:00.000Z",
++			},
++		]);
++		mockSaveGitDiff.mockClear();
++
++		await runCommand(["add", "Test Log", "--problem=Test Problem"]);
++
++		expect(mockSaveGitDiff).toHaveBeenCalled();
++		expect(consoleLogSpy).toHaveBeenCalledWith(
++			"Git diff saved to ./logs/diff/test-id-diff.diff",
++		);
++	});
++
++	it("should skip saving git diff when --no-diff flag is provided", async () => {
++		mockAddLogEntry.mockReturnValue([
++			{
++				id: "test-id-no-diff",
++				name: "Test Log",
++				problem: "Test Problem",
++				"created-at": "2023-01-01T00:00:00.000Z",
++			},
++		]);
++		mockSaveGitDiff.mockClear();
++
++		await runCommand([
++			"add",
++			"Test Log",
++			"--problem=Test Problem",
++			"--no-diff",
++		]);
++
++		expect(mockSaveGitDiff).not.toHaveBeenCalled();
++		expect(consoleLogSpy).toHaveBeenCalledWith(
++			"Git diff save skipped (--no-diff flag provided)",
++		);
++	});
+ });
+diff --git a/packages/cli/src/utils/cli.ts b/packages/cli/src/utils/cli.ts
+index 03f0c8c..e5a1077 100644
+--- a/packages/cli/src/utils/cli.ts
++++ b/packages/cli/src/utils/cli.ts
+@@ -153,8 +153,9 @@ export async function main(version: string) {
+ 			// Auto-save git diff to .diff file using the log entry ID.
+ 			// After saved log, git diff will be saved to .diff file,
+ 			// and diff file include the log itself too.
++			const shouldSaveDiff = !args.includes("--no-diff");
+ 			const logId = entries[entries.length - 1]?.id;
+-			if (logId) {
++			if (logId && shouldSaveDiff) {
+ 				const folderPath = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
+ 				mkdirIfNotExists(folderPath);
+ 				const diffFileName = `${folderPath}/${logId}.diff`;
+@@ -164,6 +165,8 @@ export async function main(version: string) {
+ 				} else {
+ 					console.error(`Failed to save git diff to ${diffFileName}`);
+ 				}
++			} else if (!shouldSaveDiff) {
++				console.log("Git diff save skipped (--no-diff flag provided)");
+ 			} else {
+ 				console.error("Error: Log entry ID is missing");
+ 				process.exit(1);
+diff --git a/packages/cli/src/utils/const.ts b/packages/cli/src/utils/const.ts
+index fcd3dc9..235e6c4 100644
+--- a/packages/cli/src/utils/const.ts
++++ b/packages/cli/src/utils/const.ts
+@@ -11,7 +11,7 @@ stats,--human,Show log statistics
+ view <index>,"--last,--human",View detailed entry at index
+ search <query>,--human,Search logs by name/problem/solution
+ tags <tag1> [tag2],--human,Filter logs by tags
+-add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>",Add a new log entry
++add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>,--no-diff",Add a new log entry
+ help|-h|--help,--human,Show this help message
+ -v|-V|--version,,Show version number
+ 
+@@ -62,6 +62,7 @@ Commands:
+     --created-at=<time> Creation time (ISO 8601 formatted string)
+     --updated-at=<time> Update time (ISO 8601 formatted string)
+     --created-by-agent=<name> Agent model name
++    --no-diff           Skip saving git diff file
+   
+   help, -h, --help      Show this help message
+     --human             Show human-readable output (default for terminal)

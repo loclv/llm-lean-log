@@ -1,0 +1,168 @@
+diff --git a/.ralph/ralph-loop.state.json b/.ralph/ralph-loop.state.json
+index 14e1536..b76e510 100644
+--- a/.ralph/ralph-loop.state.json
++++ b/.ralph/ralph-loop.state.json
+@@ -1,13 +1,13 @@
+ {
+-	"active": true,
+-	"iteration": 1,
+-	"minIterations": 1,
+-	"maxIterations": 50,
+-	"completionPromise": "COMPLETE",
+-	"tasksMode": true,
+-	"taskPromise": "READY_FOR_NEXT_TASK",
+-	"prompt": "add a option to CLI that determine whether create diff file or not, support bun-cli and cli projects in packages. write UT; update CHANGE_LOG.md for there projects",
+-	"startedAt": "2026-02-28T18:34:35.868Z",
+-	"model": "",
+-	"agent": "opencode"
+-}
++  "active": true,
++  "iteration": 2,
++  "minIterations": 1,
++  "maxIterations": 50,
++  "completionPromise": "COMPLETE",
++  "tasksMode": true,
++  "taskPromise": "READY_FOR_NEXT_TASK",
++  "prompt": "add a option to CLI that determine whether create diff file or not, support bun-cli and cli projects in packages. write UT; update CHANGE_LOG.md for there projects",
++  "startedAt": "2026-02-28T18:34:35.868Z",
++  "model": "",
++  "agent": "opencode"
++}
+\ No newline at end of file
+diff --git a/.ralph/ralph-opencode.config.json b/.ralph/ralph-opencode.config.json
+index 9a6efbc..f23c3f9 100644
+--- a/.ralph/ralph-opencode.config.json
++++ b/.ralph/ralph-opencode.config.json
+@@ -1,20 +1,20 @@
+ {
+-	"$schema": "https://opencode.ai/config.json",
+-	"permission": {
+-		"read": "allow",
+-		"edit": "allow",
+-		"glob": "allow",
+-		"grep": "allow",
+-		"list": "allow",
+-		"bash": "allow",
+-		"task": "allow",
+-		"webfetch": "allow",
+-		"websearch": "allow",
+-		"codesearch": "allow",
+-		"todowrite": "allow",
+-		"todoread": "allow",
+-		"question": "allow",
+-		"lsp": "allow",
+-		"external_directory": "allow"
+-	}
+-}
++  "$schema": "https://opencode.ai/config.json",
++  "permission": {
++    "read": "allow",
++    "edit": "allow",
++    "glob": "allow",
++    "grep": "allow",
++    "list": "allow",
++    "bash": "allow",
++    "task": "allow",
++    "webfetch": "allow",
++    "websearch": "allow",
++    "codesearch": "allow",
++    "todowrite": "allow",
++    "todoread": "allow",
++    "question": "allow",
++    "lsp": "allow",
++    "external_directory": "allow"
++  }
++}
+\ No newline at end of file
+diff --git a/packages/bun-cli/src/index.test.ts b/packages/bun-cli/src/index.test.ts
+index f7965a8..b91d2ef 100644
+--- a/packages/bun-cli/src/index.test.ts
++++ b/packages/bun-cli/src/index.test.ts
+@@ -1,7 +1,7 @@
+-import { spawnSync } from "bun";
+ import { describe, expect, it } from "bun:test";
+ import { readFileSync } from "node:fs";
+ import { join } from "node:path";
++import { spawnSync } from "bun";
+ 
+ describe("CLI Basic Checks", () => {
+ 	const cliPath = join(import.meta.dir, "index.ts");
+@@ -155,6 +155,32 @@ describe("CLI Commands Integration", () => {
+ 		expect(stdout.toString()).not.toContain("command,options,description");
+ 	});
+ 
++	it("should skip creating diff file when --no-diff is provided", async () => {
++		cleanup();
++		const { stdout, exitCode } = spawnSync([
++			"bun",
++			"run",
++			cliPath,
++			"add",
++			testCsv,
++			"No Diff Entry",
++			"--problem=test problem",
++			"--solution=test solution",
++			"--no-diff",
++		]);
++		expect(exitCode).toBe(0);
++		expect(stdout.toString()).toContain("Git diff save skipped");
++		expect(stdout.toString()).toContain("--no-diff");
++
++		const diffDir = join(import.meta.dir, "diff");
++		const fileContent = readFileSync(testCsv, "utf8");
++		const idMatch = fileContent.match(/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/);
++		expect(idMatch).not.toBeNull();
++		const diffFile = join(diffDir, `${idMatch![1]}.diff`);
++		const diffFileExists = await Bun.file(diffFile).exists();
++		expect(diffFileExists).toBe(false);
++	});
++
+ 	it("should clean up test file", async () => {
+ 		cleanup();
+ 		const file = Bun.file(testCsv);
+diff --git a/packages/cli/src/index.test.ts b/packages/cli/src/index.test.ts
+index f7965a8..b91d2ef 100644
+--- a/packages/cli/src/index.test.ts
++++ b/packages/cli/src/index.test.ts
+@@ -1,7 +1,7 @@
+-import { spawnSync } from "bun";
+ import { describe, expect, it } from "bun:test";
+ import { readFileSync } from "node:fs";
+ import { join } from "node:path";
++import { spawnSync } from "bun";
+ 
+ describe("CLI Basic Checks", () => {
+ 	const cliPath = join(import.meta.dir, "index.ts");
+@@ -155,6 +155,32 @@ describe("CLI Commands Integration", () => {
+ 		expect(stdout.toString()).not.toContain("command,options,description");
+ 	});
+ 
++	it("should skip creating diff file when --no-diff is provided", async () => {
++		cleanup();
++		const { stdout, exitCode } = spawnSync([
++			"bun",
++			"run",
++			cliPath,
++			"add",
++			testCsv,
++			"No Diff Entry",
++			"--problem=test problem",
++			"--solution=test solution",
++			"--no-diff",
++		]);
++		expect(exitCode).toBe(0);
++		expect(stdout.toString()).toContain("Git diff save skipped");
++		expect(stdout.toString()).toContain("--no-diff");
++
++		const diffDir = join(import.meta.dir, "diff");
++		const fileContent = readFileSync(testCsv, "utf8");
++		const idMatch = fileContent.match(/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/);
++		expect(idMatch).not.toBeNull();
++		const diffFile = join(diffDir, `${idMatch![1]}.diff`);
++		const diffFileExists = await Bun.file(diffFile).exists();
++		expect(diffFileExists).toBe(false);
++	});
++
+ 	it("should clean up test file", async () => {
+ 		cleanup();
+ 		const file = Bun.file(testCsv);

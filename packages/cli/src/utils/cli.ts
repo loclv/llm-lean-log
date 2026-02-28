@@ -150,11 +150,20 @@ export async function main(version: string) {
 
 			await saveLogs(logFile, entries);
 
+			const logId = entries[entries.length - 1]?.id;
+
+			if (!logId) {
+				console.error("Error: Log entry ID is missing");
+				process.exit(1);
+			}
+
 			// Auto-save git diff to .diff file using the log entry ID.
 			// After saved log, git diff will be saved to .diff file,
 			// and diff file include the log itself too.
-			const logId = entries[entries.length - 1]?.id;
-			if (logId) {
+			const hasDiffFlag = args.includes("--diff");
+			const hasNoDiffFlag = args.includes("--no-diff");
+			const shouldSaveDiff = hasDiffFlag ? true : !hasNoDiffFlag;
+			if (shouldSaveDiff) {
 				const folderPath = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
 				mkdirIfNotExists(folderPath);
 				const diffFileName = `${folderPath}/${logId}.diff`;
@@ -165,8 +174,7 @@ export async function main(version: string) {
 					console.error(`Failed to save git diff to ${diffFileName}`);
 				}
 			} else {
-				console.error("Error: Log entry ID is missing");
-				process.exit(1);
+				console.log("Git diff save skipped (--no-diff flag provided)");
 			}
 
 			console.log("Log entry added successfully");

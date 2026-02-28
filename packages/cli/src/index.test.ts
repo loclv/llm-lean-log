@@ -1,7 +1,7 @@
-import { spawnSync } from "bun";
 import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { spawnSync } from "bun";
 
 describe("CLI Basic Checks", () => {
 	const cliPath = join(import.meta.dir, "index.ts");
@@ -153,6 +153,32 @@ describe("CLI Commands Integration", () => {
 		const { stdout } = spawnSync(["bun", "run", cliPath, "help", "--human"]);
 		expect(stdout.toString()).toContain("Usage:");
 		expect(stdout.toString()).not.toContain("command,options,description");
+	});
+
+	it("should skip creating diff file when --no-diff is provided", async () => {
+		cleanup();
+		const { stdout, exitCode } = spawnSync([
+			"bun",
+			"run",
+			cliPath,
+			"add",
+			testCsv,
+			"No Diff Entry",
+			"--problem=test problem",
+			"--solution=test solution",
+			"--no-diff",
+		]);
+		expect(exitCode).toBe(0);
+		expect(stdout.toString()).toContain("Git diff save skipped");
+		expect(stdout.toString()).toContain("--no-diff");
+
+		const diffDir = join(import.meta.dir, "diff");
+		const fileContent = readFileSync(testCsv, "utf8");
+		const idMatch = fileContent.match(/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/);
+		expect(idMatch).not.toBeNull();
+		const diffFile = join(diffDir, `${idMatch![1]}.diff`);
+		const diffFileExists = await Bun.file(diffFile).exists();
+		expect(diffFileExists).toBe(false);
 	});
 
 	it("should clean up test file", async () => {
