@@ -1,6 +1,7 @@
-// script to release a new version of the package
-// run `zig run scripts/release.zig`
+// script to release a new version of the bun-cli package
+// run `zig run scripts/release.zig` from packages/bun-cli directory
 // Plus 0.0.1 to the version number in package.json
+// Update version in src/utils/const.ts
 // Commit and tag the new version
 // Push the new version to GitHub
 // Publish the new version to npm
@@ -215,7 +216,7 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
 pub fn main() !void {
     const allocator = std.heap.raw_c_allocator;
 
-    std.log.info("Starting release process for CLI...", .{});
+    std.log.info("Starting release process for bun-cli...", .{});
 
     // Update version in package.json
     const new_version = try updatePackageVersion(allocator);
@@ -241,7 +242,7 @@ pub fn main() !void {
         allocator.free(output);
     }
 
-    const tag_name = try std.fmt.allocPrint(allocator, "cli-v{s}", .{new_version});
+    const tag_name = try std.fmt.allocPrint(allocator, "bun-cli-v{s}", .{new_version});
     // Tag name should be in the format cli-v0.0.1
     // `defer` will free the memory allocated by `allocPrint`,
     // so we don't need to free it manually
