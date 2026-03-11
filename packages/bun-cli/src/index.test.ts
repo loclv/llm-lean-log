@@ -1,7 +1,6 @@
-import { describe, expect, it } from "bun:test";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { spawnSync } from "bun";
+import { describe, expect, it } from "bun:test";
+import { join } from "node:path";
 
 describe("CLI Basic Checks", () => {
 	const cliPath = join(import.meta.dir, "index.ts");
@@ -44,17 +43,17 @@ describe("CLI Commands Integration", () => {
 	const testCsv = join(import.meta.dir, "test-logs-ts.csv");
 
 	// Clean up after tests
-	const cleanup = () => {
+	const cleanup = async () => {
 		try {
 			const file = Bun.file(testCsv);
-			if (file.exists()) {
+			if (await file.exists()) {
 				spawnSync(["rm", testCsv]);
 			}
 		} catch (_e) {}
 	};
 
-	it("should add a log entry successfully", () => {
-		cleanup();
+	it("should add a log entry successfully", async () => {
+		await cleanup();
 		const { stdout, exitCode, stderr } = spawnSync([
 			"bun",
 			"run",
@@ -72,7 +71,7 @@ describe("CLI Commands Integration", () => {
 		expect(exitCode).toBe(0);
 		expect(stdout.toString()).toContain("Log entry added successfully");
 
-		const fileContent = readFileSync(testCsv, "utf8");
+		const fileContent = await Bun.file(testCsv).text();
 		expect(fileContent).toContain("Test Entry");
 		expect(fileContent).toContain("test problem");
 	});
@@ -156,7 +155,7 @@ describe("CLI Commands Integration", () => {
 	});
 
 	it("should skip creating diff file when --no-diff is provided", async () => {
-		cleanup();
+		await cleanup();
 		const { stdout, exitCode } = spawnSync([
 			"bun",
 			"run",
@@ -173,16 +172,16 @@ describe("CLI Commands Integration", () => {
 		expect(stdout.toString()).toContain("--no-diff");
 
 		const diffDir = join(import.meta.dir, "diff");
-		const fileContent = readFileSync(testCsv, "utf8");
+		const fileContent = await Bun.file(testCsv).text();
 		const idMatch = fileContent.match(/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/);
 		expect(idMatch).not.toBeNull();
-		const diffFile = join(diffDir, `${idMatch![1]}.diff`);
+		const diffFile = join(diffDir, `${idMatch?.[1]}.diff`);
 		const diffFileExists = await Bun.file(diffFile).exists();
 		expect(diffFileExists).toBe(false);
 	});
 
 	it("should clean up test file", async () => {
-		cleanup();
+		await cleanup();
 		const file = Bun.file(testCsv);
 		expect(await file.exists()).toBe(false);
 	});

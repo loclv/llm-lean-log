@@ -5,9 +5,10 @@
 ```ts
 const foo = Bun.file("foo.txt");
 
+if (await foo.exists()) {
+  console.log("foo.txt exists");
+}
+
 await foo.text(); // contents as a string
 await foo.json(); // contents as a JSON object
-await foo.stream(); // contents as ReadableStream
-await foo.arrayBuffer(); // contents as ArrayBuffer
-await foo.bytes(); // contents as Uint8Array
 ```
