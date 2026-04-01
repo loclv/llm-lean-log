@@ -104,6 +104,23 @@ This project has an MCP server `llm-memory` configured. Use it to retrieve conte
 
 ```
 
+## Configuration for Windsurf
+
+Add this to your Windsurf global settings file at "/Users/user/.codeium/windsurf/mcp_config.json":
+
+```json
+{
+  "mcpServers": {
+    "llm-memory": {
+      "command": "bun",
+      "args": [
+        "/Users/user/w/llm-lean-log/packages/mcp-server/src/index.ts"
+      ]
+    }
+  }
+}
+```
+
 ## Features
 
 ### Resources

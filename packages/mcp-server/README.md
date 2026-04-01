@@ -46,6 +46,20 @@ Add this to your `~/.opencode.json`:
   "mcp": {
     "llm-memory": {
       "type": "local",
+      "command": ["l-log-mcp-server"]
+    }
+  }
+}
+```
+
+`LLM_LOG_PATH` environment variable is not required, it's automatically set to the path of your logs file inside your project by default.
+If you want to use a different path, you can set it in the environment section:
+
+```json
+{
+  "mcp": {
+    "llm-memory": {
+      "type": "local",
       "command": ["l-log-mcp-server"],
       "environment": {
         "LLM_LOG_PATH": "/absolute/path/to/your/logs/chat.csv"
@@ -65,10 +79,23 @@ Add this to your `claude_config.json` (Desktop) or `.claude/settings.json` (Code
 {
   "mcpServers": {
     "llm-memory": {
-      "command": "l-log-mcp-server",
-      "env": {
-        "LLM_LOG_PATH": "/absolute/path/to/your/logs/chat.csv"
-      }
+      "command": "l-log-mcp-server"
+    }
+  }
+}
+```
+
+`LLM_LOG_PATH` environment variable is not required, it's automatically set to the path of your logs file inside your project by default.
+
+### Windsurf Configuration
+
+Add this to your Windsurf global settings file at "/Users/user/.codeium/windsurf/mcp_config.json":
+
+```json
+{
+  "mcpServers": {
+    "llm-memory": {
+      "command": "l-log-mcp-server"
     }
   }
 }
