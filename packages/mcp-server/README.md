@@ -190,6 +190,58 @@ bun i
 bun run build
 ```
 
+## Skills / Rules Sample
+
+To help AI agents understand and use this MCP server effectively, you can add the following to your agent's rules or skills configuration:
+
+### Sample Agent Rule (e.g., `.agent/rules/llm-memory.md`)
+
+```markdown
+# LLM Memory MCP Server
+
+This project uses `llm-memory` MCP server to maintain a history of development tasks.
+
+## Context Retrieval
+
+Use MCP server tools:
+
+- `search_logs(query)` - Find how problems were solved
+- `get_task_history(taskName)` - See feature progression
+
+## Resources
+
+- `memory://recent` - View the last 8 log entries
+- `memory://last` - View the very last log entry with full details
+- `memory://stats` - View statistics about your logs
+
+## Prompts
+
+- `recent_work` - Overview of recent work
+- `up` - Daily standup context
+- `learned` - Review past mistakes
+
+## Work Logging
+
+Always log your work after completing a task using the l-log CLI.
+```
+
+### Sample OpenCode Skill (e.g., `~/.opencode/skills/llm-memory.md`)
+
+```markdown
+---
+description: Search and retrieve past development task history
+---
+
+Use the llm-memory MCP server to:
+
+- Search for past solutions: `search_logs("error message or topic")`
+- Get task history: `get_task_history("feature-name")`
+- View recent work: access `memory://recent` resource
+- Review lessons learned: use `learned` prompt
+
+When encountering an error, first search logs to see if this problem was solved before.
+```
+
 ---
 
 For more details about the core logic, see [mcp/README.md](../mcp/README.md).
