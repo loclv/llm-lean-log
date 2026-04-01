@@ -108,12 +108,8 @@ Prompts:
 
 	// Check if log file exists
 	if (!existsSync(LOG_PATH)) {
-		console.error(`\x1b[33mWarning: Log file not found at ${LOG_PATH}\x1b[0m`);
 		console.error(
-			"\x1b[33mPlease set LLM_LOG_PATH environment variable to the absolute path of your chat.csv file.\x1b[0m",
-		);
-		console.error(
-			"\x1b[33mRun 'l-log-mcp-server --config' to see configuration examples.\x1b[0m",
+			`\x1b[33mWarning: Log file not found at ${LOG_PATH}\nPlease set LLM_LOG_PATH environment variable to the absolute path of your chat.csv file.\nRun 'l-log-mcp-server --config' to see configuration examples.\x1b[0m`,
 		);
 	}
 
