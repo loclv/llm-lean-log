@@ -32,15 +32,12 @@ function printConfig() {
 		},
 	};
 
-	console.log("\n\x1b[32m✨ l-log-mcp-server configuration examples:\x1b[0m");
-	console.log("\n\x1b[36mOpenCode (~/.opencode.json):\x1b[0m");
-	console.log(JSON.stringify(config, null, 2));
 	console.log(
-		"\n\x1b[36mClaude Desktop / Claude Code (claude_config.json or .claude/settings.json):\x1b[0m",
-	);
-	console.log(JSON.stringify(claudeConfig, null, 2));
-	console.log(
-		"\n\x1b[33mNote: Replace /absolute/path/to/your/logs/chat.csv with the actual path to your chat.csv file.\x1b[0m\n",
+		"\n\x1b[32ml-log-mcp-server configuration examples:\x1b[0m\n\n\x1b[36mOpenCode (~/.opencode.json):\x1b[0m\n" +
+			JSON.stringify(config, null, 2) +
+			"\n\n\x1b[36mClaude Desktop / Claude Code (claude_config.json or .claude/settings.json):\x1b[0m\n" +
+			JSON.stringify(claudeConfig, null, 2) +
+			"\n\n\x1b[33mNote: Replace /absolute/path/to/your/logs/chat.csv with the actual path to your chat.csv file.\x1b[0m\n",
 	);
 }
 
@@ -73,9 +70,22 @@ export async function run(
 		const _helpText = `Usage: l-log-mcp-server [options]
 
 Options:
-  --config, -c        Show configuration examples for OpenCode, Claude Desktop, and Claude Code
-  --version, -v, -V   Show version number
-  --help, -h          Show this help message`;
+  --config, -c # Show configuration examples for OpenCode, Claude Desktop, and Claude Code
+  --version, -v, -V # Show version number
+  --help, -h # Show this help message
+
+Resources:
+  memory://recent # View the last 8 log entries
+  memory://last # View the very last log entry with full details
+  memory://stats # View statistics about your logs
+
+Tools:
+  search_logs(query) # Search for specific topics or errors in your history
+  get_task_history(taskName) # Get all logs related to a specific task
+
+Prompts:
+  recent_work # A prompt template to summarize recent activities
+  learned # Review past mistakes and lessons learned to avoid repeating them`;
 		console.log(_helpText);
 		return;
 	}

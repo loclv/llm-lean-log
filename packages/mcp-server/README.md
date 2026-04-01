@@ -114,6 +114,9 @@ Example User Prompts:
 - "Show me the last 50 log entries to see what I've been working on recently"
 - "What are my project statistics? How many entries do I have and what tags have I used?"
 - "What was the very last thing I worked on?"
+- "up"
+- "recent_work"
+- "learned"
 
 ### Tools
 
@@ -153,7 +156,7 @@ How it runs: This script is triggered automatically by your package manager (`bu
 Example output during installation:
 
 ```text
-✨ l-log-mcp-server summary:
+l-log-mcp-server summary:
 To use this with OpenCode, add the following to your ~/.opencode.json:
 {
   "mcp": {
