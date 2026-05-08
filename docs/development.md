@@ -237,8 +237,8 @@ The visualizer uses Vite for development:
 
 ```bash
 cd packages/visualizer
-bun run dev      # Development
-bun run build     # Production build
+bun run dev # Development
+bun run build # Production build
 ```
 
 ## Testing
@@ -246,7 +246,6 @@ bun run build     # Production build
 ### Test Structure
 
 Test files are named `*.test.ts` and placed in the same directory as the source file they test.
-
 Example:
 
 ```text
@@ -373,7 +372,6 @@ bun publish
 ```
 
 Note: You may need to update the version in `package.json` before publishing.
-
 See `docs/public.md` for more details.
 
 ## Development Tools
@@ -381,7 +379,6 @@ See `docs/public.md` for more details.
 ### Recommended VS Code Extensions
 
 Install from `.vscode/extensions.json`:
-
 - `DavidAnson.vscode-markdownlint` - Markdown linting
 - `biomejs.biome` - Code formatting and linting
 - `oven-sh.bun` - Bun runtime support
