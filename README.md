@@ -408,6 +408,7 @@ This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) 
 - [Project Structure](./docs/project-strcture.md) - Overview of project structure
 - [Graph](./docs/graph.md) - Basic workflow diagram
 - [Public](./docs/public.md) - How to publish packages
+- [Improvement Ideals](./docs/improvement-ideals.md) - Long-term vision and improvement ideas
 - [Release](./docs/release.md) - Release process and changelog format
 
 ### 💻 Use with VS Code base editor
