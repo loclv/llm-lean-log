@@ -21,6 +21,7 @@ export function sanitizeFilename(str: string): string {
 export function formatLogEntryForMarkdown(
 	entry: LogEntry,
 	allEntries: LogEntry[] = [],
+	diff?: string,
 ): string {
 	const tags = entry.tags
 		? entry.tags.split(",").map((t) => t.trim())
@@ -102,6 +103,13 @@ export function formatLogEntryForMarkdown(
 			}
 			content += "\n";
 		}
+	}
+
+	if (diff) {
+		content += "## Git Diff\n";
+		content += "```diff\n";
+		content += `${diff}\n`;
+		content += "```\n\n";
 	}
 
 	return (frontmatter + content).trim() + "\n";

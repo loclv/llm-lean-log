@@ -199,9 +199,23 @@ export async function main(version: string) {
 				const outputDir = vaultPath.endsWith("/Logs/LLM") ? vaultPath : `${vaultPath}/Logs/LLM`;
 				mkdirIfNotExists(outputDir);
 
+				const diffDir = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
+
 				for (const entry of entries) {
 					const filename = `${getMarkdownFilename(entry)}.md`;
-					const content = formatLogEntryForMarkdown(entry, entries);
+					let diffContent: string | undefined;
+
+					try {
+						const diffPath = `${diffDir}/${entry.id}.diff`;
+						const diffFile = Bun.file(diffPath);
+						if (await diffFile.exists()) {
+							diffContent = await diffFile.text();
+						}
+					} catch (e) {
+						// Ignore errors reading diff
+					}
+
+					const content = formatLogEntryForMarkdown(entry, entries, diffContent);
 					await Bun.write(`${outputDir}/${filename}`, content);
 				}
 

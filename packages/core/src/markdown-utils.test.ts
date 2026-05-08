@@ -90,5 +90,19 @@ describe("markdown-utils", () => {
 			expect(output.endsWith("\n")).toBe(true);
 			expect(output.endsWith("\n\n")).toBe(false);
 		});
+
+		it("should include git diff if provided", () => {
+			const entry: LogEntry = {
+				id: "1",
+				name: "Test",
+				problem: "P",
+				"created-at": "2026-05-08T12:00:00Z",
+			};
+			const diff = "--- a/file.ts\n+++ b/file.ts\n+ console.log('hello');";
+			const output = formatLogEntryForMarkdown(entry, [], diff);
+			expect(output).toContain("## Git Diff");
+			expect(output).toContain("```diff");
+			expect(output).toContain(diff);
+		});
 	});
 });

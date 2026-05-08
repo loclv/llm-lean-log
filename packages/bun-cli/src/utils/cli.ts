@@ -10,6 +10,8 @@ import {
 	loadLogs,
 	saveLogs,
 	searchLogs,
+	formatLogEntryForMarkdown,
+	getMarkdownFilename,
 } from "llm-lean-log-core";
 import { helpText, helpTextForHuman } from "./const";
 import { getLogFolderPathFromLogFilePath, mkdirIfNotExists } from "./files";
@@ -186,6 +188,50 @@ export async function main(
 			}
 
 			console.log("Log entry added successfully");
+			break;
+		}
+		case "export": {
+			const subCommand = args[paramStart];
+			if (subCommand === "md" || subCommand === "markdown" || subCommand === "obsidian") {
+				const findFlag = (flag: string): string | undefined => {
+					const arg = args.find((a) => a.startsWith(`${flag}=`));
+					return arg ? arg.split("=")[1] : undefined;
+				};
+
+				const vaultPath = findFlag("--vault") || findFlag("--path") || findFlag("--out");
+				if (!vaultPath) {
+					console.error("Error: Please provide output path with --vault=<path> or --path=<path>");
+					process.exit(1);
+				}
+
+				const outputDir = vaultPath.endsWith("/Logs/LLM") ? vaultPath : `${vaultPath}/Logs/LLM`;
+				mkdirIfNotExists(outputDir);
+
+				const diffDir = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
+
+				for (const entry of entries) {
+					const filename = `${getMarkdownFilename(entry)}.md`;
+					let diffContent: string | undefined;
+
+					try {
+						const diffPath = `${diffDir}/${entry.id}.diff`;
+						const diffFile = Bun.file(diffPath);
+						if (await diffFile.exists()) {
+							diffContent = await diffFile.text();
+						}
+					} catch (e) {
+						// Ignore errors reading diff
+					}
+
+					const content = formatLogEntryForMarkdown(entry, entries, diffContent);
+					await Bun.write(`${outputDir}/${filename}`, content);
+				}
+
+				console.log(`Exported ${entries.length} logs to ${outputDir}`);
+			} else {
+				console.error(`Error: Unknown export target "${subCommand}"`);
+				process.exit(1);
+			}
 			break;
 		}
 		case "help":
