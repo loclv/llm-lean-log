@@ -33,6 +33,8 @@ mock.module("llm-lean-log-core", () => ({
 	addLogEntry: mockAddLogEntry,
 	filterByTags: mock(() => []),
 	searchLogs: mock(() => []),
+	formatLogEntryForMarkdown: mock(() => "markdown content"),
+	getMarkdownFilename: mock((entry: any) => "filename"),
 }));
 
 // Mock visualizer utilities
@@ -480,5 +482,89 @@ describe("CLI", () => {
 		expect(consoleLogSpy).toHaveBeenCalledWith(
 			"Git diff saved to ./logs/diff/test-id-explicit-diff.diff",
 		);
+	});
+
+	describe("export command", () => {
+		it("should export logs to markdown with 'export md' command", async () => {
+			const { loadLogs, formatLogEntryForMarkdown, getMarkdownFilename } = core as any;
+			loadLogs.mockResolvedValueOnce([
+				{ id: "1", name: "test", problem: "p", "created-at": "2024-01-01" },
+			]);
+			getMarkdownFilename.mockReturnValueOnce("2024-01-01-test");
+			formatLogEntryForMarkdown.mockReturnValueOnce("markdown content");
+
+			await runCommand(["export", "md", "--vault=./test-vault"]);
+
+			expect(loadLogs).toHaveBeenCalled();
+			expect(formatLogEntryForMarkdown).toHaveBeenCalled();
+			expect(bunWriteSpy).toHaveBeenCalledWith(
+				expect.stringContaining("test-vault/Logs/LLM/2024-01-01-test.md"),
+				"markdown content",
+			);
+			expect(consoleLogSpy).toHaveBeenCalledWith(
+				expect.stringContaining("Exported 1 logs to ./test-vault/Logs/LLM"),
+			);
+		});
+
+		it("should include diff content in export if diff file exists", async () => {
+			const { loadLogs, formatLogEntryForMarkdown, getMarkdownFilename } = core as any;
+			loadLogs.mockResolvedValueOnce([
+				{ id: "diff-id", name: "test", problem: "p", "created-at": "2024-01-01" },
+			]);
+			getMarkdownFilename.mockReturnValueOnce("2024-01-01-test");
+			formatLogEntryForMarkdown.mockReturnValueOnce("markdown with diff");
+
+			// Mock Bun.file().exists() to return true and text() to return diff content
+			bunFileSpy.mockImplementation((path: string) => {
+				if (path.endsWith("diff-id.diff")) {
+					return {
+						exists: () => Promise.resolve(true),
+						text: () => Promise.resolve("git diff content"),
+					} as any;
+				}
+				return {
+					exists: () => Promise.resolve(false),
+				} as any;
+			});
+
+			await runCommand(["export", "md", "--vault=./test-vault"]);
+
+			expect(formatLogEntryForMarkdown).toHaveBeenCalledWith(
+				expect.any(Object),
+				expect.any(Array),
+				"git diff content",
+			);
+			expect(bunWriteSpy).toHaveBeenCalledWith(
+				expect.stringContaining("test-vault/Logs/LLM/2024-01-01-test.md"),
+				"markdown with diff",
+			);
+		});
+
+		it("should show error and exit if vault path is missing", async () => {
+			const { loadLogs } = core as any;
+			loadLogs.mockResolvedValueOnce([{ id: "1" }]);
+
+			try {
+				await runCommand(["export", "md"]);
+			} catch (e: any) {
+				expect(e.message).toBe("process.exit(1)");
+			}
+
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				expect.stringContaining("Please provide output path"),
+			);
+		});
+
+		it("should show error and exit for unknown export target", async () => {
+			try {
+				await runCommand(["export", "unknown"]);
+			} catch (e: any) {
+				expect(e.message).toBe("process.exit(1)");
+			}
+
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				expect.stringContaining('Unknown export target "unknown"'),
+			);
+		});
 	});
 });

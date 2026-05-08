@@ -2,11 +2,19 @@
 
 All notable changes to the `llm-lean-log-core` package will be documented in this file.
 
+## [0.2.6] - 2026-05-08
+
+### Added
+
+- Markdown Export: Added support for exporting logs to Markdown format (Obsidian style)
+- Git Diff Support: Included associated git diffs in Markdown exports for better code change visibility
+- Linking: Added automatic internal linking (`[[filename|title]]`) between logs in Markdown exports based on `causeIds` and `effectIds`
+
 ## [0.2.5] - 2026-01-22
 
 ### ⚠️ BREAKING CHANGES
 
-- **Package Structure**: CLI source code moved from core package to dedicated CLI package
+- Package Structure: CLI source code moved from core package to dedicated CLI package
 
 ### Changed
 
@@ -24,7 +32,7 @@ All notable changes to the `llm-lean-log-core` package will be documented in thi
 
 ### ⚠️ BREAKING CHANGES
 
-- **Dependency Management**: Updated CLI package dependency from `workspace:*` to explicit version `^0.2.0` for proper publishing
+- Dependency Management: Updated CLI package dependency from `workspace:*` to explicit version `^0.2.0` for proper publishing
 
 ### Added
 
@@ -36,8 +44,8 @@ All notable changes to the `llm-lean-log-core` package will be documented in thi
 
 - Updated CLI package dependency to use explicit version constraint
 - Standardized release process with changelog integration
-- **Release Workflow Integration**: Enhanced release workflow now requires CHANGELOG.md updates for version-specific content
-- **Publishing Process**: Automated npm publishing now enabled in GitHub Actions workflow
+- Release Workflow Integration: Enhanced release workflow now requires CHANGELOG.md updates for version-specific content
+- Publishing Process: Automated npm publishing now enabled in GitHub Actions workflow
 
 ## [0.1.7] - 2026-01-14
 

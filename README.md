@@ -280,6 +280,8 @@ l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem descriptio
 
 # Export logs to Markdown files (Obsidian style)
 l-log export md ./logs/chat.csv --vault=./my-vault
+
+> 💡 The export command automatically includes associated git diffs and creates internal links (`[[link]]`) between logs based on their causal relationships.
 ```
 
 For human users viewing logs with `--human` option:

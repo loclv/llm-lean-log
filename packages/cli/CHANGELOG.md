@@ -2,38 +2,47 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.12] - 2026-05-08
+
+### Added
+
+- Markdown Export: Added `export md` command to export logs to Markdown format
+- Markdown Export: Added aliases `markdown` and `obsidian` for the export command
+- Git Diff Support: Automatically includes associated `.diff` files in Markdown exports
+- Flexible Path Flags: Added support for `--vault`, `--path`, and `--out` flags to specify the output directory
+
 ## [0.2.11] - 2026-03-01
 
 ### Added
 
-- **Git Diff Control**: Added `--diff` flag to explicitly enable saving git diff file
-- **Git Diff Control**: Added `--no-diff` flag to `add` command to skip saving git diff file
-- **Git Diff Control**: Check if git diff is empty before saving, if it is, skip saving
+- Git Diff Control: Added `--diff` flag to explicitly enable saving git diff file
+- Git Diff Control: Added `--no-diff` flag to `add` command to skip saving git diff file
+- Git Diff Control: Check if git diff is empty before saving, if it is, skip saving
 
 ## [0.2.10] - 2026-03-01
 
 ### Added
 
-- **Git Diff Control**: Added `--no-diff` flag to `add` command to skip saving git diff file
+- Git Diff Control: Added `--no-diff` flag to `add` command to skip saving git diff file
 
 ## [0.2.9] - 2026-01-24
 
 ### Added
 
-- **Git Integration**: Added git diff auto-save feature
+- Git Integration: Added git diff auto-save feature
 
 ## [0.2.8] - 2026-01-22
 
 ### Added
 
-- **Release Automation**: Added Zig-based release script (`scripts/release.zig`) for automated version management
+- Release Automation: Added Zig-based release script (`scripts/release.zig`) for automated version management
   - Automatic version increment in `package.json`
   - Version synchronization with TypeScript constants
   - Automated build and test validation
   - Git commit and tag creation with semantic versioning
   - Integration with npm publishing workflow
 
-- **Git Integration**: Enhanced `last-commit-short-sha` field with automatic population
+- Git Integration: Enhanced `last-commit-short-sha` field with automatic population
   - Auto-populates git short SHA when not explicitly provided via `--last-commit-short-sha` flag
   - Uses `git rev-parse --short HEAD` command to retrieve current commit SHA
   - Gracefully handles non-git repositories and git command failures
@@ -41,7 +50,7 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 
 ### Changed
 
-- **Release Process**: Enhanced release workflow with comprehensive automation
+- Release Process: Enhanced release workflow with comprehensive automation
   - Version bumping now handled programmatically
   - Consistent commit message formatting (`chore: release mcp-server-v{version}`)
   - Automated tag creation and pushing to GitHub
@@ -50,28 +59,27 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 
 ### Changed
 
-- **Dependency Management**: Updated build to include `llm-lean-log-core` in bundle and removed peer dependency on `typescript`
+- Dependency Management: Updated build to include `llm-lean-log-core` in bundle and removed peer dependency on `typescript`
 
 ## [0.2.6] - 2026-01-18
 
 ### Fixed
 
-- **Build Configuration**: Fixed __require error in bundled CLI by using external dependencies
-- **Package Import**: Replaced JSON import with fs-based reading to avoid bundling issues
-- **Dependency Management**: Updated build to exclude llm-lean-log-core from bundle
+- Build Configuration: Fixed __require error in bundled CLI by using external dependencies
+- Package Import: Replaced JSON import with fs-based reading to avoid bundling issues
+- Dependency Management: Updated build to exclude llm-lean-log-core from bundle
 
 ### Changed
 
-- **Build Process**: Now uses --external flag for core dependency
+- Build Process: Now uses --external flag for core dependency
 
 ## [0.2.4] - 2026-01-18
 
 ### Changed
 
-- **Build Optimization**: Improved build script to output a single bundled file
-
+- Build Optimization: Improved build script to output a single bundled file
 | Option | Before | After |
-|--------|--------|-------|
+|---|---|---|
 | Output | `--outdir dist` (directory) | `--outfile dist/index.js` (single file) |
 | Target | `--target node` | `--target node` |
 | Minify | ❌ | `--minify` ✅ |
@@ -79,7 +87,7 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 
 ### Added
 
-- **LLM-Optimized Help Output**: Default help output is now in CSV format for better LLM consumption
+- LLM-Optimized Help Output: Default help output is now in CSV format for better LLM consumption
   - Added `--human` flag to show human-readable format for help command
   - CSV format includes columns: `command`, `options`, `description` for easy parsing
 
@@ -89,7 +97,7 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 
 ### Changed
 
-- **Help Text Updates**: Enhanced CLI help documentation with improved parameter descriptions
+- Help Text Updates: Enhanced CLI help documentation with improved parameter descriptions
   - Updated `--files` parameter description to "Comma-separated files paths"
   - Updated `--causeIds` and `--effectIds` to specify "Comma-separated cause/effect log row UUIDs"
   - Restored "Examples for LLMs:" section title for clarity
@@ -100,11 +108,11 @@ All notable changes to the `llm-lean-log-cli` package will be documented in this
 
 ### ⚠️ BREAKING CHANGES
 
-- **Dependency Update**: Updated core dependency to explicit version `^0.2.0` for proper publishing
+- Dependency Update: Updated core dependency to explicit version `^0.2.0` for proper publishing
 
 ### Changed
 
-- **Release Process**: Now follows enhanced release workflow with CHANGELOG.md integration
+- Release Process: Now follows enhanced release workflow with CHANGELOG.md integration
 - Updated dependency on `llm-lean-log-core` to version 0.2.0
 
 ## [0.1.8] - 2026-01-14

@@ -1,12 +1,18 @@
 # Changelog - llm-lean-log
 
 This project is a monorepo containing multiple packages. For detailed changes, please see the individual package changelogs:
-
 - [`llm-lean-log-core`](./packages/core/CHANGELOG.md)
 - [`llm-lean-log-cli`](./packages/cli/CHANGELOG.md)
 - [`l-log-vis`](./packages/visualizer/CHANGELOG.md)
 - [`l-log-mcp`](./packages/mcp-server/CHANGELOG.md)
 - [`l-log-mcp-server`](./packages/mcp-server/CHANGELOG.md)
+
+## v0.2.7 - May 8, 2026
+
+- Introduced `export md` command to export logs to tool-agnostic Markdown format (supporting Obsidian, Logseq, etc.)
+- Integrated git diff inclusion in Markdown exports for comprehensive session history
+- Added cross-linking support in Markdown files based on log causal relationships
+- Updated documentation and added comprehensive unit tests for export functionality
 
 ## v0.2.6 - January 19, 2026
 
