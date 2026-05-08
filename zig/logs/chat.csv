@@ -1,0 +1,4 @@
+id,name,tags,problem,solution,action,files,tech-stack,cause,causeIds,effectIds,last-commit-short-sha,created-at,updated-at,model,created-by-agent
+"409a53b9-6eea-4435-a990-d68d1d3c581b","Default Log",,"Testing default log path",,,,,,,,,"2026-05-08T05:03:30Z","2026-05-08T05:03:30Z",,"ZigAgent"
+"29ba16d1-cb30-4c8d-94b2-90f8fad9febb","Test Entry","test,zig","This is a test",,,,,,,,,"2026-05-08T05:29:20Z","2026-05-08T05:29:20Z",,"ZigAgent"
+"806b9759-0280-4455-b7c9-82bc0d22a63f","Modular Add",,"Testing modularized add command",,,,,,,,,"2026-05-08T05:41:50Z","2026-05-08T05:41:50Z",,"ZigAgent"

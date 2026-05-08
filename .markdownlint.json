@@ -3,5 +3,10 @@
 	"MD024": false,
 	"MD029": false,
 	"no-inline-html": false,
-	"table-column-style": false
+	"table-column-style": false,
+	"MD033": false,
+	"blanks-around-lists": false,
+	"blanks-around-fences": false,
+	"blanks-around-headings": false,
+	"blanks-around-tables": false
 }
