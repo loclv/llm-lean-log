@@ -46,4 +46,9 @@ export {
 	searchLogs,
 	updateLogEntry,
 } from "./logger";
+export {
+	formatLogEntryForMarkdown,
+	getMarkdownFilename,
+	sanitizeFilename,
+} from "./markdown-utils";
 export type { LogEntry } from "./types";

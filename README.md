@@ -277,6 +277,9 @@ l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem descriptio
 
 # Add a new log entry and explicitly save git diff (default behavior)
 l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --diff
+
+# Export logs to Markdown files (Obsidian style)
+l-log export md ./logs/chat.csv --vault=./my-vault
 ```
 
 For human users viewing logs with `--human` option:

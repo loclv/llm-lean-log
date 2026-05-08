@@ -13,6 +13,7 @@ search <query>,--human,Search logs by name/problem/solution
 tags <tag1> [tag2],--human,Filter logs by tags
 add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>,--diff|--no-diff",Add a new log entry
 help|-h|--help,--human,Show this help message
+export md,--vault=<path>,Export logs to Markdown files (Obsidian style)
 -v|-V|--version,,Show version number
 
 examples
@@ -65,8 +66,10 @@ Commands:
     --diff | Save git diff file (default: true)
     --no-diff | Skip saving git diff file
   
-  help, -h, --help | Show this help message
     --human | Show human-readable output (default for terminal)
+  
+  export md | Export logs to Markdown files (Obsidian style)
+    --vault=<path> | Path to Markdown vault (e.g. Obsidian)
 
   -v, -V, --version | Show version number
 

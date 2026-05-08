@@ -8,12 +8,12 @@ To support multiple platforms, we should implement a generic sync layer in `pack
 - State Tracking: A local file (e.g., `.log-sync.json`) to track which CSV rows have been successfully synced to which platforms and their external IDs.
 - Transformers: Functions that convert a `LogEntry` into the specific format required by the target platform (Markdown, Notion JSON, etc.).
 
-## 2. Obsidian Integration (Local Markdown)
+## 2. Markdown Integration (Generic / Obsidian style)
 
-Obsidian is local-first and uses Markdown. The goal is to turn each log entry into a searchable, linkable note.
+Markdown is the universal format for knowledge management. The goal is to turn each log entry into a searchable, linkable note that works with Obsidian, Logseq, and other tools.
 
 ### Implementation Path:
-- CLI Command: `l-log export obsidian --vault /path/to/vault`
+- CLI Command: `l-log export md --vault /path/to/vault`
 - File Structure:
   - Store logs in a dedicated folder: `Logs/LLM/`.
   - Filename format: `YYYY-MM-DD-task-name.md`.
@@ -57,6 +57,6 @@ For tools like Slack, Discord, or custom internal dashboards:
 
 ## 5. Next Steps for Implementation
 
-1. Phase 1: Implement `l-log export obsidian` as it's the easiest to build (just file writing).
+1. Phase 1: Implement `l-log export md` as it's the easiest to build (just file writing).
 2. Phase 2: Create the sync state tracking logic to support incremental updates.
 3. Phase 3: Build the Notion integration using the `@notionhq/client` library.

@@ -183,6 +183,14 @@ If the AI agent forgets to write the log, you can remind it with:
 
 The efficient approach is better because the AI agent doesn't need to read the entire CSV file before it can write a new log entry. This saves time, tokens, and energy.
 
+## Exporting Logs to Markdown
+
+You can export your logs to Markdown files (e.g., for Obsidian) using the `export md` command:
+
+> run `l-log export md ./logs/chat.csv --vault=./my-vault` CLI
+
+This will create a `Logs/LLM/` directory in your vault and populate it with Markdown notes for each log entry.
+
 ## Agent Rules Reference
 
 ### Functional Programming

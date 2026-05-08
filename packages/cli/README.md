@@ -37,6 +37,9 @@ l-log tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+
+# Export logs to Markdown files (Obsidian style)
+l-log export md ./logs/example.csv --vault=./my-vault
 ```
 
 For human users viewing logs:
