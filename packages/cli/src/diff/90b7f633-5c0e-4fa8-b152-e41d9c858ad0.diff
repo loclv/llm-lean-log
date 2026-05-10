@@ -1,0 +1,40 @@
+diff --git a/packages/cli/CHANGELOG.md b/packages/cli/CHANGELOG.md
+index a7dd1e7..c32a208 100644
+--- a/packages/cli/CHANGELOG.md
++++ b/packages/cli/CHANGELOG.md
+@@ -2,6 +2,13 @@
+ 
+ All notable changes to the `llm-lean-log-cli` package will be documented in this file.
+ 
++## [0.2.14] - 2026-05-10
++
++### Changed
++
++- Release Process: Improved path robustness and error handling in release scripts
++- Code Quality: Migrated memory operations to use @memmove for safety
++
+ ## [0.2.13] - 2026-05-10
+ 
+ ### Added
+diff --git a/packages/cli/package.json b/packages/cli/package.json
+index 8cd3aff..fc88820 100644
+--- a/packages/cli/package.json
++++ b/packages/cli/package.json
+@@ -1,6 +1,6 @@
+ {
+ 	"name": "llm-lean-log-cli",
+-	"version": "0.2.13",
++	"version": "0.2.14",
+ 	"description": "CLI tool for llm-lean-log",
+ 	"scripts": {
+ 		"cli": "bun run src/index.ts",
+diff --git a/packages/cli/src/utils/const.ts b/packages/cli/src/utils/const.ts
+index 8821e97..fce9b10 100644
+--- a/packages/cli/src/utils/const.ts
++++ b/packages/cli/src/utils/const.ts
+@@ -1,4 +1,4 @@
+-export const VERSION = "0.2.13";
++export const VERSION = "0.2.14";
+ 
+ /**
+  * Help text for LLMs in CSV format

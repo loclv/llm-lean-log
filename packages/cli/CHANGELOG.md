@@ -2,6 +2,12 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.16] - 2026-05-11
+
+### Fixed
+
+- Release Process: Fixed Zig 0.16.0 compilation error in release script
+
 ## [0.2.15] - 2026-05-10
 
 ### Changed

@@ -1,0 +1,39 @@
+diff --git a/packages/cli/CHANGELOG.md b/packages/cli/CHANGELOG.md
+index ed2601d..280c11d 100644
+--- a/packages/cli/CHANGELOG.md
++++ b/packages/cli/CHANGELOG.md
+@@ -2,6 +2,12 @@
+ 
+ All notable changes to the `llm-lean-log-cli` package will be documented in this file.
+ 
++## [0.2.16] - 2026-05-11
++
++### Fixed
++
++- Release Process: Fixed Zig 0.16.0 compilation error in release script
++
+ ## [0.2.15] - 2026-05-10
+ 
+ ### Changed
+diff --git a/packages/cli/package.json b/packages/cli/package.json
+index 9d15ea5..7c73fb1 100644
+--- a/packages/cli/package.json
++++ b/packages/cli/package.json
+@@ -1,6 +1,6 @@
+ {
+ 	"name": "llm-lean-log-cli",
+-	"version": "0.2.15",
++	"version": "0.2.16",
+ 	"description": "CLI tool for llm-lean-log",
+ 	"scripts": {
+ 		"cli": "bun run src/index.ts",
+diff --git a/packages/cli/src/utils/const.ts b/packages/cli/src/utils/const.ts
+index a88cb6f..6e02dda 100644
+--- a/packages/cli/src/utils/const.ts
++++ b/packages/cli/src/utils/const.ts
+@@ -1,4 +1,4 @@
+-export const VERSION = "0.2.15";
++export const VERSION = "0.2.16";
+ 
+ /**
+  * Help text for LLMs in CSV format
