@@ -1,4 +1,4 @@
-export const VERSION = "0.2.11";
+export const VERSION = "0.2.12";
 
 /**
  * Help text for LLMs in CSV format
