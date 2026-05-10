@@ -1,0 +1,39 @@
+diff --git a/packages/bun-cli/CHANGELOG.md b/packages/bun-cli/CHANGELOG.md
+index 0dee259..2933684 100644
+--- a/packages/bun-cli/CHANGELOG.md
++++ b/packages/bun-cli/CHANGELOG.md
+@@ -2,6 +2,12 @@
+ 
+ All notable changes to the `bl-log` package will be documented in this file.
+ 
++## [0.2.14] - 2026-05-11
++
++### Improvements
++
++- Update rules, skills's command explanation and README.md
++
+ ## [0.2.12] - 2026-05-10
+ 
+ ### Added
+diff --git a/packages/bun-cli/package.json b/packages/bun-cli/package.json
+index 2d7b8e5..712dd3c 100644
+--- a/packages/bun-cli/package.json
++++ b/packages/bun-cli/package.json
+@@ -1,6 +1,6 @@
+ {
+ 	"name": "bl-log",
+-	"version": "0.2.12",
++	"version": "0.2.14",
+ 	"description": "CLI tool for llm-lean-log and Bun only",
+ 	"scripts": {
+ 		"cli": "bun run src/index.ts",
+diff --git a/packages/bun-cli/src/utils/const.ts b/packages/bun-cli/src/utils/const.ts
+index cfd843f..3c3fa5d 100644
+--- a/packages/bun-cli/src/utils/const.ts
++++ b/packages/bun-cli/src/utils/const.ts
+@@ -1,4 +1,4 @@
+-export const VERSION = "0.2.12";
++export const VERSION = "0.2.14";
+ 
+ /**
+  * Help text for LLMs in CSV format

@@ -2,6 +2,12 @@
 
 All notable changes to the `bl-log` package will be documented in this file.
 
+## [0.2.14] - 2026-05-11
+
+### Improvements
+
+- Update rules, skills's command explanation and README.md
+
 ## [0.2.12] - 2026-05-10
 
 ### Added
