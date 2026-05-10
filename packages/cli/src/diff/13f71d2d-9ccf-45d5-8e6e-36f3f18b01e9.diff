@@ -1,0 +1,115 @@
+diff --git a/packages/cli/package.json b/packages/cli/package.json
+index 31bc308..f9c23ee 100644
+--- a/packages/cli/package.json
++++ b/packages/cli/package.json
+@@ -1,6 +1,6 @@
+ {
+ 	"name": "llm-lean-log-cli",
+-	"version": "0.2.9",
++	"version": "0.2.10",
+ 	"description": "CLI tool for llm-lean-log",
+ 	"scripts": {
+ 		"cli": "bun run src/index.ts",
+diff --git a/packages/cli/release.md b/packages/cli/release.md
+index 4febd42..69fc4ac 100644
+--- a/packages/cli/release.md
++++ b/packages/cli/release.md
+@@ -9,9 +9,6 @@ mkdir -p build
+ # Build the script.
+ zig build-exe ../packages/cli/scripts/release.zig -femit-bin=../packages/cli/build/release
+ 
+-# Update version in `packages/cli/package.json`.
+-zig run ../packages/cli/scripts/release.zig
+-
+ # Run the script.
+ ../packages/cli/build/release
+ ```
+diff --git a/packages/cli/scripts/release.zig b/packages/cli/scripts/release.zig
+index 52bdc9d..d94f2da 100644
+--- a/packages/cli/scripts/release.zig
++++ b/packages/cli/scripts/release.zig
+@@ -90,7 +90,13 @@ fn isCommandAvailable(allocator: std.mem.Allocator, io: std.Io, environ_map: *st
+ 
+ /// Update version in TypeScript const file
+ fn updateConstVersion(io: std.Io, allocator: std.mem.Allocator, new_version: []const u8) !void {
+-    const contents = try readFileContents(io, allocator, "src/utils/const.ts");
++    const contents = readFileContents(io, allocator, "src/utils/const.ts") catch |err| switch (err) {
++        error.FileNotFound => {
++            std.log.err("src/utils/const.ts not found", .{});
++            return error.FileNotFound;
++        },
++        else => return err,
++    };
+     defer allocator.free(contents);
+ 
+     // Find and replace version in the TypeScript file
+@@ -112,11 +118,11 @@ fn updateConstVersion(io: std.Io, allocator: std.mem.Allocator, new_version: []c
+     defer allocator.free(new_contents);
+ 
+     // Copy before version
+-    @memcpy(new_contents[0..start_idx], contents[0..start_idx]);
++    @memmove(new_contents[0..start_idx], contents[0..start_idx]);
+     // Copy new version
+-    @memcpy(new_contents[start_idx .. start_idx + new_version.len], new_version);
++    @memmove(new_contents[start_idx .. start_idx + new_version.len], new_version);
+     // Copy after version
+-    @memcpy(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
++    @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
+ 
+     // Write new contents to the TypeScript file
+     {
+@@ -129,7 +135,13 @@ fn updateConstVersion(io: std.Io, allocator: std.mem.Allocator, new_version: []c
+ 
+ /// Check if CHANGELOG.md contains the new version
+ fn checkChangelog(io: std.Io, allocator: std.mem.Allocator, version: []const u8) !void {
+-    const contents = try readFileContents(io, allocator, "CHANGELOG.md");
++    const contents = readFileContents(io, allocator, "CHANGELOG.md") catch |err| switch (err) {
++        error.FileNotFound => {
++            std.log.err("CHANGELOG.md not found", .{});
++            return error.FileNotFound;
++        },
++        else => return err,
++    };
+     defer allocator.free(contents);
+ 
+     const version_pattern = try std.fmt.allocPrint(allocator, "## [{s}]", .{version});
+@@ -145,7 +157,13 @@ fn checkChangelog(io: std.Io, allocator: std.mem.Allocator, version: []const u8)
+ 
+ /// Read package.json and update version
+ fn updatePackageVersion(io: std.Io, allocator: std.mem.Allocator) ![]const u8 {
+-    const contents = try readFileContents(io, allocator, "package.json");
++    const contents = readFileContents(io, allocator, "package.json") catch |err| switch (err) {
++        error.FileNotFound => {
++            std.log.err("package.json not found", .{});
++            return error.FileNotFound;
++        },
++        else => return err,
++    };
+     defer allocator.free(contents);
+ 
+     var parsed = try json.parseFromSlice(json.Value, allocator, contents, .{});
+@@ -186,11 +204,11 @@ fn updatePackageVersion(io: std.Io, allocator: std.mem.Allocator) ![]const u8 {
+     defer allocator.free(new_contents);
+ 
+     // Copy before version
+-    @memcpy(new_contents[0..start_idx], contents[0..start_idx]);
++    @memmove(new_contents[0..start_idx], contents[0..start_idx]);
+     // Copy new version
+-    @memcpy(new_contents[start_idx .. start_idx + new_version.len], new_version);
++    @memmove(new_contents[start_idx .. start_idx + new_version.len], new_version);
+     // Copy after version
+-    @memcpy(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
++    @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
+ 
+     // Write new package.json
+     {
+diff --git a/packages/cli/src/utils/const.ts b/packages/cli/src/utils/const.ts
+index b85a72d..b6a46e1 100644
+--- a/packages/cli/src/utils/const.ts
++++ b/packages/cli/src/utils/const.ts
+@@ -1,4 +1,4 @@
+-export const VERSION = "0.2.9";
++export const VERSION = "0.2.10";
+ 
+ /**
+  * Help text for LLMs in CSV format

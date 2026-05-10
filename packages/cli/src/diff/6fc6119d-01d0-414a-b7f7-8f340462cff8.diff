@@ -1,0 +1,40 @@
+diff --git a/packages/cli/package.json b/packages/cli/package.json
+index f9c23ee..8cd3aff 100644
+--- a/packages/cli/package.json
++++ b/packages/cli/package.json
+@@ -1,6 +1,6 @@
+ {
+ 	"name": "llm-lean-log-cli",
+-	"version": "0.2.10",
++	"version": "0.2.13",
+ 	"description": "CLI tool for llm-lean-log",
+ 	"scripts": {
+ 		"cli": "bun run src/index.ts",
+diff --git a/packages/cli/release.md b/packages/cli/release.md
+index 4febd42..9cae50e 100644
+--- a/packages/cli/release.md
++++ b/packages/cli/release.md
+@@ -9,11 +9,9 @@ mkdir -p build
+ # Build the script.
+ zig build-exe ../packages/cli/scripts/release.zig -femit-bin=../packages/cli/build/release
+ 
+-# Update version in `packages/cli/package.json`.
+-zig run ../packages/cli/scripts/release.zig
+-
+ # Run the script.
+-../packages/cli/build/release
++cd ../packages/cli
++./build/release
+ ```
+ 
+ Read more at `scripts/release.zig`.
+diff --git a/packages/cli/src/utils/const.ts b/packages/cli/src/utils/const.ts
+index b6a46e1..8821e97 100644
+--- a/packages/cli/src/utils/const.ts
++++ b/packages/cli/src/utils/const.ts
+@@ -1,4 +1,4 @@
+-export const VERSION = "0.2.10";
++export const VERSION = "0.2.13";
+ 
+ /**
+  * Help text for LLMs in CSV format

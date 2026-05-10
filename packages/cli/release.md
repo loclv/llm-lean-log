@@ -9,11 +9,15 @@ mkdir -p build
 # Build the script.
 zig build-exe ../packages/cli/scripts/release.zig -femit-bin=../packages/cli/build/release
 
-# Update version in `packages/cli/package.json`.
-zig run ../packages/cli/scripts/release.zig
-
 # Run the script.
-../packages/cli/build/release
+cd ../packages/cli
+./build/release
+
+# Build the package.
+bun run build
+
+# Publish to npm.
+bun publish
 ```
 
 Read more at `scripts/release.zig`.
