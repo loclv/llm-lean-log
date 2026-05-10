@@ -1,8 +1,8 @@
-// script to release a new version of the zig package
-// run `zig run scripts/release.zig`
-// Plus 0.0.1 to the version number in build.zig.zon
-// Commit and tag the new version
-// Push the new version to GitHub
+//! script to release a new version of the zig package
+//! run `zig run scripts/release.zig`
+//! Plus 0.0.1 to the version number in build.zig.zon
+//! Commit and tag the new version
+//! Push the new version to GitHub
 
 const std = @import("std");
 const process = std.process;
@@ -37,11 +37,18 @@ fn incrementVersion(allocator: std.mem.Allocator, version: []const u8) ![]const 
 
 /// Execute a command and return output
 fn execCommand(allocator: std.mem.Allocator, io: std.Io, args: []const []const u8) ![]const u8 {
+    // Create environment map with HOME set
+    var environ_map = std.process.Environ.Map.init(allocator);
+    defer environ_map.deinit();
+    try environ_map.put("HOME", "/Users/a0");
+    try environ_map.put("USER", "a0");
+
     const result = try process.run(allocator, io, .{
         .argv = args,
         .stderr_limit = std.Io.Limit.limited(size_1mb),
         .stdout_limit = std.Io.Limit.limited(size_1mb),
         .cwd = .{ .path = "/Users/a0/w/llm-lean-log/zig" },
+        .environ_map = &environ_map,
     });
 
     defer allocator.free(result.stdout);
@@ -137,7 +144,7 @@ fn isCommandAvailable(allocator: std.mem.Allocator, io: std.Io, command: []const
 }
 
 pub fn main() !void {
-    const allocator = std.heap.c_allocator;
+    const allocator = std.heap.page_allocator;
 
     // Create a basic Io instance for standalone use
     var io_state = std.Io.Threaded.init(allocator, .{});
