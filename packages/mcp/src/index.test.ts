@@ -4,7 +4,7 @@ import path from "node:path";
 import { registerMemoryMcpHandlers } from "./index";
 
 describe("MCP Handlers", () => {
-	const testLogPath = path.resolve(process.cwd(), "test-handlers.csv");
+	const testLogPath = path.resolve(process.cwd(), "mocks/test-handlers.csv");
 
 	const setup = () => {
 		fs.writeFileSync(

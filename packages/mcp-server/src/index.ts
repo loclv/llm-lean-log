@@ -1,8 +1,8 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerMemoryMcpHandlers } from "l-log-mcp";
-import { existsSync } from "node:fs";
-import path from "node:path";
 import { MCP_SERVER_VERSION } from "./utils/const";
 
 /**
@@ -82,6 +82,12 @@ Resources:
 Tools:
   search_logs(query) # Search for specific topics or errors in your history
   get_task_history(taskName) # Get all logs related to a specific task
+  get_logs_by_tags(tags) # Filter logs by specific tags (e.g., ['bug', 'fix', 'api'])
+  get_logs_by_date_range(startDate, endDate) # Filter logs by date range
+  get_logs_by_agent(agent) # Filter logs by the agent/LLM that created them
+  get_problem_patterns() # Analyze common problem patterns in the log history
+  get_solution_suggestions(problem) # Get solution suggestions based on similar problems
+  get_log_statistics() # Get detailed statistics about the log history
 
 Prompts:
   recent_work # A prompt template to summarize recent activities

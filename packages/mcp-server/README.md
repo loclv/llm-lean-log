@@ -17,7 +17,6 @@ LLM runtime
 ```
 
 `llm-lean-log` become MCP memory, which gives you:
-
 - auditability (what did the model think last week?)
 - debugging (why did it choose X?)
 - analytics (token burn, drift, behavior change)
@@ -110,7 +109,6 @@ Add this to your Windsurf global settings file at "/Users/user/.codeium/windsurf
 - `memory://last`: View the very last log entry from the project history.
 
 Example User Prompts:
-
 - "Show me the last 50 log entries to see what I've been working on recently"
 - "What are my project statistics? How many entries do I have and what tags have I used?"
 - "What was the very last thing I worked on?"
@@ -122,13 +120,24 @@ Example User Prompts:
 
 - `search_logs(query)`: Search the log history for past problems, solutions, or topics.
 - `get_task_history(taskName)`: Get all log entries related to a specific task name.
+- `get_logs_by_tags(tags)`: Filter logs by specific tags (e.g., ['bug', 'fix', 'api']).
+- `get_logs_by_date_range(startDate, endDate)`: Filter logs by date range.
+- `get_logs_by_agent(agent)`: Filter logs by the agent/LLM that created them.
+- `get_problem_patterns()`: Analyze common problem patterns in the log history.
+- `get_solution_suggestions(problem)`: Get solution suggestions based on similar problems.
+- `get_log_statistics()`: Get detailed statistics about the log history.
 
 Example User Prompts:
-
 - "Search my logs for 'database migration' using llm-memory MCP to see how I handled similar issues before"
 - "Find all entries related to 'authentication system' using llm-memory MCP to understand the development history"
 - "Look up any past 'build errors' using llm-memory MCP to see common solutions"
 - "Look up how I solved 'TypeScript compilation errors' using llm-memory MCP in the past"
+- "Filter logs by tags ['bug', 'fix'] to see all bug fixes"
+- "Get logs from last week using date range filtering"
+- "Show me all work done by 'claude' agent"
+- "What are the common problem patterns in my project?"
+- "Get solution suggestions for 'authentication error'"
+- "Show me detailed statistics about my log history"
 
 ### Prompts
 
@@ -137,7 +146,6 @@ Example User Prompts:
 - `learned`: Review past mistakes and lessons learned to avoid repeating them.
 
 Example User Prompts:
-
 - "up from llm-memory mcp"
 - "recent_work from llm-memory"
 - "learned from llm-memory"
@@ -148,11 +156,9 @@ Example User Prompts:
 ### Postinstall
 
 The package includes a `postinstall` script to streamline the setup process for new users.
-
 Why it's needed: Setting up an MCP server requires specific configuration (like environment variables and command paths) that can be easily overlooked. The postinstall script provides an immediate, copy-paste-able configuration snippet tailored for your client (like OpenCode) right after installation.
 
 How it runs: This script is triggered automatically by your package manager (`bun`, `npm`, or `yarn`) immediately after the global or local installation of `l-log-mcp-server` finishes.
-
 Example output during installation:
 
 ```text
@@ -207,6 +213,12 @@ Use MCP server tools:
 
 - `search_logs(query)` - Find how problems were solved
 - `get_task_history(taskName)` - See feature progression
+- `get_logs_by_tags(tags)` - Filter logs by specific tags
+- `get_logs_by_date_range(startDate, endDate)` - Filter logs by date range
+- `get_logs_by_agent(agent)` - Filter logs by agent/LLM
+- `get_problem_patterns()` - Analyze common problem patterns
+- `get_solution_suggestions(problem)` - Get solution suggestions
+- `get_log_statistics()` - Get detailed statistics
 
 ## Resources
 
@@ -236,12 +248,16 @@ Use the llm-memory MCP server to:
 
 - Search for past solutions: `search_logs("error message or topic")`
 - Get task history: `get_task_history("feature-name")`
+- Filter by tags: `get_logs_by_tags(["bug", "fix"])`
+- Filter by date range: `get_logs_by_date_range("2024-01-01", "2024-01-31")`
+- Filter by agent: `get_logs_by_agent("claude")`
+- Analyze patterns: `get_problem_patterns()`
+- Get suggestions: `get_solution_suggestions("current problem")`
+- Get statistics: `get_log_statistics()`
 - View recent work: access `memory://recent` resource
 - Review lessons learned: use `learned` prompt
 
-When encountering an error, first search logs to see if this problem was solved before.
+When encountering an error, first search logs to see if this problem was solved before. Use pattern analysis to identify common issues and solution suggestions for similar problems.
 ```
-
----
 
 For more details about the core logic, see [mcp/README.md](../mcp/README.md).

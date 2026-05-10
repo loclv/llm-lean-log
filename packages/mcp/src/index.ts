@@ -2,8 +2,14 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { LogEntry } from "llm-lean-log-core";
 import { z } from "zod";
 import {
+	getDetailedStatistics,
+	getEntriesByAgent,
+	getEntriesByDateRange,
+	getEntriesByTags,
 	getEntriesByTask,
 	getLastNEntries,
+	getProblemPatterns,
+	getSolutionSuggestions,
 	loadEntries,
 	searchEntries,
 } from "./data-access.js";
@@ -188,6 +194,150 @@ export const registerMemoryMcpHandlers = (
 		},
 	);
 
+	server.registerTool(
+		"get_logs_by_tags",
+		{
+			description: "Filter logs by specific tags.",
+			inputSchema: {
+				tags: z
+					.array(z.string())
+					.describe(
+						"Array of tags to filter logs by (e.g., ['bug', 'fix', 'api'])",
+					),
+			},
+		},
+		async ({ tags }) => {
+			await refreshCache();
+			const results = getEntriesByTags(logCache, tags);
+			return {
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(results, null, 2),
+					},
+				],
+			};
+		},
+	);
+
+	server.registerTool(
+		"get_logs_by_date_range",
+		{
+			description: "Filter logs by date range.",
+			inputSchema: {
+				startDate: z
+					.string()
+					.describe("Start date in ISO format (e.g., '2024-01-01')"),
+				endDate: z
+					.string()
+					.describe("End date in ISO format (e.g., '2024-01-31')"),
+			},
+		},
+		async ({ startDate, endDate }) => {
+			await refreshCache();
+			const results = getEntriesByDateRange(logCache, startDate, endDate);
+			return {
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(results, null, 2),
+					},
+				],
+			};
+		},
+	);
+
+	server.registerTool(
+		"get_logs_by_agent",
+		{
+			description: "Filter logs by the agent/LLM that created them.",
+			inputSchema: {
+				agent: z
+					.string()
+					.describe(
+						"The agent name to filter by (e.g., 'claude', 'gpt', 'cascade')",
+					),
+			},
+		},
+		async ({ agent }) => {
+			await refreshCache();
+			const results = getEntriesByAgent(logCache, agent);
+			return {
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(results, null, 2),
+					},
+				],
+			};
+		},
+	);
+
+	server.registerTool(
+		"get_problem_patterns",
+		{
+			description: "Analyze common problem patterns in the log history.",
+			inputSchema: {},
+		},
+		async () => {
+			await refreshCache();
+			const patterns = getProblemPatterns(logCache);
+			return {
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(patterns, null, 2),
+					},
+				],
+			};
+		},
+	);
+
+	server.registerTool(
+		"get_solution_suggestions",
+		{
+			description:
+				"Get solution suggestions based on similar problems in the past.",
+			inputSchema: {
+				problem: z
+					.string()
+					.describe("The current problem to find similar solutions for."),
+			},
+		},
+		async ({ problem }) => {
+			await refreshCache();
+			const suggestions = getSolutionSuggestions(logCache, problem);
+			return {
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(suggestions, null, 2),
+					},
+				],
+			};
+		},
+	);
+
+	server.registerTool(
+		"get_log_statistics",
+		{
+			description: "Get detailed statistics about the log history.",
+			inputSchema: {},
+		},
+		async () => {
+			await refreshCache();
+			const stats = getDetailedStatistics(logCache);
+			return {
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(stats, null, 2),
+					},
+				],
+			};
+		},
+	);
+
 	const RECENT_WORK_LIMIT = 20;
 
 	/**
@@ -306,3 +456,17 @@ export const registerMemoryMcpHandlers = (
 
 	return refreshCache;
 };
+
+// Re-export data-access functions for testing
+export {
+	getDetailedStatistics,
+	getEntriesByAgent,
+	getEntriesByDateRange,
+	getEntriesByTags,
+	getEntriesByTask,
+	getLastNEntries,
+	getProblemPatterns,
+	getSolutionSuggestions,
+	loadEntries,
+	searchEntries,
+} from "./data-access.js";
