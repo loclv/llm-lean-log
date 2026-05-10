@@ -4,11 +4,12 @@
 zig version
 # 0.15.2
 
-# Update version in `package.json`.
-zig run scripts/release.zig
-
+mkdir -p build
 # Build the script.
 zig build-exe scripts/release.zig -femit-bin=build/release
+
+# Update version in `package.json`.
+zig run scripts/release.zig
 
 # Run the script.
 ./build/release
