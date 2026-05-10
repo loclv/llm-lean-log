@@ -18,6 +18,13 @@ Từ đó, `llm-lean-log-cli` là tool đọc, ghi lịch sử chat tối ưu ch
 >📝 Ghi log cho LLM, nhưng lược bỏ phần dư thừa.
 `llm-lean-log` là một định dạng ghi log được tối ưu hóa cho mức tiêu thụ token của LLM (Mô hình ngôn ngữ lớn), thể hiện các mối quan hệ nguyên nhân và kết quả dựa trên dữ liệu CSV.
 
+Bạn có thể sử dụng công cụ này để:
+- tiếp tục làm việc từ các session cũ với các công cụ AI agent khác
+- chia sẻ nhật ký trò chuyện với thành viên trong nhóm
+- theo dõi tiến độ làm việc với LLMs
+- xây dựng cơ sở tri thức cho dự án của bạn
+- phân tích thay đổi mã bởi AI agents
+
 ## 🍓 Yêu cầu AI agent (LLM) viết log
 
 Trước khi bạn yêu cầu AI agent (LLM) viết log, hãy đảm bảo đã cài đặt công cụ CLI `llm-lean-log-cli` trên toàn hệ thống.

@@ -28,6 +28,13 @@ That’s how `llm-lean-log-cli` was born: a tool for reading and writing chat hi
 >📝 Logging for LLMs, but we cut the fat.
 `llm-lean-log` is a format for logging that is optimized for LLMs token usage, cause and effect relationships based on CSV Data.
 
+You can use this tool to:
+- continue old work session from other AI agents tools
+- share chat logs with your team members
+- track working progress with LLMs
+- build the knowledge base of your project
+- analyze code changes by AI agents
+
 ## 🍓 Ask AI agent (LLMs) to write a log
 
 Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-log-cli` CLI tool globally.
