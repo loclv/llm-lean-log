@@ -57,7 +57,8 @@ fn execCommand(allocator: std.mem.Allocator, args: []const []const u8) ![]const 
 
 /// Update version in TypeScript const file
 fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !void {
-    const file = std.fs.File.openRead("src/utils/const.ts") catch |err| switch (err) {
+    const cwd = std.Io.Dir.cwd();
+    const file = cwd.openFile("src/utils/const.ts", .{ .mode = .read_only }) catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("src/utils/const.ts not found", .{});
             return error.FileNotFound;
@@ -66,8 +67,12 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
     };
     defer file.close();
 
-    const contents = try file.readToEndAlloc(allocator, size_1mb);
+    // Read file using streaming approach
+    var buffer: [size_1mb]u8 = undefined;
+    const bytes_read = try file.readStreaming(&[_][]u8{buffer[0..]});
+    const contents = try allocator.alloc(u8, bytes_read);
     defer allocator.free(contents);
+    @memmove(contents[0..bytes_read], buffer[0..bytes_read]);
 
     // Find and replace version in the TypeScript file
     const version_pattern = "export const VERSION = \"";
@@ -96,9 +101,14 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
 
     // Write new contents to the TypeScript file
     {
-        const out_file = try std.fs.createFileAbsolute("src/utils/const.ts", .{});
+        const out_file = cwd.createFile("src/utils/const.ts", .{}) catch |err| {
+            std.log.err("Failed to create src/utils/const.ts: {}", .{err});
+            return err;
+        };
         defer out_file.close();
-        try out_file.writeAll(new_contents);
+        var write_buffer: [4096]u8 = undefined;
+        var writer = out_file.writerStreaming(&write_buffer);
+        try writer.interface.writeAll(new_contents);
     }
 
     std.log.info("Updated version in src/utils/const.ts to {s}", .{new_version});
@@ -106,7 +116,8 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
 
 /// Check if CHANGELOG.md contains the new version
 fn checkChangelog(allocator: std.mem.Allocator, version: []const u8) !void {
-    const file = std.fs.File.openRead("CHANGELOG.md") catch |err| switch (err) {
+    const cwd = std.Io.Dir.cwd();
+    const file = cwd.openFile("CHANGELOG.md", .{ .mode = .read_only }) catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("CHANGELOG.md not found", .{});
             return error.FileNotFound;
@@ -115,8 +126,12 @@ fn checkChangelog(allocator: std.mem.Allocator, version: []const u8) !void {
     };
     defer file.close();
 
-    const contents = try file.readToEndAlloc(allocator, size_1mb);
+    // Read file using streaming approach
+    var buffer: [size_1mb]u8 = undefined;
+    const bytes_read = try file.readStreaming(&[_][]u8{buffer[0..]});
+    const contents = try allocator.alloc(u8, bytes_read);
     defer allocator.free(contents);
+    @memmove(contents[0..bytes_read], buffer[0..bytes_read]);
 
     const version_pattern = try std.fmt.allocPrint(allocator, "## [{s}]", .{version});
     defer allocator.free(version_pattern);
@@ -148,7 +163,8 @@ fn isCommandAvailable(allocator: std.mem.Allocator, command: []const u8) bool {
 
 /// Read package.json and update version
 fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
-    const file = std.fs.File.openRead("package.json") catch |err| switch (err) {
+    const cwd = std.Io.Dir.cwd();
+    const file = cwd.openFile("package.json", .{ .mode = .read_only }) catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("package.json not found", .{});
             return error.FileNotFound;
@@ -157,8 +173,12 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     };
     defer file.close();
 
-    const contents = try file.readToEndAlloc(allocator, size_1mb);
+    // Read file using streaming approach
+    var buffer: [size_1mb]u8 = undefined;
+    const bytes_read = try file.readStreaming(&[_][]u8{buffer[0..]});
+    const contents = try allocator.alloc(u8, bytes_read);
     defer allocator.free(contents);
+    @memmove(contents[0..bytes_read], buffer[0..bytes_read]);
 
     var parsed = try json.parseFromSlice(json.Value, allocator, contents, .{});
     defer parsed.deinit();
@@ -210,7 +230,16 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
     // Write new package.json
-    try std.fs.cwd.writeFile(.{ .sub_path = "package.json", .data = new_contents });
+    {
+        const out_file = cwd.createFile("package.json", .{}) catch |err| {
+            std.log.err("Failed to create package.json: {}", .{err});
+            return err;
+        };
+        defer out_file.close();
+        var write_buffer: [4096]u8 = undefined;
+        var writer = out_file.writerStreaming(&write_buffer);
+        try writer.interface.writeAll(new_contents);
+    }
 
     std.log.info("Updated version from {s} to {s}", .{ current_version, new_version });
     return new_version;

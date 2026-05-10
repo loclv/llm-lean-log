@@ -37,18 +37,10 @@ fn incrementVersion(allocator: std.mem.Allocator, version: []const u8) ![]const 
 
 /// Execute a command and return output
 fn execCommand(allocator: std.mem.Allocator, io: std.Io, args: []const []const u8) ![]const u8 {
-    // Create environment map with HOME set
-    var environ_map = std.process.Environ.Map.init(allocator);
-    defer environ_map.deinit();
-    try environ_map.put("HOME", "/Users/a0");
-    try environ_map.put("USER", "a0");
-
     const result = try process.run(allocator, io, .{
         .argv = args,
         .stderr_limit = std.Io.Limit.limited(size_1mb),
         .stdout_limit = std.Io.Limit.limited(size_1mb),
-        .cwd = .{ .path = "/Users/a0/w/llm-lean-log/zig" },
-        .environ_map = &environ_map,
     });
 
     defer allocator.free(result.stdout);
@@ -113,13 +105,10 @@ fn updatePackageVersion(io: std.Io, allocator: std.mem.Allocator) ![]const u8 {
     @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
     // Write new build.zig.zon
-    const out_file = cwd.createFile(io, "build.zig.zon", .{}) catch |err| {
-        std.log.err("Failed to create build.zig.zon: {}", .{err});
-        return err;
-    };
+    const out_file = try cwd.createFile(io, "build.zig.zon", .{});
     defer out_file.close(io);
     var write_buffer: [4096]u8 = undefined;
-    var writer = out_file.writerStreaming(io, &write_buffer);
+    var writer = out_file.writer(io, &write_buffer);
     try writer.interface.writeAll(new_contents);
 
     std.log.info("Updated version from {s} to {s}", .{ current_version, new_version });
@@ -128,10 +117,11 @@ fn updatePackageVersion(io: std.Io, allocator: std.mem.Allocator) ![]const u8 {
 
 /// Check if a command is available in the system
 fn isCommandAvailable(allocator: std.mem.Allocator, io: std.Io, command: []const u8) bool {
-    const result = process.run(allocator, io, .{
+    _ = io; // autofix
+    const result = process.Child.run(.{
+        .allocator = allocator,
         .argv = &[_][]const u8{ command, "--version" },
-        .stderr_limit = std.Io.Limit.limited(1024),
-        .stdout_limit = std.Io.Limit.limited(1024),
+        .max_output_bytes = 1024,
     }) catch |err| {
         if (err == error.FileNotFound) return false;
         return false;
@@ -140,7 +130,7 @@ fn isCommandAvailable(allocator: std.mem.Allocator, io: std.Io, command: []const
     allocator.free(result.stdout);
     allocator.free(result.stderr);
 
-    return result.term.exited == 0;
+    return result.term.Exited == 0;
 }
 
 pub fn main() !void {
@@ -160,14 +150,14 @@ pub fn main() !void {
     // Build the package
     std.log.info("Building package...", .{});
     {
-        const output = try execCommand(allocator, io, &[_][]const u8{ "/opt/nanobrew/prefix/bin/zig", "build" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "zig", "build" });
         allocator.free(output);
     }
 
     // Run tests
     std.log.info("Running tests...", .{});
     {
-        const output = try execCommand(allocator, io, &[_][]const u8{ "/opt/nanobrew/prefix/bin/zig", "build", "test" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "zig", "build", "test" });
         allocator.free(output);
     }
 
