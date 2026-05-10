@@ -1,6 +1,6 @@
 {
 	"name": "llm-lean-log-cli",
-	"version": "0.2.13",
+	"version": "0.2.14",
 	"description": "CLI tool for llm-lean-log",
 	"scripts": {
 		"cli": "bun run src/index.ts",
