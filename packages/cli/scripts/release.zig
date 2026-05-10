@@ -58,7 +58,8 @@ fn execCommand(allocator: std.mem.Allocator, args: []const []const u8) ![]const 
 /// Update version in TypeScript const file
 fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !void {
     const cwd = std.Io.Dir.cwd();
-    const file = cwd.openFile("src/utils/const.ts", .{ .mode = .read_only }) catch |err| switch (err) {
+    const io = std.Io.init();
+    const file = cwd.openFile(io, "src/utils/const.ts", .{ .mode = .read_only }) catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("src/utils/const.ts not found", .{});
             return error.FileNotFound;
@@ -69,7 +70,7 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
 
     // Read file using streaming approach
     var buffer: [size_1mb]u8 = undefined;
-    const bytes_read = try file.readStreaming(&[_][]u8{buffer[0..]});
+    const bytes_read = try file.readStreaming(io, &[_][]u8{buffer[0..]});
     const contents = try allocator.alloc(u8, bytes_read);
     defer allocator.free(contents);
     @memmove(contents[0..bytes_read], buffer[0..bytes_read]);
@@ -101,13 +102,13 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
 
     // Write new contents to the TypeScript file
     {
-        const out_file = cwd.createFile("src/utils/const.ts", .{}) catch |err| {
+        const out_file = cwd.createFile(io, "src/utils/const.ts", .{}) catch |err| {
             std.log.err("Failed to create src/utils/const.ts: {}", .{err});
             return err;
         };
         defer out_file.close();
         var write_buffer: [4096]u8 = undefined;
-        var writer = out_file.writerStreaming(&write_buffer);
+        var writer = out_file.writerStreaming(io, &write_buffer);
         try writer.interface.writeAll(new_contents);
     }
 
@@ -117,7 +118,8 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
 /// Check if CHANGELOG.md contains the new version
 fn checkChangelog(allocator: std.mem.Allocator, version: []const u8) !void {
     const cwd = std.Io.Dir.cwd();
-    const file = cwd.openFile("CHANGELOG.md", .{ .mode = .read_only }) catch |err| switch (err) {
+    const io = std.Io.init();
+    const file = cwd.openFile(io, "CHANGELOG.md", .{ .mode = .read_only }) catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("CHANGELOG.md not found", .{});
             return error.FileNotFound;
@@ -128,7 +130,7 @@ fn checkChangelog(allocator: std.mem.Allocator, version: []const u8) !void {
 
     // Read file using streaming approach
     var buffer: [size_1mb]u8 = undefined;
-    const bytes_read = try file.readStreaming(&[_][]u8{buffer[0..]});
+    const bytes_read = try file.readStreaming(io, &[_][]u8{buffer[0..]});
     const contents = try allocator.alloc(u8, bytes_read);
     defer allocator.free(contents);
     @memmove(contents[0..bytes_read], buffer[0..bytes_read]);
@@ -164,7 +166,8 @@ fn isCommandAvailable(allocator: std.mem.Allocator, command: []const u8) bool {
 /// Read package.json and update version
 fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     const cwd = std.Io.Dir.cwd();
-    const file = cwd.openFile("package.json", .{ .mode = .read_only }) catch |err| switch (err) {
+    const io = std.Io.init();
+    const file = cwd.openFile(io, "package.json", .{ .mode = .read_only }) catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("package.json not found", .{});
             return error.FileNotFound;
@@ -175,7 +178,7 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
 
     // Read file using streaming approach
     var buffer: [size_1mb]u8 = undefined;
-    const bytes_read = try file.readStreaming(&[_][]u8{buffer[0..]});
+    const bytes_read = try file.readStreaming(io, &[_][]u8{buffer[0..]});
     const contents = try allocator.alloc(u8, bytes_read);
     defer allocator.free(contents);
     @memmove(contents[0..bytes_read], buffer[0..bytes_read]);
@@ -231,13 +234,13 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
 
     // Write new package.json
     {
-        const out_file = cwd.createFile("package.json", .{}) catch |err| {
+        const out_file = cwd.createFile(io, "package.json", .{}) catch |err| {
             std.log.err("Failed to create package.json: {}", .{err});
             return err;
         };
         defer out_file.close();
         var write_buffer: [4096]u8 = undefined;
-        var writer = out_file.writerStreaming(&write_buffer);
+        var writer = out_file.writerStreaming(io, &write_buffer);
         try writer.interface.writeAll(new_contents);
     }
 
@@ -247,30 +250,31 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
 
 pub fn main() !void {
     const allocator = std.heap.c_allocator;
+    const io = std.Io.init();
 
     std.log.info("Starting release process for CLI...", .{});
 
     // Update version in package.json
-    const new_version = try updatePackageVersion(allocator);
+    const new_version = try updatePackageVersion(io, allocator);
     defer allocator.free(new_version);
 
     // Check if ./CHANGELOG.md contains the new version
-    try checkChangelog(allocator, new_version);
+    try checkChangelog(io, allocator, new_version);
 
     // Update version in TypeScript const file
-    try updateConstVersion(allocator, new_version);
+    try updateConstVersion(io, allocator, new_version);
 
     // Build the package
     std.log.info("Building package...", .{});
     {
-        const output = try execCommand(allocator, &[_][]const u8{ "bun", "run", "build" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "bun", "run", "build" });
         allocator.free(output);
     }
 
     // Run tests
     std.log.info("Running tests...", .{});
     {
-        const output = try execCommand(allocator, &[_][]const u8{ "bun", "test" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "bun", "test" });
         allocator.free(output);
     }
 
@@ -283,13 +287,13 @@ pub fn main() !void {
     // Commit changes
     std.log.info("Committing changes...", .{});
     {
-        const output = try execCommand(allocator, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "git", "add", "package.json", "src/utils/const.ts" });
         allocator.free(output);
     }
     const commit_message = try std.fmt.allocPrint(allocator, "chore: release {s}", .{tag_name});
     defer allocator.free(commit_message);
     {
-        const output = try execCommand(allocator, &[_][]const u8{ "git", "commit", "-m", commit_message });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "git", "commit", "-m", commit_message });
         allocator.free(output);
     }
 
@@ -297,11 +301,11 @@ pub fn main() !void {
     std.log.info("Creating and pushing tag...", .{});
 
     {
-        const output = try execCommand(allocator, &[_][]const u8{ "git", "tag", tag_name });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "git", "tag", tag_name });
         allocator.free(output);
     }
     {
-        const output = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "git", "push", "origin", "main" });
         allocator.free(output);
     }
     // {
@@ -310,9 +314,9 @@ pub fn main() !void {
     // }
 
     // Create GitHub release if `gh` is available
-    if (isCommandAvailable(allocator, "gh")) {
+    if (isCommandAvailable(io, allocator, "gh")) {
         std.log.info("Creating GitHub release...", .{});
-        const output = try execCommand(allocator, &[_][]const u8{
+        const output = try execCommand(allocator, io, &[_][]const u8{
             "gh",
             "release",
             "create",

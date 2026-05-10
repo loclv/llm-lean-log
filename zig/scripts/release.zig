@@ -7,6 +7,8 @@
 const std = @import("std");
 const process = std.process;
 
+const c = @cImport(@cInclude("stdlib.h"));
+
 const Error = error{
     InvalidVersionFormat,
     VersionPatternNotFound,
@@ -37,10 +39,26 @@ fn incrementVersion(allocator: std.mem.Allocator, version: []const u8) ![]const 
 
 /// Execute a command and return output
 fn execCommand(allocator: std.mem.Allocator, io: std.Io, args: []const []const u8) ![]const u8 {
+    // Create environment map with current environment
+    var environ_map = std.process.Environ.Map.init(allocator);
+    defer environ_map.deinit();
+
+    // Copy essential environment variables using C getenv
+    if (c.getenv("HOME")) |home| {
+        try environ_map.put("HOME", std.mem.span(home));
+    }
+    if (c.getenv("USER")) |user| {
+        try environ_map.put("USER", std.mem.span(user));
+    }
+    if (c.getenv("PATH")) |path| {
+        try environ_map.put("PATH", std.mem.span(path));
+    }
+
     const result = try process.run(allocator, io, .{
         .argv = args,
         .stderr_limit = std.Io.Limit.limited(size_1mb),
         .stdout_limit = std.Io.Limit.limited(size_1mb),
+        .environ_map = &environ_map,
     });
 
     defer allocator.free(result.stdout);
@@ -117,11 +135,26 @@ fn updatePackageVersion(io: std.Io, allocator: std.mem.Allocator) ![]const u8 {
 
 /// Check if a command is available in the system
 fn isCommandAvailable(allocator: std.mem.Allocator, io: std.Io, command: []const u8) bool {
-    _ = io; // autofix
-    const result = process.Child.run(.{
-        .allocator = allocator,
+    // Create environment map with current environment
+    var environ_map = std.process.Environ.Map.init(allocator);
+    defer environ_map.deinit();
+
+    // Copy essential environment variables using C getenv
+    if (c.getenv("HOME")) |home| {
+        environ_map.put("HOME", std.mem.span(home)) catch return false;
+    }
+    if (c.getenv("USER")) |user| {
+        environ_map.put("USER", std.mem.span(user)) catch return false;
+    }
+    if (c.getenv("PATH")) |path| {
+        environ_map.put("PATH", std.mem.span(path)) catch return false;
+    }
+
+    const result = process.run(allocator, io, .{
         .argv = &[_][]const u8{ command, "--version" },
-        .max_output_bytes = 1024,
+        .stderr_limit = std.Io.Limit.limited(1024),
+        .stdout_limit = std.Io.Limit.limited(1024),
+        .environ_map = &environ_map,
     }) catch |err| {
         if (err == error.FileNotFound) return false;
         return false;
@@ -130,7 +163,7 @@ fn isCommandAvailable(allocator: std.mem.Allocator, io: std.Io, command: []const
     allocator.free(result.stdout);
     allocator.free(result.stderr);
 
-    return result.term.Exited == 0;
+    return result.term.exited == 0;
 }
 
 pub fn main() !void {
@@ -150,14 +183,14 @@ pub fn main() !void {
     // Build the package
     std.log.info("Building package...", .{});
     {
-        const output = try execCommand(allocator, io, &[_][]const u8{ "zig", "build" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "/opt/nanobrew/prefix/bin/zig", "build" });
         allocator.free(output);
     }
 
     // Run tests
     std.log.info("Running tests...", .{});
     {
-        const output = try execCommand(allocator, io, &[_][]const u8{ "zig", "build", "test" });
+        const output = try execCommand(allocator, io, &[_][]const u8{ "/opt/nanobrew/prefix/bin/zig", "build", "test" });
         allocator.free(output);
     }
 
