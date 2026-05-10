@@ -12,7 +12,6 @@ zig build-exe ../packages/bun-cli/scripts/release.zig -femit-bin=../packages/bun
 cd ../packages/bun-cli
 ./build/release
 
-cd ../packages/bun-cli
 # Build the package.
 bun run build
 
