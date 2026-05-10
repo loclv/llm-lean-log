@@ -1,4 +1,4 @@
-# Project Rules for OpenCode
+# Project Rules
 
 This project uses `llm-lean-log` to maintain a history of development tasks. As an AI agent working on this project, you must follow these rules:
 
@@ -70,6 +70,11 @@ This project has an MCP server `llm-memory` configured:
 - `learned` - Review past mistakes
 
 ## Code Style Guidelines
+
+## Error Handling
+
+Always handle errors, do not let them bubble up.
+When use `try` to propagate an error, always log it before returning it.
 
 ### Imports & Dependencies
 

@@ -7,7 +7,7 @@ This document records the lessons learned while migrating release scripts to Zig
 ### EndOfStream error with readStreaming
 When using `file.readStreaming(io, &[_][]u8{buffer})`, if the buffer size is larger than the file content, the operation may throw `error.EndOfStream`.
 
-**Solution:**
+Solution:
 Use `file.stat(io)` to get the exact file size before reading.
 
 ```zig
@@ -39,7 +39,7 @@ try writer.interface.writeAll(new_contents);
 ### PATH Resolution
 `std.process.run` and `std.process.spawn` in Zig 0.16.0 do not seem to search the `PATH` by default in all environments, leading to `error.FileNotFound`.
 
-**Workaround:**
+Workaround:
 Use absolute paths for executables or ensure the environment is correctly passed. Wrapping with `/usr/bin/env` might also help if the environment's `PATH` is correctly set.
 
 ### Environment Inheritance and PATH
@@ -69,4 +69,25 @@ try cwd.writeFile(io, .{ .sub_path = "package.json", .data = new_contents });
 ## General
 - `std.Io.Threaded` is commonly used for standalone CLI tools to provide a synchronous-like API on top of the new I/O system.
 - `std.Io.Dir.cwd()` returns the current working directory as an `Io.Dir` object.
-- Accessing the environment via `init.environ_map` is the preferred way in Zig 0.16.0 for CLI tools.
+## Error Handling (try vs catch)
+
+### Redundant try with catch blocks
+In Zig 0.16.0, using `try` on an expression that already handles the error union via `catch` (and returns or provides a value) is a compilation error: `expected error union type, found '[]const u8'` (or whatever the success type is).
+
+This happens because `catch` has higher precedence than `try`. The expression `X catch Y` evaluates to the success type of `X`. Applying `try` to this non-error-union result is illegal.
+Incorrect:
+```zig
+const val = try functionReturningErrorUnion() catch |err| {
+    std.log.err("Error: {any}", .{err});
+    return err;
+};
+```
+
+Correct:
+```zig
+const val = functionReturningErrorUnion() catch |err| {
+    std.log.err("Error: {any}", .{err});
+    return err;
+};
+```
+If you want to log and then re-throw the error, use `catch |err| { ... return err; }` without the leading `try`.
