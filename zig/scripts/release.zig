@@ -198,10 +198,10 @@ pub fn main() !void {
         const output = try execCommand(allocator, io, &[_][]const u8{ "git", "push", "origin", "main" });
         allocator.free(output);
     }
-    {
-        const output = try execCommand(allocator, io, &[_][]const u8{ "git", "push", "origin", tag_name });
-        allocator.free(output);
-    }
+    // {
+    //     const output = try execCommand(allocator, io, &[_][]const u8{ "git", "push", "origin", tag_name });
+    //     allocator.free(output);
+    // }
 
     // Create GitHub release if `gh` is available
     if (isCommandAvailable(allocator, io, "gh")) {

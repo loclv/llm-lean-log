@@ -2,17 +2,18 @@
 
 ```bash
 zig version
-# 0.15.2
+# 0.16.0
 
+cd ../../zig
 mkdir -p build
 # Build the script.
-zig build-exe scripts/release.zig -femit-bin=build/release
+zig build-exe ../packages/cli/scripts/release.zig -femit-bin=../packages/cli/build/release
 
-# Update version in `package.json`.
-zig run scripts/release.zig
+# Update version in `packages/cli/package.json`.
+zig run ../packages/cli/scripts/release.zig
 
 # Run the script.
-./build/release
+../packages/cli/build/release
 ```
 
 Read more at `scripts/release.zig`.

@@ -57,7 +57,7 @@ fn execCommand(allocator: std.mem.Allocator, args: []const []const u8) ![]const 
 
 /// Update version in TypeScript const file
 fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !void {
-    const file = std.fs.cwd().openFile("src/utils/const.ts", .{}) catch |err| switch (err) {
+    const file = std.fs.File.openRead("src/utils/const.ts") catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("src/utils/const.ts not found", .{});
             return error.FileNotFound;
@@ -95,14 +95,18 @@ fn updateConstVersion(allocator: std.mem.Allocator, new_version: []const u8) !vo
     @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
     // Write new contents to the TypeScript file
-    try std.fs.cwd().writeFile(.{ .sub_path = "src/utils/const.ts", .data = new_contents });
+    {
+        const out_file = try std.fs.createFileAbsolute("src/utils/const.ts", .{});
+        defer out_file.close();
+        try out_file.writeAll(new_contents);
+    }
 
     std.log.info("Updated version in src/utils/const.ts to {s}", .{new_version});
 }
 
 /// Check if CHANGELOG.md contains the new version
 fn checkChangelog(allocator: std.mem.Allocator, version: []const u8) !void {
-    const file = std.fs.cwd().openFile("CHANGELOG.md", .{}) catch |err| switch (err) {
+    const file = std.fs.File.openRead("CHANGELOG.md") catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("CHANGELOG.md not found", .{});
             return error.FileNotFound;
@@ -144,7 +148,7 @@ fn isCommandAvailable(allocator: std.mem.Allocator, command: []const u8) bool {
 
 /// Read package.json and update version
 fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
-    const file = std.fs.cwd().openFile("package.json", .{}) catch |err| switch (err) {
+    const file = std.fs.File.openRead("package.json") catch |err| switch (err) {
         error.FileNotFound => {
             std.log.err("package.json not found", .{});
             return error.FileNotFound;
@@ -206,14 +210,14 @@ fn updatePackageVersion(allocator: std.mem.Allocator) ![]const u8 {
     @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
     // Write new package.json
-    try std.fs.cwd().writeFile(.{ .sub_path = "package.json", .data = new_contents });
+    try std.fs.cwd.writeFile(.{ .sub_path = "package.json", .data = new_contents });
 
     std.log.info("Updated version from {s} to {s}", .{ current_version, new_version });
     return new_version;
 }
 
 pub fn main() !void {
-    const allocator = std.heap.raw_c_allocator;
+    const allocator = std.heap.c_allocator;
 
     std.log.info("Starting release process for CLI...", .{});
 
@@ -271,10 +275,10 @@ pub fn main() !void {
         const output = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", "main" });
         allocator.free(output);
     }
-    {
-        const output = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
-        allocator.free(output);
-    }
+    // {
+    //     const output = try execCommand(allocator, &[_][]const u8{ "git", "push", "origin", tag_name });
+    //     allocator.free(output);
+    // }
 
     // Create GitHub release if `gh` is available
     if (isCommandAvailable(allocator, "gh")) {
