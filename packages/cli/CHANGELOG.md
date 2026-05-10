@@ -2,6 +2,18 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.15] - 2026-05-10
+
+### Changed
+
+- Internal: Refactored release script for better maintainability
+
+## [0.2.14] - 2026-05-10
+
+### Changed
+
+- Release Process: Improved path robustness and error handling in release scripts
+
 ## [0.2.13] - 2026-05-10
 
 ### Added

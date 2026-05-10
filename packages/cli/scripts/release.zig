@@ -228,19 +228,31 @@ pub fn main(init: std.process.Init) !void {
     std.log.info("Starting release process for CLI...", .{});
 
     // Update version in package.json
-    const new_version = try updatePackageVersion(io, allocator);
+    const new_version = updatePackageVersion(io, allocator) catch |err| {
+        std.log.err("Failed to update version in package.json: {any}", .{err});
+        return err;
+    };
     defer allocator.free(new_version);
 
     // Check if ./CHANGELOG.md contains the new version
-    try checkChangelog(io, allocator, new_version);
+    checkChangelog(io, allocator, new_version) catch |err| {
+        std.log.err("Failed to check CHANGELOG.md: {any}", .{err});
+        return err;
+    };
 
     // Update version in TypeScript const file
-    try updateConstVersion(io, allocator, new_version);
+    updateConstVersion(io, allocator, new_version) catch |err| {
+        std.log.err("Failed to update version in TypeScript const file: {any}", .{err});
+        return err;
+    };
 
     // Build the package
     std.log.info("Building package...", .{});
     {
-        const output = try execCommand(allocator, io, environ_map, &[_][]const u8{ "bun", "run", "build" });
+        const output = execCommand(allocator, io, environ_map, &[_][]const u8{ "bun", "run", "build" }) catch |err| {
+            std.log.err("Failed to build package: {any}", .{err});
+            return err;
+        };
         allocator.free(output);
     }
 
