@@ -34,7 +34,9 @@ mock.module("llm-lean-log-core", () => ({
 	filterByTags: mock(() => []),
 	searchLogs: mock(() => []),
 	formatLogEntryForMarkdown: mock(() => "markdown content"),
-	getMarkdownFilename: mock((entry: any) => "filename"),
+	getMarkdownFilename: mock((_entry: any) => "filename"),
+	logEntriesToJSONL: mock(() => "jsonl content"),
+	saveLogsToJSONL: mock(() => Promise.resolve()),
 }));
 
 // Mock visualizer utilities
@@ -486,7 +488,8 @@ describe("CLI", () => {
 
 	describe("export command", () => {
 		it("should export logs to markdown with 'export md' command", async () => {
-			const { loadLogs, formatLogEntryForMarkdown, getMarkdownFilename } = core as any;
+			const { loadLogs, formatLogEntryForMarkdown, getMarkdownFilename } =
+				core as any;
 			loadLogs.mockResolvedValueOnce([
 				{ id: "1", name: "test", problem: "p", "created-at": "2024-01-01" },
 			]);
@@ -507,9 +510,15 @@ describe("CLI", () => {
 		});
 
 		it("should include diff content in export if diff file exists", async () => {
-			const { loadLogs, formatLogEntryForMarkdown, getMarkdownFilename } = core as any;
+			const { loadLogs, formatLogEntryForMarkdown, getMarkdownFilename } =
+				core as any;
 			loadLogs.mockResolvedValueOnce([
-				{ id: "diff-id", name: "test", problem: "p", "created-at": "2024-01-01" },
+				{
+					id: "diff-id",
+					name: "test",
+					problem: "p",
+					"created-at": "2024-01-01",
+				},
 			]);
 			getMarkdownFilename.mockReturnValueOnce("2024-01-01-test");
 			formatLogEntryForMarkdown.mockReturnValueOnce("markdown with diff");
@@ -552,6 +561,109 @@ describe("CLI", () => {
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
 				expect.stringContaining("Please provide output path"),
+			);
+		});
+
+		it("should export logs to JSONL with 'export jsonl' command", async () => {
+			const { loadLogs, saveLogsToJSONL } = core as any;
+			const mockEntries = [
+				{ id: "1", name: "test", problem: "p", "created-at": "2024-01-01" },
+			];
+			loadLogs.mockResolvedValueOnce(mockEntries);
+			saveLogsToJSONL.mockClear();
+
+			await runCommand(["export", "jsonl", "--out=test.jsonl"]);
+
+			expect(loadLogs).toHaveBeenCalled();
+			expect(saveLogsToJSONL).toHaveBeenCalledWith("test.jsonl", mockEntries);
+			expect(consoleLogSpy).toHaveBeenCalledWith(
+				"Exported 1 logs to test.jsonl",
+			);
+		});
+
+		it("should export logs to JSONL with 'export json-lines' command", async () => {
+			const { loadLogs, saveLogsToJSONL } = core as any;
+			const mockEntries = [
+				{ id: "1", name: "test", problem: "p", "created-at": "2024-01-01" },
+			];
+			loadLogs.mockResolvedValueOnce(mockEntries);
+			saveLogsToJSONL.mockClear();
+
+			await runCommand(["export", "json-lines", "--path=test.jsonl"]);
+
+			expect(loadLogs).toHaveBeenCalled();
+			expect(saveLogsToJSONL).toHaveBeenCalledWith("test.jsonl", mockEntries);
+			expect(consoleLogSpy).toHaveBeenCalledWith(
+				"Exported 1 logs to test.jsonl",
+			);
+		});
+
+		it("should export logs to JSONL with --file flag", async () => {
+			const { loadLogs, saveLogsToJSONL } = core as any;
+			const mockEntries = [
+				{ id: "1", name: "test", problem: "p", "created-at": "2024-01-01" },
+			];
+			loadLogs.mockResolvedValueOnce(mockEntries);
+			saveLogsToJSONL.mockClear();
+
+			await runCommand(["export", "jsonl", "--file=output.jsonl"]);
+
+			expect(loadLogs).toHaveBeenCalled();
+			expect(saveLogsToJSONL).toHaveBeenCalledWith("output.jsonl", mockEntries);
+			expect(consoleLogSpy).toHaveBeenCalledWith(
+				"Exported 1 logs to output.jsonl",
+			);
+		});
+
+		it("should create output directory when exporting JSONL to subdirectory", async () => {
+			const { loadLogs, saveLogsToJSONL } = core as any;
+			const mockEntries = [
+				{ id: "1", name: "test", problem: "p", "created-at": "2024-01-01" },
+			];
+			loadLogs.mockResolvedValueOnce(mockEntries);
+			saveLogsToJSONL.mockClear();
+
+			await runCommand(["export", "jsonl", "--out=subdir/test.jsonl"]);
+
+			expect(loadLogs).toHaveBeenCalled();
+			expect(saveLogsToJSONL).toHaveBeenCalledWith(
+				"subdir/test.jsonl",
+				mockEntries,
+			);
+			expect(consoleLogSpy).toHaveBeenCalledWith(
+				"Exported 1 logs to subdir/test.jsonl",
+			);
+		});
+
+		it("should show error and exit if JSONL output path is missing", async () => {
+			const { loadLogs } = core as any;
+			loadLogs.mockResolvedValueOnce([{ id: "1" }]);
+
+			try {
+				await runCommand(["export", "jsonl"]);
+			} catch (e: any) {
+				expect(e.message).toBe("process.exit(1)");
+			}
+
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				expect.stringContaining("Please provide output path"),
+			);
+		});
+
+		it("should handle JSONL export errors gracefully", async () => {
+			const { loadLogs, saveLogsToJSONL } = core as any;
+			loadLogs.mockResolvedValueOnce([{ id: "1" }]);
+			saveLogsToJSONL.mockRejectedValueOnce(new Error("Write failed"));
+
+			try {
+				await runCommand(["export", "jsonl", "--out=test.jsonl"]);
+			} catch (e: any) {
+				expect(e.message).toBe("process.exit(1)");
+			}
+
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				"Error exporting to JSONL:",
+				new Error("Write failed"),
 			);
 		});
 

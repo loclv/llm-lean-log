@@ -24,6 +24,7 @@ export {
 	parseIds,
 	reasoningSearch,
 } from "./graph-utils";
+export type { GraphIndex, LogIndex, SearchIndex } from "./indexer";
 export {
 	buildGraphIndex,
 	buildIndex,
@@ -36,7 +37,13 @@ export {
 	indexedSearch,
 	updateIndex,
 } from "./indexer";
-export type { GraphIndex, LogIndex, SearchIndex } from "./indexer";
+export {
+	jsonlToLogEntries,
+	loadLogsFromJSONL,
+	logEntriesToJSONL,
+	logEntryToJSONL,
+	saveLogsToJSONL,
+} from "./jsonl-utils";
 export {
 	addLogEntry,
 	createLogEntry,

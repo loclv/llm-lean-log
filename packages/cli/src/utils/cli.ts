@@ -7,11 +7,12 @@
 import {
 	addLogEntry,
 	filterByTags,
-	loadLogs,
-	saveLogs,
-	searchLogs,
 	formatLogEntryForMarkdown,
 	getMarkdownFilename,
+	loadLogs,
+	saveLogs,
+	saveLogsToJSONL,
+	searchLogs,
 } from "llm-lean-log-core";
 import { helpText, helpTextForHuman } from "./const";
 import { getLogFolderPathFromLogFilePath, mkdirIfNotExists } from "./files";
@@ -184,19 +185,28 @@ export async function main(version: string) {
 		}
 		case "export": {
 			const subCommand = args[paramStart];
-			if (subCommand === "md" || subCommand === "markdown" || subCommand === "obsidian") {
+			if (
+				subCommand === "md" ||
+				subCommand === "markdown" ||
+				subCommand === "obsidian"
+			) {
 				const findFlag = (flag: string): string | undefined => {
 					const arg = args.find((a) => a.startsWith(`${flag}=`));
 					return arg ? arg.split("=")[1] : undefined;
 				};
 
-				const vaultPath = findFlag("--vault") || findFlag("--path") || findFlag("--out");
+				const vaultPath =
+					findFlag("--vault") || findFlag("--path") || findFlag("--out");
 				if (!vaultPath) {
-					console.error("Error: Please provide output path with --vault=<path> or --path=<path>");
+					console.error(
+						"Error: Please provide output path with --vault=<path> or --path=<path>",
+					);
 					process.exit(1);
 				}
 
-				const outputDir = vaultPath.endsWith("/Logs/LLM") ? vaultPath : `${vaultPath}/Logs/LLM`;
+				const outputDir = vaultPath.endsWith("/Logs/LLM")
+					? vaultPath
+					: `${vaultPath}/Logs/LLM`;
 				mkdirIfNotExists(outputDir);
 
 				const diffDir = `${getLogFolderPathFromLogFilePath(logFile)}/diff`;
@@ -211,15 +221,47 @@ export async function main(version: string) {
 						if (await diffFile.exists()) {
 							diffContent = await diffFile.text();
 						}
-					} catch (e) {
-						// Ignore errors reading diff
+					} catch (error) {
+						console.error(`Failed to read diff for entry ${entry.id}:`, error);
 					}
 
-					const content = formatLogEntryForMarkdown(entry, entries, diffContent);
+					const content = formatLogEntryForMarkdown(
+						entry,
+						entries,
+						diffContent,
+					);
 					await Bun.write(`${outputDir}/${filename}`, content);
 				}
 
 				console.log(`Exported ${entries.length} logs to ${outputDir}`);
+			} else if (subCommand === "jsonl" || subCommand === "json-lines") {
+				const findFlag = (flag: string): string | undefined => {
+					const arg = args.find((a) => a.startsWith(`${flag}=`));
+					return arg ? arg.split("=")[1] : undefined;
+				};
+
+				const outputPath =
+					findFlag("--out") || findFlag("--path") || findFlag("--file");
+				if (!outputPath) {
+					console.error(
+						"Error: Please provide output path with --out=<path> or --path=<path>",
+					);
+					process.exit(1);
+				}
+
+				// Ensure output directory exists
+				const outputDir = outputPath.includes("/")
+					? outputPath.substring(0, outputPath.lastIndexOf("/"))
+					: ".";
+				mkdirIfNotExists(outputDir);
+
+				try {
+					await saveLogsToJSONL(outputPath, entries);
+					console.log(`Exported ${entries.length} logs to ${outputPath}`);
+				} catch (error) {
+					console.error("Error exporting to JSONL:", error);
+					process.exit(1);
+				}
 			} else {
 				console.error(`Error: Unknown export target "${subCommand}"`);
 				process.exit(1);

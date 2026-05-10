@@ -1,11 +1,9 @@
 # llm-lean-log-core
 
-> 📦 Core library for llm-lean-log - Logging for LLMs, but we cut the fat.
-
+>📦 Core library for llm-lean-log - Logging for LLMs, but we cut the fat.
 `llm-lean-log` is a format for logging that is optimized for LLM token usage, using a simple CSV-based structure.
 
 For more information, see the [main repository](https://github.com/loclv/llm-lean-log).
-
 This package contains the core logic for parsing, saving, and visualizing logs in the `llm-lean-log` format.
 
 ## 🚀 Installation
@@ -54,6 +52,29 @@ import { logEntriesToCSVMinimal } from "llm-lean-log-core";
 
 // Export entries to CSV, automatically removing columns that are empty for all rows
 const minimalCsv = logEntriesToCSVMinimal(entries);
+```
+
+### JSONL Export
+
+```typescript
+import { 
+  logEntriesToJSONL, 
+  saveLogsToJSONL, 
+  loadLogsFromJSONL,
+  jsonlToLogEntries 
+} from "llm-lean-log-core";
+
+// Convert entries to JSONL format (one JSON object per line)
+const jsonlContent = logEntriesToJSONL(entries);
+
+// Save entries to JSONL file
+await saveLogsToJSONL("logs.jsonl", entries);
+
+// Load entries from JSONL file
+const loadedEntries = await loadLogsFromJSONL("logs.jsonl");
+
+// Parse JSONL string back to entries
+const parsedEntries = jsonlToLogEntries(jsonlContent);
 ```
 
 ## 📄 License

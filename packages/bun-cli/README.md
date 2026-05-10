@@ -1,7 +1,6 @@
 # bl-log (Bun CLI)
 
-> Bun-only CLI tool for llm-lean-log - Logging for LLMs, but we cut the fat.
-
+>Bun-only CLI tool for llm-lean-log - Logging for LLMs, but we cut the fat.
 `llm-lean-log` is a format for logging that is optimized for LLM token usage, using a simple CSV-based structure.
 
 For more information, see the [main repository](https://github.com/loclv/llm-lean-log).
@@ -41,6 +40,9 @@ l-log tags ./logs/example.csv tag1 tag2
 
 # Add a new log entry
 l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+
+# Export logs to JSONL format
+l-log export jsonl ./logs/example.csv --out=logs.jsonl
 ```
 
 For human users viewing logs:
@@ -67,12 +69,11 @@ l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem descrip
 
 ## 🤖 Ask AI agent (LLMs) to write a log
 
-> use l-log CLI to save chat log above
+>use l-log CLI to save chat log above
 
 ## Ask AI agent (LLMs) to read a log
 
-> read last chat logs from "./logs/example.csv" and tell me what should I do next
-
+>read last chat logs from "./logs/example.csv" and tell me what should I do next
 Example LLMs's response:
 
 ```text

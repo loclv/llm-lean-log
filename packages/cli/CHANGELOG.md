@@ -2,6 +2,15 @@
 
 All notable changes to the `llm-lean-log-cli` package will be documented in this file.
 
+## [0.2.13] - 2026-05-10
+
+### Added
+
+- JSONL Export: Added `export jsonl` command to export logs to JSONL format
+- JSONL Export: Added `export json-lines` alias for the export command
+- JSONL Export: Added support for `--out`, `--path`, and `--file` flags to specify output file path
+- JSONL Export: Enhanced export capabilities with machine-readable JSONL format for programmatic processing
+
 ## [0.2.12] - 2026-05-08
 
 ### Added

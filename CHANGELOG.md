@@ -7,6 +7,14 @@ This project is a monorepo containing multiple packages. For detailed changes, p
 - [`l-log-mcp`](./packages/mcp-server/CHANGELOG.md)
 - [`l-log-mcp-server`](./packages/mcp-server/CHANGELOG.md)
 
+## v0.2.8 - May 10, 2026
+
+- Added JSONL export functionality to both CLI packages (`llm-lean-log-cli` and `bl-log`)
+- Implemented core JSONL utilities in `llm-lean-log-core` package for converting logs to/from JSONL format
+- Added `export jsonl` and `export json-lines` commands with flexible output path options
+- Enhanced export capabilities with machine-readable JSONL format for programmatic processing
+- Added comprehensive unit tests for JSONL conversion and file I/O operations
+
 ## v0.2.7 - May 8, 2026
 
 - Introduced `export md` command to export logs to tool-agnostic Markdown format (supporting Obsidian, Logseq, etc.)
