@@ -13,7 +13,8 @@ search <query>,--human,Search logs by name/problem/solution
 tags <tag1> [tag2],--human,Filter logs by tags
 add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>,--diff|--no-diff",Add a new log entry
 help|-h|--help,--human,Show this help message
-export md,--vault=<path>,Export logs to Markdown files (Obsidian style)
+export md|markdown|obsidian,"--vault=<path>,--path=<path>,--out=<path>",Export logs to Markdown files (Obsidian style)
+export jsonl|json-lines,"--out=<path>,--path=<path>,--file=<path>",Export logs to JSON Lines format
 -v|-V|--version,,Show version number
 
 examples:
@@ -23,8 +24,9 @@ l-log view 0
 l-log view --last
 l-log search "memory"
 l-log tags error api
-l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --cause="" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --model="gpt-4o"
-l-log export md ./logs/example.csv --vault=./my-vault
+l-log add ./logs/chat.csv "Task name" --tags="tag1,tag2" --problem="Detailed problem description" --solution="Detailed solution" --action="Action taken" --files="file1.ts,file2.ts" --tech-stack="bun,ts" --created-by-agent="Antigravity"
+l-log export md ./logs/chat.csv --vault=./my-vault
+l-log export jsonl ./logs/chat.csv --out=./logs/export.jsonl
 `;
 
 export const helpTextForHuman = `l-log CLI
@@ -67,10 +69,14 @@ Commands:
     --diff | Save git diff file (default: true)
     --no-diff | Skip saving git diff file
   
+  help, -h, --help | Show this help message
     --human | Show human-readable output (default for terminal)
   
   export md | Export logs to Markdown files (Obsidian style)
     --vault=<path> | Path to Markdown vault (e.g. Obsidian)
+
+  export jsonl | Export logs to JSON Lines format
+    --out=<path> | Output file path
 
   -v, -V, --version | Show version number
 
@@ -81,6 +87,7 @@ Examples for LLMs:
   l-log view --last
   l-log search "memory"
   l-log tags error api
-  l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Bug description" --files="file1.ts,src/file2.ts" --tech-stack="ts,react" --cause="" --causeIds="721ace2b-5e73-4901-bef9-97de16bf170f" --model="gpt-4o"
-  l-log export md ./logs/example.csv --vault=./my-vault
+  l-log add ./logs/chat.csv "Task name" --tags="tag1,tag2" --problem="Detailed problem description" --solution="Detailed solution" --action="Action taken" --files="file1.ts,file2.ts" --tech-stack="bun,ts" --created-by-agent="Antigravity"
+  l-log export md ./logs/chat.csv --vault=./my-vault
+  l-log export jsonl ./logs/chat.csv --out=./logs/export.jsonl
 `;

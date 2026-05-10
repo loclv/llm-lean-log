@@ -270,7 +270,7 @@ This project is optimized for LLM token usage. When making changes:
 If you're an AI agent contributing to this project, you must log your work using the `l-log` CLI:
 
 ```bash
-l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --created-by-agent="<agent-name>"
+l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"
 ```
 
 Ensure log path: `./logs/chat.csv`

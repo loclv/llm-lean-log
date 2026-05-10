@@ -56,15 +56,13 @@ bun run example
 ## Work Logging (Required)
 
 Whenever you finish a task or modify code, you must log your work using the `l-log` CLI:
-
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="OpenCode"`
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"`
 
 Ensure log path: `./logs/chat.csv`
 
 ## Context Retrieval (MCP)
 
 This project has an MCP server `llm-memory` configured:
-
 - `search_logs(query)` - Find how problems were solved
 - `get_task_history(taskName)` - See feature progression
 - `recent_work` - Overview of recent work
@@ -85,11 +83,11 @@ This project has an MCP server `llm-memory` configured:
 
 ### Formatting
 
-- **Indentation**: Use tabs (configured in biome.json)
-- **Quotes**: Use double quotes for strings
-- **Line endings**: Use LF
-- **Semicolons**: Required
-- **Trailing commas**: Required in multi-line structures
+- Indentation: Use tabs (configured in biome.json)
+- Quotes: Use double quotes for strings
+- Line endings: Use LF
+- Semicolons: Required
+- Trailing commas: Required in multi-line structures
 - Run `bun run fmt` and `bun run lint` to ensure compliance
 
 ### TypeScript Conventions
@@ -101,11 +99,11 @@ This project has an MCP server `llm-memory` configured:
 
 ### Naming Conventions
 
-- **Files**: kebab-case (`csv-utils.ts`, `logger.test.ts`)
-- **Functions**: camelCase (`loadLogs`, `createLogEntry`)
-- **Constants**: UPPER_SNAKE_CASE for exports (`CSV_HEADERS`)
-- **Types**: PascalCase (`LogEntry`, `CsvRow`)
-- **Variables**: camelCase
+- Files: kebab-case (`csv-utils.ts`, `logger.test.ts`)
+- Functions: camelCase (`loadLogs`, `createLogEntry`)
+- Constants: UPPER_SNAKE_CASE for exports (`CSV_HEADERS`)
+- Types: PascalCase (`LogEntry`, `CsvRow`)
+- Variables: camelCase
 
 ### Function Documentation
 
@@ -125,7 +123,6 @@ export async function loadLogs(filePath: string): Promise<LogEntry[]> {
 ### Testing
 
 Write unit tests for ALL new functions and bug fixes:
-
 - Test files: `*.test.ts` in same directory as source
 - Use `bun:test` with `describe`, `test`/`it`, `expect`
 - Test both happy path and error cases
@@ -194,7 +191,6 @@ describe("functionName", () => {
 ## Console Output
 
 Use `\n` to separate multiple lines in console.log/console.warn/console.error
-
 Remember: This file is your guide. When in doubt, check existing code for patterns and follow the established conventions.
 
 ## When change code

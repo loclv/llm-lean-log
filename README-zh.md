@@ -5,7 +5,6 @@
 </p>
 
 使用 LLM 及其代理来读写日志：
-
 - Antigravity
 - Cursor
 - Windsurf
@@ -14,11 +13,9 @@
 - 或您选择的任何 LLM 客户端
 
 从我日常编码需求出发，我想要一个记录与AI代理聊天会话的工具，以便将其用作个人参考资料或项目文档。在浏览开发者群组时，我还注意到对跨多台机器同步聊天日志和保存长期历史记录的需求日益增长。
-
 这就是 `llm-lean-log-cli` 的由来：一个用于读写聊天历史记录的工具，针对最小化token使用进行了优化——这意味着更少的tokens，因此成本更低。
 
-> 📝 为大语言模型（LLM）设计的日志记录工具，但去除了冗余部分。
-
+>📝 为大语言模型（LLM）设计的日志记录工具，但去除了冗余部分。
 `llm-lean-log` 是一种为大语言模型token使用量优化的日志格式，基于CSV数据的因果关系。
 
 ## 🍓 让AI代理（LLM）写日志
@@ -30,26 +27,21 @@ bun add -g llm-lean-log-cli
 ```
 
 通过提示词让LLM写日志：
-
-> 使用 `l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` 命令行工具保存上面的聊天记录
+>使用 `l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --solution="解决方案" --action="行动" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` 命令行工具保存上面的聊天记录
 
 或者对用户来说更简单但对LLM效率较低的方式：
-
-> 使用 l-log CLI 保存上面的聊天记录
+>使用 l-log CLI 保存上面的聊天记录
 
 或者：
-
-> 使用 l-log 保存
+>使用 l-log 保存
 
 ## 🍓 让AI代理（LLM）读取日志
 
 只通过提示词让LLM读取最后一条日志（对LLM高效）：
-
-> 运行 `l-log view ./logs/example.csv --last` 命令并读取输出
+>运行 `l-log view ./logs/example.csv --last` 命令并读取输出
 
 通过提示词让LLM读取所有日志（对LLM效率较低）：
-
-> 从"./logs/example.csv"读取最近的聊天记录，并告诉我接下来应该做什么
+>从"./logs/example.csv"读取最近的聊天记录，并告诉我接下来应该做什么
 
 这是LLM读取日志的有效方式。节省时间、token和能源。因为LLM不需要先读取长CSV文件才能在日志末尾写入新日志。
 
@@ -63,12 +55,10 @@ touch .agent/rules/common.md
 ```
 
 复制 [.agent/rules/common.md](.agent/rules/common.md) 的内容。
-
 更改规则中的 `logs/chat.csv` 文件路径。
 
 如果LLMs忘记写日志或者不知道应该写日志时，可以提示LLMs写日志：
-
-> use l-log
+>use l-log
 
 ## 🌵 MCP Memory
 
@@ -95,7 +85,6 @@ touch .agent/rules/common.md
 ## ✅ 解决方案
 
 <img src="docs/imgs/graph.png" alt="图" width="256">
-
 🪴 创建一个简单、单一、平面的CSV数据格式文件作为日志：
 
 - 🌟 表头是日志记录的重要字段：
@@ -182,7 +171,6 @@ bun add -g llm-lean-log-cli
 ## 💻 使用方法
 
 `llm-lean-log-cli` 的二进制名称是 `l-log`。
-
 对于LLM查看日志（不需要 `--human` 选项，输出是CSV格式（+ 如果元数据列为空则自动隐藏））：
 
 ```bash
@@ -303,7 +291,6 @@ bun cli stats
 ```
 
 截图：
-
 ![CLI Stats](docs/imgs/bun-cli-stats.png)
 
 ```bash
@@ -315,7 +302,6 @@ bun cli view --last
 ```
 
 截图：
-
 ![CLI View](docs/imgs/bun-cli-view.png)
 
 ```bash
@@ -324,7 +310,6 @@ bun cli search "memory"
 ```
 
 截图：
-
 ![CLI Search](docs/imgs/bun-cli-search.png)
 
 ```bash
@@ -359,7 +344,7 @@ bun cli help
   - `jeff-hykin.better-csv-syntax` - CSV语法高亮（带颜色编码）
   - `YoavBls.pretty-ts-errors` - 美观的TypeScript错误
   - `ReprEng.csv` - CSV支持
-  
+
 ![CSV Preview](./docs/imgs/screenshot-csv-preview.png)
 
 ## 📚 覆盖状态

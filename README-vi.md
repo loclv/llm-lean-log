@@ -5,7 +5,6 @@
 </p>
 
 Làm việc với các LLM và các agent của chúng để ghi và đọc nhật ký:
-
 - Antigravity
 - Cursor
 - Windsurf
@@ -14,11 +13,9 @@ Làm việc với các LLM và các agent của chúng để ghi và đọc nh�
 - hoặc bất kỳ ứng dụng / client LLM nào bạn muốn
 
 Xuất phát từ nhu cầu hàng ngày coding, mình muốn có 1 tool để ghi Chat log với AI Agent để làm tài liệu tra cứu cho bản thân hoặc docs của dự án. Mình lướt thấy trong các group cũng có nhu cầu sync chat log nhiều máy, lưu lịch sử...
-
 Từ đó, `llm-lean-log-cli` là tool đọc, ghi lịch sử chat tối ưu cho lượng token cần sử dụng -> tiết kiệm token -> tiết kiệm tiền.
 
-> 📝 Ghi log cho LLM, nhưng lược bỏ phần dư thừa.
-
+>📝 Ghi log cho LLM, nhưng lược bỏ phần dư thừa.
 `llm-lean-log` là một định dạng ghi log được tối ưu hóa cho mức tiêu thụ token của LLM (Mô hình ngôn ngữ lớn), thể hiện các mối quan hệ nguyên nhân và kết quả dựa trên dữ liệu CSV.
 
 ## 🍓 Yêu cầu AI agent (LLM) viết log
@@ -30,26 +27,21 @@ bun add -g llm-lean-log-cli
 ```
 
 Yêu cầu LLM viết log bằng lệnh:
-
-> sử dụng công cụ CLI `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề"` để lưu log cuộc hội thoại cuối cùng / cuộc nói chuyện ở trên
+>sử dụng công cụ CLI `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề" --solution="Mô tả giải pháp" --action="Mô tả hành động" --files="tên_file" --tech-stack="tech-stack" --causeIds="id1,id2" --created-by-agent="agent-name"` để lưu log cuộc hội thoại cuối cùng / cuộc nói chuyện ở trên
 
 Hoặc đơn giản hơn cho người dùng nhưng ít hiệu quả hơn cho LLM:
-
-> sử dụng l-log CLI để lưu log hội thoại trên
+>sử dụng l-log CLI để lưu log hội thoại trên
 
 Hoặc:
-
-> sử dụng l-log để lưu
+>sử dụng l-log để lưu
 
 ## 🍓 Yêu cầu AI agent (LLM) đọc log
 
 Yêu cầu LLM chỉ đọc log cuối cùng bằng lệnh (hiệu quả cho LLM):
-
-> chạy CLI `l-log view ./logs/example.csv --last` và đọc kết quả
+>chạy CLI `l-log view ./logs/example.csv --last` và đọc kết quả
 
 Yêu cầu LLM đọc tất cả log bằng lệnh (ít hiệu quả hơn cho LLM):
-
-> đọc log hội thoại cuối cùng từ "./logs/example.csv" và cho tôi biết tôi nên làm gì tiếp theo
+>đọc log hội thoại cuối cùng từ "./logs/example.csv" và cho tôi biết tôi nên làm gì tiếp theo
 
 Đây là một cách hiệu quả để LLM đọc log. Tiết kiệm thời gian, token và năng lượng. Bởi vì LLM không cần phải đọc các tệp CSV dài trước khi có thể viết một log vào cuối phiên làm việc.
 
@@ -63,12 +55,10 @@ touch .agent/rules/common.md
 ```
 
 Copy nội dung của [.agent/rules/common.md](.agent/rules/common.md).
-
 Thay đổi `logs/chat.csv` file path trong quy tắc.
 
 Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi trả lời người dùng, bạn có thể yêu cầu LLMs viết lại log bằng lệnh:
-
-> use l-log
+>use l-log
 
 ## 🌵 MCP Memory
 
@@ -95,7 +85,6 @@ Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi tr
 ## ✅ Giải pháp
 
 <img src="docs/imgs/graph.png" alt="Graph" width="256">
-
 🪴 Tạo một tệp định dạng dữ liệu CSV đơn giản, duy nhất và phẳng cho các log:
 
 - 🌟 Các tiêu đề (Headers) là những trường quan trọng của logger:
@@ -182,7 +171,6 @@ bun add -g llm-lean-log-cli
 ## 💻 Cách sử dụng
 
 Tên tệp thực thi của `llm-lean-log-cli` là `l-log`.
-
 Đối với LLM khi xem log (không cần tùy chọn `--human`, đầu ra là định dạng CSV (+ tự động ẩn các cột Metadata nếu trống)):
 
 ```bash
@@ -303,7 +291,6 @@ bun cli stats
 ```
 
 Ảnh chụp màn hình:
-
 ![CLI Stats](docs/imgs/bun-cli-stats.png)
 
 ```bash
@@ -315,7 +302,6 @@ bun cli view --last
 ```
 
 Ảnh chụp màn hình:
-
 ![CLI View](docs/imgs/bun-cli-view.png)
 
 ```bash
@@ -324,7 +310,6 @@ bun cli search "memory"
 ```
 
 Ảnh chụp màn hình:
-
 ![CLI Search](docs/imgs/bun-cli-search.png)
 
 ```bash

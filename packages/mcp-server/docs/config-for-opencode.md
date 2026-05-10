@@ -1,7 +1,6 @@
 # Configuration for OpenCode
 
 Important: The MCP server requires the `LLM_LOG_PATH` environment variable to point to your chat log file.
-
 Add this to your `opencode.json` or `.opencode.json` (usually located at `~/.opencode.json` or in your project root):
 
 ```json
@@ -40,7 +39,7 @@ This project uses `llm-lean-log` to maintain a history of development tasks. As 
 
 Whenever you finish a task or modify code, you must log your work using the `l-log` CLI.
 
-Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="OpenCode"`
+Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"`
 
 Ensure log path: `./logs/chat.csv`
 

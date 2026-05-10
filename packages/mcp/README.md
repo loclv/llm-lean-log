@@ -5,7 +5,6 @@ An MCP server that exposes your `llm-lean-log` history as a queryable memory for
 ## Installation
 
 This package is part of the `llm-lean-log` monorepo.
-
 To run the standalone server locally:
 
 ```bash
@@ -27,7 +26,6 @@ The server should start without errors and show available resources and tools.
 ## Configuration for Claude Desktop
 
 Important: The MCP server requires the `LLM_LOG_PATH` environment variable to point to your chat log file.
-
 Add this to your `claude_config.json`:
 
 ```json
@@ -49,7 +47,6 @@ Add this to your `claude_config.json`:
 ## Configuration for OpenCode
 
 Important: The MCP server requires the `LLM_LOG_PATH` environment variable to point to your chat log file.
-
 Add this to your `opencode.json` or `.opencode.json` (usually located at `~/.opencode.json` or in your project root):
 
 ```json
@@ -88,7 +85,7 @@ This project uses `llm-lean-log` to maintain a history of development tasks. As 
 
 Whenever you finish a task or modify code, you must log your work using the `l-log` CLI.
 
-Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="OpenCode"`
+Command Format: `l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"`
 
 Ensure log path: `./logs/chat.csv`
 
@@ -174,7 +171,6 @@ MCP Server is running on stdio
 ```
 
 Ask `search_logs "CSV parsing"`:
-
 Expected response:
 
 ```text
@@ -203,22 +199,18 @@ The CSV parsing functionality is primarily implemented in the llm-lean-log-core 
 ### Common Issues
 
 Server fails to start:
-
 - Ensure `LLM_LOG_PATH` is set and points to a valid CSV file
 - Check that the file path is absolute, not relative
 
 Path not found errors:
-
 - Use absolute paths in configuration files
 - On macOS/Linux, paths start with `/Users/...` or `/home/...`
 - On Windows, use forward slashes or escaped backslashes
 
 Permission denied:
-
 - Ensure the log file is readable by the user running the MCP server
 - Check directory permissions for the log file location
 
 No resources/tools available:
-
 - Verify the server started successfully (check console output)
 - Ensure the MCP client is properly configured to connect to the server

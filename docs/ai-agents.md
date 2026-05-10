@@ -11,7 +11,6 @@ bun add -g llm-lean-log-cli
 ```
 
 2. Configure your AI agent rules (see below)
-
 3. Optionally, set up the MCP server for context retrieval (see MCP section)
 
 ## Configuring AI Agents
@@ -60,7 +59,7 @@ trigger: always_on
 
 Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
-l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --created-by-agent="<agent-name>"
+l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"
 
 Before logging:
 
@@ -138,7 +137,6 @@ l-log-mcp-server --config
 ### Example Usage
 
 After configuring the MCP server, you can ask your AI agent:
-
 - "Show me the last 50 log entries to see what I've been working on recently"
 - "What are my project statistics? How many entries do I have and what tags have I used?"
 - "What was the very last thing I worked on?"
@@ -155,39 +153,36 @@ You can use different levels of specificity when asking AI agents to write logs:
 
 ### Detailed (most efficient for LLMs)
 
-> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --cause="<cause>" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
+>use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --cause="<cause>" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
 
 ### Simple
 
-> use l-log CLI to save chat log above
+>use l-log CLI to save chat log above
 
 ### Minimal
 
-> use l-log to save
+>use l-log to save
 
 ### If Agent Forgets
 
 If the AI agent forgets to write the log, you can remind it with:
-
-> use l-log
+>use l-log
 
 ## Asking AI Agents to Read Logs
 
 ### Efficient (recommended)
 
-> run l-log view ./logs/example.csv --last CLI and read output
+>run l-log view ./logs/example.csv --last CLI and read output
 
 ### Less Efficient
 
-> read last chat logs from "./logs/example.csv" and tell me what should I do next
-
+>read last chat logs from "./logs/example.csv" and tell me what should I do next
 The efficient approach is better because the AI agent doesn't need to read the entire CSV file before it can write a new log entry. This saves time, tokens, and energy.
 
 ## Exporting Logs to Markdown
 
 You can export your logs to Markdown files (e.g., for Obsidian) using the `export md` command:
-
-> run `l-log export md ./logs/chat.csv --vault=./my-vault` CLI
+>run `l-log export md ./logs/chat.csv --vault=./my-vault` CLI
 
 This will create a `Logs/LLM/` directory in your vault and populate it with Markdown notes for each log entry.
 
@@ -196,7 +191,6 @@ This will create a `Logs/LLM/` directory in your vault and populate it with Mark
 ### Functional Programming
 
 Projects using llm-lean-log typically prefer a functional programming approach:
-
 - Use functional programming approach
 - Do not use classes, OOP design patterns, etc.
 
@@ -236,7 +230,6 @@ describe("functionName", () => {
 ### Bun Usage
 
 Default to using Bun instead of Node.js:
-
 - Use bun run <file> instead of node <file> or ts-node <file>
 - Use bun i instead of npm install or yarn install or pnpm install
 - Use bun run <script> instead of npm run <script> or yarn run <script> or pnpm run <script>
@@ -257,23 +250,19 @@ Default to using Bun instead of Node.js:
 ### MCP Server Issues
 
 Server fails to start:
-
 - Ensure LLM_LOG_PATH is set and points to a valid CSV file
 - Check that the file path is absolute, not relative
 
 Path not found errors:
-
 - Use absolute paths in configuration files
 - On macOS/Linux, paths start with /Users/... or /home/...
 - On Windows, use forward slashes or escaped backslashes
 
 Permission denied:
-
 - Ensure the log file is readable by the user running the MCP server
 - Check directory permissions for the log file location
 
 No resources/tools available:
-
 - Verify the server started successfully (check console output)
 - Ensure the MCP client is properly configured to connect to the server
 

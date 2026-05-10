@@ -4,16 +4,15 @@
   <img src="docs/imgs/logo.webp" alt="llm-lean-log logo" width="200">
 </p>
 
-|Package|What is it?|Version|Downloads|NPM Page|
+| Package | What is it? | Version | Downloads | NPM Page |
 |---|---|---|---|---|
-|llm-lean-log-cli|CLI tool to save/read chat logs|![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli)|![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core)|[npm page](https://www.npmjs.com/package/llm-lean-log-cli)|
-|llm-lean-log-core|Core library to save/read chat logs|![llm-lean-log-core npm](https://img.shields.io/npm/v/llm-lean-log-core)|![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/llm-lean-log-core)|
-|bl-log|CLI tool to save/read chat logs for Bun only|![bl-log npm](https://img.shields.io/npm/v/bl-log)|![bl-log npm](https://img.shields.io/npm/dw/bl-log)|[npm page](https://www.npmjs.com/package/bl-log)|
-|l-log-vis|CLI tool to view chat logs|![l-log-vis npm](https://img.shields.io/npm/v/l-log-vis)|![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis)|[npm page](https://www.npmjs.com/package/l-log-vis)|
-|l-log-mcp-server|MCP Server to save/read chat logs|![l-log-mcp-server npm](https://img.shields.io/npm/v/l-log-mcp-server)|![l-log-mcp-server npm](https://img.shields.io/npm/dw/l-log-mcp-server)|[npm page](https://www.npmjs.com/package/l-log-mcp-server)|
+| llm-lean-log-cli | CLI tool to save/read chat logs | ![llm-lean-log-cli npm](https://img.shields.io/npm/v/llm-lean-log-cli) | ![llm-lean-log-core npm](https://img.shields.io/npm/dw/llm-lean-log-core) | [npm page](https://www.npmjs.com/package/llm-lean-log-cli) |
+| llm-lean-log-core | Core library to save/read chat logs | ![llm-lean-log-core npm](https://img.shields.io/npm/v/llm-lean-log-core) | ![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis) | [npm page](https://www.npmjs.com/package/llm-lean-log-core) |
+| bl-log | CLI tool to save/read chat logs for Bun only | ![bl-log npm](https://img.shields.io/npm/v/bl-log) | ![bl-log npm](https://img.shields.io/npm/dw/bl-log) | [npm page](https://www.npmjs.com/package/bl-log) |
+| l-log-vis | CLI tool to view chat logs | ![l-log-vis npm](https://img.shields.io/npm/v/l-log-vis) | ![l-log-vis npm](https://img.shields.io/npm/dw/l-log-vis) | [npm page](https://www.npmjs.com/package/l-log-vis) |
+| l-log-mcp-server | MCP Server to save/read chat logs | ![l-log-mcp-server npm](https://img.shields.io/npm/v/l-log-mcp-server) | ![l-log-mcp-server npm](https://img.shields.io/npm/dw/l-log-mcp-server) | [npm page](https://www.npmjs.com/package/l-log-mcp-server) |
 
 [Vietnamese](README-vi.md) | [Japanese](README-ja.md) | [Chinese](README-zh.md)
-
 Work with LLMs and it's agents to write and read logs:
 
 - Antigravity
@@ -24,11 +23,9 @@ Work with LLMs and it's agents to write and read logs:
 - or what LLM client you want
 
 Starting from my day-to-day coding needs, I wanted a tool to log chat sessions with AI agents so I could use them as personal reference material or as project documentation. While browsing developer groups, I also noticed a growing demand for syncing chat logs across multiple machines and keeping long-term history.
-
 That’s how `llm-lean-log-cli` was born: a tool for reading and writing chat history optimized for minimal token usage — which means fewer tokens, and therefore lower cost.
 
-> 📝 Logging for LLMs, but we cut the fat.
-
+>📝 Logging for LLMs, but we cut the fat.
 `llm-lean-log` is a format for logging that is optimized for LLMs token usage, cause and effect relationships based on CSV Data.
 
 ## 🍓 Ask AI agent (LLMs) to write a log
@@ -40,26 +37,21 @@ bun add -g llm-lean-log-cli
 ```
 
 Ask LLMs to write a log by prompt:
-
-> use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
+>use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
 
 Or simpler for user but less efficient for LLMs:
-
-> use l-log CLI to save chat log above
+>use l-log CLI to save chat log above
 
 Or:
-
-> use l-log to save
+>use l-log to save
 
 ## 🍓 Ask AI agent (LLMs) to read a log
 
 Ask LLMs to read last log only by prompt (efficient for LLMs):
-
-> run `l-log view ./logs/example.csv --last` CLI and read output
+>run `l-log view ./logs/example.csv --last` CLI and read output
 
 Ask LLMs to read all logs by prompt (less efficient for LLMs):
-
-> read last chat logs from "./logs/example.csv" and tell me what should I do next
+>read last chat logs from "./logs/example.csv" and tell me what should I do next
 
 This is a efficient way to read logs for LLMs. Save time, tokens and energy. Because LLMs no need to read long CSV files before LLMs can write a log at the end of the log.
 
@@ -83,7 +75,7 @@ trigger: always_on
 
 Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --created-by-agent="<agent-name>"`
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"`
 
 Note: `--last-commit-short-sha` is optional and will be auto-populated by the CLI if not provided.
 
@@ -94,12 +86,10 @@ Before run:
 - log path: `./logs/chat.csv`.
 
 ```
-
 With `logs/chat.csv` file path, you can change it to any path you want.
 
 If LLMs forget about the log or it is not known that should write the log when responding to a user, you can ask LLMs to write the log again by prompt:
-
-> use l-log
+>use l-log
 
 ## 🌵 MCP Memory
 
@@ -126,11 +116,9 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
 ## ✅ Solution
 
 <img src="docs/imgs/graph.png" alt="Graph" width="256">
-
 🪴 Create a simple, single, flat, CSV data format file for logs:
 
 - 🌟 Headers are logger important fields:
-
   - `id`: log ID (required), UUID for unique identifier, used for Directed Graph, cause and effect.
   - `name`: main content of the log (short). (required)
   - `tags`: tags to categorize the log, comma separated, wrap with double quotes if multiple tags. Example: `"error,api,auth"`. (optional)
@@ -139,7 +127,6 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
   - `action`: run command, action (web search, etc.) that was taken to fix the problem. (optional)
 
     - running command format: `text {language}`\`code-block\``
-
       - Example of row value:
 
         ```text
@@ -152,7 +139,6 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
         - Learn from Markdown code blocks format, so humans can read and understand the code.
 
     - Format: `text {language}`\`code-block\`` or markdown code block or text.
-
   - `files`: list of files that were modified, created, deleted or must be read (optional).
     - Example: `"src/index.ts,src/constants.ts"`
     - Why?
@@ -171,14 +157,12 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
     - Format: text.
 
   - `causeIds`: cause log ID of the log (optional).
-
     - Example: `"UUID,UUID"`
     - Why?
       - Better understanding of the log.
     - Format: comma separated list of other log IDs, wrap with double quotes if multiple cause log IDs.
 
   - `effectIds`: effect log ID of the log (optional).
-
     - Example: `"UUID,UUID"`
     - Why?
       - Better understanding of the log.
@@ -211,7 +195,6 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
 ## Another problems
 
 Problem: CSV format is sometimes hard to read since it's not human-friendly, too long lines, no code-blocks support.
-
 - Solution: Use `llm-lean-log-cli` CLI tool for viewing logs in a more human-friendly way.
 
 ```bash
@@ -219,7 +202,6 @@ bun add -g llm-lean-log-cli
 ```
 
 User want to view `git diff` from log:
-
 - Solution: `llm-lean-log-cli` CLI tool will auto save `git diff` to `.diff` file.
   - When LLM/ Human write logs, it will auto save `git diff` to `.diff` file.
     - use `git diff -- . ':(exclude)*.lock' ':(exclude)yarn.lock' ':(exclude)package-lock.json' > <UUID>.diff` to exclude `*.lock` files.
@@ -227,7 +209,6 @@ User want to view `git diff` from log:
 ## 💻 Usage
 
 `llm-lean-log-cli`'s bin name is `l-log`.
-
 For LLMs viewing logs (no need `--human` option, output is CSV format (+ auto-hide Metadata columns if empty)):
 
 ```bash
@@ -362,7 +343,6 @@ bun cli stats
 ```
 
 Screenshots:
-
 ![CLI Stats](docs/imgs/bun-cli-stats.png)
 
 ```bash
@@ -374,7 +354,6 @@ bun cli view --last
 ```
 
 Screenshots:
-
 ![CLI View](docs/imgs/bun-cli-view.png)
 
 ```bash
@@ -383,7 +362,6 @@ bun cli search "memory"
 ```
 
 Screenshots:
-
 ![CLI Search](docs/imgs/bun-cli-search.png)
 
 ```bash

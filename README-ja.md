@@ -5,7 +5,6 @@
 </p>
 
 LLMとそのエージェントを使用して、ログの書き込みと読み取りを行います。
-
 - Antigravity
 - Cursor
 - Windsurf
@@ -14,11 +13,9 @@ LLMとそのエージェントを使用して、ログの書き込みと読み�
 - または、お好みのLLMクライアント
 
 私の日常的なコーディングニーズから始まり、私はAIエージェントとのチャットセッションを記録するツールを必要としました。これにより、個人的な参考資料やプロジェクトドキュメントとして使用できます。開発者のグループを閲覧している間、複数のマシン間でチャットログを同期し、長期的な履歴を保持するための需要が高まっていることも気づきました。
-
 それが `llm-lean-log-cli` が誕生した理由です：トークン使用量を最小限に抑えるように最適化されたチャット履歴の読み書きのためのツールです。つまり、より少ないトークン数で、それゆえにコストも低くなります。
 
-> 📝 大規模言語モデル（LLM）のためのロギングですが、余分な機能は削除されています。
-
+>📝 大規模言語モデル（LLM）のためのロギングですが、余分な機能は削除されています。
 `llm-lean-log` は、CSVデータに基づく原因と結果の関係を持つ、LLMのトークン使用量を最適化したロギングフォーマットです。
 
 ## 🍓 AIエージェント（LLM）にログを書かせる
@@ -30,26 +27,21 @@ bun add -g llm-lean-log-cli
 ```
 
 プロンプトでLLMにログを書かせる：
-
-> `l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLIツールを使用して上記のチャットログ/会話を保存
+>`l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLIツールを使用して上記のチャットログ/会話を保存
 
 またはユーザーにとってはより簡単だがLLMには効率が悪い方法：
-
-> 上記のチャットログを保存するためにl-log CLIを使用
+>上記のチャットログを保存するためにl-log CLIを使用
 
 または：
-
-> l-log を使用して保存
+>l-log を使用して保存
 
 ## 🍓 AIエージェント（LLM）にログを読ませる
 
 プロンプトでLLMに最後のログのみを読ませる（LLMにとって効率的）：
-
-> `l-log view ./logs/example.csv --last` CLIを実行して出力を読み込む
+>`l-log view ./logs/example.csv --last` CLIを実行して出力を読み込む
 
 プロンプトでLLMにすべてのログを読ませる（LLMにとって効率が悪い）：
-
-> "./logs/example.csv"から最新のチャットログを読み込み、次に何をするべきか教えてください
+>"./logs/example.csv"から最新のチャットログを読み込み、次に何をするべきか教えてください
 
 これはLLMがログを読むための効率的な方法です。時間、トークン、エネルギーを節約できます。LLMがログの最後に新しいログを書く前に長いCSVファイルを読む必要がないためです。
 
@@ -63,10 +55,9 @@ touch .agent/rules/common.md
 ```
 
 [.agent/rules/common.md](.agent/rules/common.md)ファイルの内容をコピーしてください。
-
 もしLLMsがログを忘れるか、またはユーザーに応答する際にログを書くべきかどうかが不明確な場合は、プロンプトでLLMsにログを書くように要求できます：
 
-> use l-log
+>use l-log
 
 ## 🌵 MCP Memory
 
@@ -93,7 +84,6 @@ MCP Memoryを使用するには、`l-log-mcp-server`パッケージを使用し�
 ## ✅ 解決策
 
 <img src="docs/imgs/graph.png" alt="グラフ" width="256">
-
 🪴 ログ用のシンプルで単一の平面CSVデータフォーマットファイルを作成：
 
 - 🌟 ヘッダーはロガーの重要なフィールドです：
@@ -180,7 +170,6 @@ bun add -g llm-lean-log-cli
 ## 💻 使用方法
 
 `llm-lean-log-cli` のバイナリ名は `l-log` です。
-
 LLMによるログ表示用（`--human`オプションは不要、出力はCSV形式（+ 空の場合はメタデータ列を自動的に非表示））：
 
 ```bash
@@ -301,7 +290,6 @@ bun cli stats
 ```
 
 スクリーンショット：
-
 ![CLI Stats](docs/imgs/bun-cli-stats.png)
 
 ```bash
@@ -313,7 +301,6 @@ bun cli view --last
 ```
 
 スクリーンショット：
-
 ![CLI View](docs/imgs/bun-cli-view.png)
 
 ```bash
@@ -322,7 +309,6 @@ bun cli search "memory"
 ```
 
 スクリーンショット：
-
 ![CLI Search](docs/imgs/bun-cli-search.png)
 
 ```bash
@@ -357,7 +343,7 @@ bun cli help
   - `jeff-hykin.better-csv-syntax` - CSV構文ハイライト（カラーコーディング付き）
   - `YoavBls.pretty-ts-errors` - 美しいTypeScriptエラー
   - `ReprEng.csv` - CSVサポート
-  
+
 ![CSV Preview](./docs/imgs/screenshot-csv-preview.png)
 
 ## 📚 カバレッジ状況
