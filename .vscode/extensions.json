@@ -5,7 +5,7 @@
 		"DavidAnson.vscode-markdownlint",
 		"biomejs.biome",
 		"oven-sh.bun",
-		"ahmadawais.emoji-log-vscode",
-		"ReprEng.csv"
+		"ReprEng.csv",
+		"loclv.agent-md-formatter"
 	]
 }
