@@ -1,6 +1,6 @@
 {
 	"name": "bl-log",
-	"version": "0.2.12",
+	"version": "0.2.14",
 	"description": "CLI tool for llm-lean-log and Bun only",
 	"scripts": {
 		"cli": "bun run src/index.ts",
