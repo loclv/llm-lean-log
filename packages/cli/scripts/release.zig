@@ -90,7 +90,13 @@ fn isCommandAvailable(allocator: std.mem.Allocator, io: std.Io, environ_map: *st
 
 /// Update version in TypeScript const file
 fn updateConstVersion(io: std.Io, allocator: std.mem.Allocator, new_version: []const u8) !void {
-    const contents = try readFileContents(io, allocator, "src/utils/const.ts");
+    const contents = readFileContents(io, allocator, "src/utils/const.ts") catch |err| switch (err) {
+        error.FileNotFound => {
+            std.log.err("src/utils/const.ts not found", .{});
+            return error.FileNotFound;
+        },
+        else => return err,
+    };
     defer allocator.free(contents);
 
     // Find and replace version in the TypeScript file
@@ -112,11 +118,11 @@ fn updateConstVersion(io: std.Io, allocator: std.mem.Allocator, new_version: []c
     defer allocator.free(new_contents);
 
     // Copy before version
-    @memcpy(new_contents[0..start_idx], contents[0..start_idx]);
+    @memmove(new_contents[0..start_idx], contents[0..start_idx]);
     // Copy new version
-    @memcpy(new_contents[start_idx .. start_idx + new_version.len], new_version);
+    @memmove(new_contents[start_idx .. start_idx + new_version.len], new_version);
     // Copy after version
-    @memcpy(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
+    @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
     // Write new contents to the TypeScript file
     {
@@ -129,7 +135,13 @@ fn updateConstVersion(io: std.Io, allocator: std.mem.Allocator, new_version: []c
 
 /// Check if CHANGELOG.md contains the new version
 fn checkChangelog(io: std.Io, allocator: std.mem.Allocator, version: []const u8) !void {
-    const contents = try readFileContents(io, allocator, "CHANGELOG.md");
+    const contents = readFileContents(io, allocator, "CHANGELOG.md") catch |err| switch (err) {
+        error.FileNotFound => {
+            std.log.err("CHANGELOG.md not found", .{});
+            return error.FileNotFound;
+        },
+        else => return err,
+    };
     defer allocator.free(contents);
 
     const version_pattern = try std.fmt.allocPrint(allocator, "## [{s}]", .{version});
@@ -145,7 +157,13 @@ fn checkChangelog(io: std.Io, allocator: std.mem.Allocator, version: []const u8)
 
 /// Read package.json and update version
 fn updatePackageVersion(io: std.Io, allocator: std.mem.Allocator) ![]const u8 {
-    const contents = try readFileContents(io, allocator, "package.json");
+    const contents = readFileContents(io, allocator, "package.json") catch |err| switch (err) {
+        error.FileNotFound => {
+            std.log.err("package.json not found", .{});
+            return error.FileNotFound;
+        },
+        else => return err,
+    };
     defer allocator.free(contents);
 
     var parsed = try json.parseFromSlice(json.Value, allocator, contents, .{});
@@ -186,11 +204,11 @@ fn updatePackageVersion(io: std.Io, allocator: std.mem.Allocator) ![]const u8 {
     defer allocator.free(new_contents);
 
     // Copy before version
-    @memcpy(new_contents[0..start_idx], contents[0..start_idx]);
+    @memmove(new_contents[0..start_idx], contents[0..start_idx]);
     // Copy new version
-    @memcpy(new_contents[start_idx .. start_idx + new_version.len], new_version);
+    @memmove(new_contents[start_idx .. start_idx + new_version.len], new_version);
     // Copy after version
-    @memcpy(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
+    @memmove(new_contents[start_idx + new_version.len ..], contents[end_idx..]);
 
     // Write new package.json
     {
