@@ -14,7 +14,7 @@ import {
 	saveLogsToJSONL,
 	searchLogs,
 } from "llm-lean-log-core";
-import { helpText, helpTextForHuman } from "./const";
+import { agentRule, helpText, helpTextForHuman } from "./const";
 import { getLogFolderPathFromLogFilePath, mkdirIfNotExists } from "./files";
 import { getLastCommitShortSha, saveGitDiffExcludeLockFiles } from "./git";
 import { visualizeEntry, visualizeStats, visualizeTable } from "./visualizer";
@@ -32,7 +32,14 @@ export async function main(version: string) {
 	// Get the index where actual parameters start
 	const paramStart = hasLogFile ? 2 : 1;
 
-	let entries = await loadLogs(logFile);
+	// Skip loading logs if command is 'g-rule' or 'rule'
+	const isRuleCmd =
+		command === "g-rule" ||
+		command === "global-rule" ||
+		command === "rule" ||
+		command === "local-rule";
+
+	let entries = isRuleCmd ? [] : await loadLogs(logFile);
 	const isHuman = args.includes("--human");
 	const llm = !isHuman;
 
@@ -101,6 +108,31 @@ export async function main(version: string) {
 			const results = filterByTags(entries, tagsList);
 			const compact = args.includes("--compact") || args.includes("-c") || llm;
 			console.log(visualizeTable(results, { compact, llm }));
+			break;
+		}
+
+		case "g-rule":
+		case "global-rule": {
+			const home = Bun.env.HOME || Bun.env.USERPROFILE;
+			if (!home) {
+				console.error("Error: Could not find home directory");
+				process.exit(1);
+			}
+			const ruleDir = `${home}/.agents/rules`;
+			const rulePath = `${ruleDir}/l-log-rules.md`;
+			mkdirIfNotExists(ruleDir);
+			await Bun.write(rulePath, agentRule);
+			console.log(`Global agent rule added to ${rulePath}`);
+			break;
+		}
+
+		case "rule":
+		case "local-rule": {
+			const ruleDir = ".agents/rules";
+			const rulePath = `${ruleDir}/llm-lean-log.md`;
+			mkdirIfNotExists(ruleDir);
+			await Bun.write(rulePath, agentRule);
+			console.log(`Local agent rule added to ${rulePath}`);
 			break;
 		}
 

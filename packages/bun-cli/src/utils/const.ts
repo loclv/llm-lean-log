@@ -12,6 +12,8 @@ view <index>,"--last,--human",View detailed entry at index
 search <query>,--human,Search logs by name/problem/solution
 tags <tag1> [tag2],--human,Filter logs by tags
 add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>,--diff|--no-diff",Add a new log entry
+g-rule|global-rule,,Add global agent rule in ~/.agents/rules/l-log-rules.md
+rule|local-rule,,Add local agent rule in .agents/rules/llm-lean-log.md
 help|-h|--help,--human,Show this help message
 export md|markdown|obsidian,"--vault=<path>,--path=<path>,--out=<path>",Export logs to Markdown files (Obsidian style)
 export jsonl|json-lines,"--out=<path>,--path=<path>,--file=<path>",Export logs to JSON Lines format
@@ -25,6 +27,7 @@ l-log view --last
 l-log search "memory"
 l-log tags error api
 l-log add ./logs/chat.csv "Task name" --tags="tag1,tag2" --problem="Detailed problem description" --solution="Detailed solution" --action="Action taken" --files="file1.ts,file2.ts" --tech-stack="bun,ts" --created-by-agent="Antigravity"
+l-log add g-rule
 l-log export md ./logs/chat.csv --vault=./my-vault
 l-log export jsonl ./logs/chat.csv --out=./logs/export.jsonl
 `;
@@ -68,6 +71,9 @@ Commands:
     --created-by-agent=<name> | Agent model name
     --diff | Save git diff file (default: true)
     --no-diff | Skip saving git diff file
+
+  g-rule | Add global agent rule to ~/.agents/rules/l-log-rules.md
+  rule | Add local agent rule to .agents/rules/llm-lean-log.md
   
   help, -h, --help | Show this help message
     --human | Show human-readable output (default for terminal)
@@ -88,7 +94,26 @@ Examples for LLMs:
   l-log search "memory"
   l-log tags error api
   l-log add ./logs/chat.csv "Task name" --tags="tag1,tag2" --problem="Detailed problem description" --solution="Detailed solution" --action="Action taken" --files="file1.ts,file2.ts" --tech-stack="bun,ts" --created-by-agent="Antigravity"
+  l-log g-rule
   l-log export md ./logs/chat.csv --vault=./my-vault
   l-log export jsonl ./logs/chat.csv --out=./logs/export.jsonl
 `;
 
+export const agentRule = `---
+trigger: always_on
+---
+
+# Common rules for LLM agent
+
+Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
+
+\`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"\`
+
+Note: \`--last-commit-short-sha\` is optional and will be auto-populated by the CLI if not provided.
+
+Before run:
+
+- Install the l-log CLI if not already installed: \`bun add -g llm-lean-log-cli\`.
+- If need, run CLI help command: \`l-log -h\` for more information.
+- log path: \`./logs/chat.csv\`.
+`;

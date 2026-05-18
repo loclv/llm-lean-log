@@ -116,7 +116,7 @@ bun add -g bl-log
 #  - l-log (this means it is ready to use by `l-log` command, not package name)
 
 # Add to your agent configuration (example for Cursor/Windsurf)
-# In your .agent/rules/common.md:
+# In your .agents/rules/common.md:
 # Whenever you finish a task, run:
 # l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>"
 ```

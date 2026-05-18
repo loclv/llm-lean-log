@@ -29,6 +29,7 @@ JSONL (JSON Lines) format is ideal for:
 - Integration with data analysis tools
 - Machine learning pipelines
 - Programmatic log processing
+- Create Knowledge Base and Retrieval-Augmented Generation (RAG)
 
 ## Enhanced MCP Server - Now with 8 Tools!
 

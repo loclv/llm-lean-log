@@ -29,6 +29,7 @@ l-log export jsonl ./logs/chat.csv --file=output.jsonl
 - Tích hợp với các công cụ phân tích dữ liệu
 - Pipeline học máy
 - Xử lý log chương trình
+- Tạo Knowledge Base và Retrieval-Augmented Generation (RAG)
 
 ## MCP Server Nâng Cấp - Giờ có 8 Công cụ!
 

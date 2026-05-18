@@ -54,14 +54,14 @@ bun add -g llm-lean-log-cli
 
 ## 📚 为代理添加写日志规则
 
-例如，您可以将此规则添加到您的LLM代理配置文件中（例如 `.agent/rules/common.md`）：
+例如，您可以将此规则添加到您的LLM代理配置文件中（例如 `.agents/rules/common.md`）：
 
 ```bash
 # 创建文件
-touch .agent/rules/common.md
+touch .agents/rules/common.md
 ```
 
-复制 [.agent/rules/common.md](.agent/rules/common.md) 的内容。
+复制 [.agents/rules/common.md](.agents/rules/common.md) 的内容。
 更改规则中的 `logs/chat.csv` 文件路径。
 
 如果LLMs忘记写日志或者不知道应该写日志时，可以提示LLMs写日志：

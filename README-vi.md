@@ -54,14 +54,14 @@ Yêu cầu LLM đọc tất cả log bằng lệnh (ít hiệu quả hơn cho LL
 
 ## 📚 Thêm quy tắc cho agent ghi log
 
-Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agent/rules/common.md`):
+Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agents/rules/common.md`):
 
 ```bash
 # Tạo tệp
-touch .agent/rules/common.md
+touch .agents/rules/common.md
 ```
 
-Copy nội dung của [.agent/rules/common.md](.agent/rules/common.md).
+Copy nội dung của [.agents/rules/common.md](.agents/rules/common.md).
 Thay đổi `logs/chat.csv` file path trong quy tắc.
 
 Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi trả lời người dùng, bạn có thể yêu cầu LLMs viết lại log bằng lệnh:

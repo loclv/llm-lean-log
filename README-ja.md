@@ -54,14 +54,14 @@ bun add -g llm-lean-log-cli
 
 ## 📚 エージェントにログ記録ルールを追加
 
-たとえば、LLMエージェント設定ファイル（例：`.agent/rules/common.md`）にこのルールを追加できます：
+たとえば、LLMエージェント設定ファイル（例：`.agents/rules/common.md`）にこのルールを追加できます：
 
 ```bash
 # Create file
-touch .agent/rules/common.md
+touch .agents/rules/common.md
 ```
 
-[.agent/rules/common.md](.agent/rules/common.md)ファイルの内容をコピーしてください。
+[.agents/rules/common.md](.agents/rules/common.md)ファイルの内容をコピーしてください。
 もしLLMsがログを忘れるか、またはユーザーに応答する際にログを書くべきかどうかが不明確な場合は、プロンプトでLLMsにログを書くように要求できます：
 
 >use l-log

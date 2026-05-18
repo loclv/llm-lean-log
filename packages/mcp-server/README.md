@@ -200,7 +200,7 @@ bun run build
 
 To help AI agents understand and use this MCP server effectively, you can add the following to your agent's rules or skills configuration:
 
-### Sample Agent Rule (e.g., `.agent/rules/llm-memory.md`)
+### Sample Agent Rule (e.g., `.agents/rules/llm-memory.md`)
 
 ```markdown
 # LLM Memory MCP Server

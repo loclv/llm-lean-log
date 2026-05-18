@@ -64,11 +64,25 @@ This is a efficient way to read logs for LLMs. Save time, tokens and energy. Bec
 
 ## 📚 Add rules for agent to write log
 
-For example, you can add this rule to your LLM agent configuration file (e.g. `.agent/rules/common.md`):
+You can easily add the agent rule to your project or globally using the CLI.
+
+### Add local rule
+This adds the rule to `.agents/rules/llm-lean-log.md` in your current workspace.
+```bash
+l-log rule
+```
+
+### Add global rule
+This adds the rule to `~/.agents/rules/l-log-rules.md` (global).
+```bash
+l-log g-rule
+```
+
+Or you can manually add this rule to your LLM agent configuration file (e.g. `.agents/rules/common.md`):
 
 ```bash
 # Create file
-touch .agent/rules/common.md
+touch .agents/rules/common.md
 ```
 
 Add this content to the file:

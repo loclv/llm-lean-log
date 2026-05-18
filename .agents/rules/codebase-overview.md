@@ -19,7 +19,7 @@ This is a monorepo called `llm-lean-log` for maintaining development task histor
 ## Key Files to Know
 
 - Root config: `package.json` (workspace), `biome.json` (formatting/linting)
-- Agent rules: `.agent/rules/*.md` (auto-loaded for all agents)
+- Agent rules: `.agents/rules/*.md` (auto-loaded for all agents)
 - Project rules: `AGENTS.md` (OpenCode configuration)
 - Log path: `./logs/chat.csv`
 
