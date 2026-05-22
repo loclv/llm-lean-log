@@ -8,7 +8,7 @@ When change codes, always run unit tests: `bun test`.
 When change codes, always run TypeCheck: `bun tsc --noEmit`.
 
 Whenever you finish a task or a request from developer, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"`
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --tradeoff="<tradeoff>" --spec-decisions="<spec-decisions>" --should-know="<should-know>" --created-by-agent="<agent-name>"`
 
 Note: `--last-commit-short-sha` is optional and will be auto-populated by the CLI if not provided.
 Before run:
