@@ -27,14 +27,18 @@ LLMとそのエージェントを使用して、ログの書き込みと読み�
 
 ## 🍓 AIエージェント（LLM）にログを書かせる
 
-AIエージェント（LLM）にログを書かせる前に、`llm-lean-log-cli` CLIツールをグローバルにインストールしてください。
+AIエージェント（LLM）にログを書かせる前に、`llm-lean-log-cli` CLIツール（Node版）または`bl-log` CLIツール（Bun版）をグローバルにインストールしてください。
 
 ```bash
+# Node版
 bun add -g llm-lean-log-cli
+
+# またはBun版（Bunランタイム向けに最適化、コマンド名は bl-log）
+bun add -g bl-log
 ```
 
 プロンプトでLLMにログを書かせる：
->`l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLIツールを使用して上記のチャットログ/会話を保存
+>`l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --solution="解決策の説明" --tradeoff="トレードオフの説明" --spec-decisions="仕様外の決定事項の説明" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLIツールを使用して上記のチャットログ/会話を保存
 
 またはユーザーにとってはより簡単だがLLMには効率が悪い方法：
 >上記のチャットログを保存するためにl-log CLIを使用
@@ -54,16 +58,52 @@ bun add -g llm-lean-log-cli
 
 ## 📚 エージェントにログ記録ルールを追加
 
-たとえば、LLMエージェント設定ファイル（例：`.agents/rules/common.md`）にこのルールを追加できます：
+CLIツールを使用して、エージェントルールをプロジェクトまたはグローバルに簡単に追加できます。
+
+### ローカルルールの追加
+これにより、現在のワークスペースの `.agents/rules/llm-lean-log.md` にルールが追加されます。
+```bash
+l-log rule
+```
+
+### グローバルルールの追加
+これにより、`~/.agents/rules/l-log-rules.md` (グローバル) にルールが追加されます。
+```bash
+l-log g-rule
+```
+
+または、LLMエージェント設定ファイル（例：`.agents/rules/common.md`）にこのルールを手動で追加できます：
 
 ```bash
 # Create file
 touch .agents/rules/common.md
 ```
 
-[.agents/rules/common.md](.agents/rules/common.md)ファイルの内容をコピーしてください。
-もしLLMsがログを忘れるか、またはユーザーに応答する際にログを書くべきかどうかが不明確な場合は、プロンプトでLLMsにログを書くように要求できます：
+ファイルに次の内容を追加します：
 
+```text
+---
+trigger: always_on
+---
+
+# LLMエージェントの共通ルール
+
+タスクを完了したりコードを変更した場合は、必ず l-log bashコマンド（llm-lean-log-cliパッケージ）または bl-log（bl-logパッケージ）を使用して、次の形式で作業ログを記録してください：
+
+`l-log add ./logs/chat.csv "<タスク名>" --tags="<タグ>" --problem="<問題>" --solution="<解決策>" --tradeoff="<トレードオフ>" --spec-decisions="<仕様外の決定事項>" --action="<アクション>" --files="<ファイル>" --tech-stack="<技術スタック>" --cause="<原因>" --created-by-agent="<エージェント名>"`
+
+注意: `--last-commit-short-sha` はオプションであり、提供されない場合はCLIツールによって自動的に入力されます。
+
+実行する前に：
+
+- l-log CLIがまだインストールされていない場合はインストールしてください: `bun add -g llm-lean-log-cli` (or `bun add -g bl-log`)。
+- 必要に応じて、CLIヘルプコマンド `l-log -h` または `bl-log -h` を実行して詳細情報を確認してください。
+- ログファイルのパス: `./logs/chat.csv`。
+
+```
+`logs/chat.csv` ファイルのパスは、任意のパスに変更できます。
+
+LLMがログの記録を忘れたり、ユーザーに応答する際にログを記録すべきかどうかが不明な場合は、プロンプトでLLMにログを記録するよう再度要求できます：
 >use l-log
 
 ## 🌵 MCP Memory
@@ -99,6 +139,8 @@ MCP Memoryを使用するには、`l-log-mcp-server`パッケージを使用し�
   - `tags`: ログを分類するタグ、カンマ区切り。例：`error,api,auth`。（オプション）
   - `problem`: 問題の説明、ログのコンテキスト。（必須）
   - `solution`: 解決策の説明、問題を解決する方法。（オプション）
+  - `tradeoff`: トレードオフの説明、メリット・デメリットまたはこのオプションが選ばれた理由。（オプション）
+  - `spec-decisions`: 実装中に決定した、元の仕様で定義されていなかった事項。（オプション）
   - `action`: 実行コマンド、問題を解決するために実行されたアクション（ウェブ検索など）。（オプション）
     - 実行コマンドの形式：`text {language}`\`code-block\``
       - 行の値の例：
@@ -176,7 +218,7 @@ bun add -g llm-lean-log-cli
 
 ## 💻 使用方法
 
-`llm-lean-log-cli` のバイナリ名は `l-log` です。
+`llm-lean-log-cli` のコマンド名は `l-log` です。`bl-log` のコマンド名は `bl-log` です（`l-log` と完全に同じ機能ですが、Bunランタイム向けに最適化されています）。
 LLMによるログ表示用（`--human`オプションは不要、出力はCSV形式（+ 空の場合はメタデータ列を自動的に非表示））：
 
 ```bash
@@ -218,8 +260,22 @@ l-log search ./logs/example.csv "Database"
 # タグでフィルター、出力はCSV形式
 l-log tags ./logs/example.csv error api
 
-# 新しいログエントリを追加
-l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明"
+# 新しいログエントリを追加 (デフォルトでgit diffを自動保存)
+l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --solution="解決策の説明" --tradeoff="トレードオフの説明" --spec-decisions="仕様外の決定事項の説明"
+
+# git diffを保存せずに新しいログエントリを追加
+l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --solution="解決策の説明" --tradeoff="トレードオフの説明" --spec-decisions="仕様外の決定事項の説明" --no-diff
+
+# 明立的にgit diffを保存して新しいログエントリを追加 (デフォルトの動作)
+l-log add ./logs/chat.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --solution="解決策の説明" --tradeoff="トレードオフの説明" --spec-decisions="仕様外の決定事項の説明" --diff
+
+# Markdownファイルにエクスポート (Obsidianスタイル)
+l-log export md ./logs/chat.csv --vault=./my-vault
+
+# JSONL形式にエクスポート
+l-log export jsonl ./logs/chat.csv --out=logs.jsonl
+
+> 💡 エクスポートコマンドは関連するgit diffを自動的に含め、ログの因果関係に基づいて内部リンク (`[[リンク]]`) を作成します。
 ```
 
 人間のユーザーによるログ表示には `--human` オプションを使用：
@@ -241,8 +297,8 @@ l-log search ./logs/example.csv "query" --human
 # タグでフィルター
 l-log tags ./logs/example.csv tag1 tag2 --human
 
-# 新しいログエントリを追加、ログファイルを指定しない場合、`./logs/example.csv` ログファイルを使用します
-l-log add ./logs/example.csv "バグ修正" --tags=bug,fix --problem="問題の説明"
+# 新しいログエントリを追加
+l-log add ./logs/example.csv "バグ修正" --tags=bug,fix --problem="問題の説明" --solution="解決策の説明" --tradeoff="トレードオフの説明" --spec-decisions="仕様外の決定事項の説明"
 ```
 
 ## 🐳 人間のためのビジュアライザー
@@ -325,7 +381,7 @@ bun cli tags error api
 
 ```bash
 # 新しいログエントリを追加
-bun cli add "バグ修正" --tags=bug,fix --problem="バグの説明" --solution="問題を修正しました"
+bun cli add "バグ修正" --tags=bug,fix --problem="バグの説明" --solution="問題を修正しました" --tradeoff="トレードオフの説明" --spec-decisions="仕様外 of 決定事項の説明"
 # 期待される結果: ログエントリが正常に追加されました
 
 # ヘルプを表示

@@ -27,14 +27,18 @@ Bạn có thể sử dụng công cụ này để:
 
 ## 🍓 Yêu cầu AI agent (LLM) viết log
 
-Trước khi bạn yêu cầu AI agent (LLM) viết log, hãy đảm bảo đã cài đặt công cụ CLI `llm-lean-log-cli` trên toàn hệ thống.
+Trước khi bạn yêu cầu AI agent (LLM) viết log, hãy đảm bảo đã cài đặt công cụ CLI `llm-lean-log-cli` (phiên bản Node) hoặc `bl-log` (phiên bản Bun) trên toàn hệ thống.
 
 ```bash
+# Phiên bản Node
 bun add -g llm-lean-log-cli
+
+# Hoặc phiên bản Bun (được tối ưu hóa cho môi trường Bun, tên lệnh là bl-log)
+bun add -g bl-log
 ```
 
 Yêu cầu LLM viết log bằng lệnh:
->sử dụng công cụ CLI `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề" --solution="Mô tả giải pháp" --action="Mô tả hành động" --files="tên_file" --tech-stack="tech-stack" --causeIds="id1,id2" --created-by-agent="agent-name"` để lưu log cuộc hội thoại cuối cùng / cuộc nói chuyện ở trên
+>sử dụng công cụ CLI `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề" --solution="Mô tả giải pháp" --tradeoff="Mô tả sự đánh đổi" --spec-decisions="Mô tả quyết định thiết kế ngoài đặc tả" --action="Mô tả hành động" --files="tên_file" --tech-stack="tech-stack" --causeIds="id1,id2" --created-by-agent="agent-name"` để lưu log cuộc hội thoại cuối cùng / cuộc nói chuyện ở trên
 
 Hoặc đơn giản hơn cho người dùng nhưng ít hiệu quả hơn cho LLM:
 >sử dụng l-log CLI để lưu log hội thoại trên
@@ -54,18 +58,53 @@ Yêu cầu LLM đọc tất cả log bằng lệnh (ít hiệu quả hơn cho LL
 
 ## 📚 Thêm quy tắc cho agent ghi log
 
-Ví dụ, bạn có thể thêm quy tắc này vào tệp cấu hình agent của bạn (ví dụ: `.agents/rules/common.md`):
+Bạn có thể dễ dàng thêm quy tắc cho agent vào dự án của mình hoặc trên toàn hệ thống bằng công cụ CLI.
+
+### Thêm quy tắc cục bộ
+Lệnh này sẽ thêm quy tắc vào `.agents/rules/llm-lean-log.md` trong thư mục làm việc hiện tại của bạn.
+```bash
+l-log rule
+```
+
+### Thêm quy tắc toàn cục
+Lệnh này sẽ thêm quy tắc vào `~/.agents/rules/l-log-rules.md` (toàn cục).
+```bash
+l-log g-rule
+```
+
+Hoặc bạn có thể thêm thủ công quy tắc này vào tệp cấu hình LLM agent của mình (ví dụ: `.agents/rules/common.md`):
 
 ```bash
 # Tạo tệp
 touch .agents/rules/common.md
 ```
 
-Copy nội dung của [.agents/rules/common.md](.agents/rules/common.md).
-Thay đổi `logs/chat.csv` file path trong quy tắc.
+Thêm nội dung này vào tệp:
 
-Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi trả lời người dùng, bạn có thể yêu cầu LLMs viết lại log bằng lệnh:
->use l-log
+```text
+---
+trigger: always_on
+---
+
+# Quy tắc chung cho LLM agent
+
+Bất cứ khi nào bạn hoàn thành một tác vụ hoặc thay đổi mã nguồn, hãy luôn ghi lại công việc của mình bằng lệnh bash l-log (gói llm-lean-log-cli) hoặc bl-log (gói bl-log) với định dạng sau:
+
+`l-log add ./logs/chat.csv "<Tên tác vụ>" --tags="<thẻ>" --problem="<vấn đề>" --solution="<giải pháp>" --tradeoff="<đánh đổi>" --spec-decisions="<quyết định ngoài đặc tả>" --action="<hành động>" --files="<tệp tin>" --tech-stack="<công nghệ>" --cause="<nguyên nhân>" --created-by-agent="<tên-agent>"`
+
+Lưu ý: `--last-commit-short-sha` là tùy chọn và sẽ được công cụ CLI tự động điền nếu không được cung cấp.
+
+Trước khi chạy:
+
+- Cài đặt l-log CLI nếu chưa cài đặt: `bun add -g llm-lean-log-cli` (hoặc `bun add -g bl-log`).
+- Nếu cần, chạy lệnh trợ giúp của CLI: `l-log -h` hoặc `bl-log -h` để biết thêm thông tin.
+- Đường dẫn tệp log: `./logs/chat.csv`.
+
+```
+Nếu đường dẫn tệp log là `logs/chat.csv`, bạn có thể thay đổi thành bất kỳ đường dẫn nào bạn muốn.
+
+Nếu LLM quên ghi log hoặc không biết rằng họ nên viết log khi phản hồi người dùng, bạn có thể yêu cầu LLM viết lại log bằng lệnh:
+>sử dụng l-log
 
 ## 🌵 MCP Memory
 
@@ -100,6 +139,8 @@ Nếu LLMs quên viết log hoặc không biết khi nào nên viết log khi tr
   - `tags`: các thẻ để phân loại log, phân tách bằng dấu phẩy. Ví dụ: `error,api,auth`. (tùy chọn)
   - `problem`: mô tả vấn đề, ngữ cảnh của log. (bắt buộc)
   - `solution`: mô tả giải pháp, phương pháp để khắc phục vấn đề. (tùy chọn)
+  - `tradeoff`: mô tả sự đánh đổi, ưu nhược điểm hoặc lý do tại sao phương án này được chọn. (tùy chọn)
+  - `spec-decisions`: các quyết định đưa ra trong quá trình triển khai nhưng không có trong đặc tả ban đầu. (tùy chọn)
   - `action`: lệnh chạy, hành động (tìm kiếm web, v.v.) đã được thực hiện để giải quyết vấn đề. (tùy chọn)
     - định dạng lệnh chạy: `văn bản {ngôn-ngữ}`\`khối-mã\``
       - Ví dụ về giá trị một hàng:
@@ -177,7 +218,7 @@ bun add -g llm-lean-log-cli
 
 ## 💻 Cách sử dụng
 
-Tên tệp thực thi của `llm-lean-log-cli` là `l-log`.
+Tên lệnh của `llm-lean-log-cli` là `l-log`. Tên lệnh của `bl-log` là `bl-log` (hoạt động hoàn toàn tương tự như `l-log` nhưng được tối ưu hóa cho môi trường Bun).
 Đối với LLM khi xem log (không cần tùy chọn `--human`, đầu ra là định dạng CSV (+ tự động ẩn các cột Metadata nếu trống)):
 
 ```bash
@@ -219,8 +260,22 @@ l-log search ./logs/example.csv "Database"
 # Lọc theo thẻ, đầu ra là định dạng CSV
 l-log tags ./logs/example.csv error api
 
-# Thêm một mục log mới
-l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề"
+# Thêm một mục log mới (tự động lưu git diff theo mặc định)
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề" --solution="Mô tả giải pháp" --tradeoff="Giải thích sự đánh đổi" --spec-decisions="Giải thích quyết định thiết kế ngoài đặc tả"
+
+# Thêm một mục log mới mà không lưu git diff
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề" --solution="Mô tả giải pháp" --tradeoff="Giải thích sự đánh đổi" --spec-decisions="Giải thích quyết định thiết kế ngoài đặc tả" --no-diff
+
+# Thêm một mục log mới và lưu git diff rõ ràng (hành vi mặc định)
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề" --solution="Mô tả giải pháp" --tradeoff="Giải thích sự đánh đổi" --spec-decisions="Giải thích quyết định thiết kế ngoài đặc tả" --diff
+
+# Xuất log sang tệp Markdown (kiểu Obsidian)
+l-log export md ./logs/chat.csv --vault=./my-vault
+
+# Xuất log sang định dạng JSONL
+l-log export jsonl ./logs/chat.csv --out=logs.jsonl
+
+> 💡 Lệnh export sẽ tự động bao gồm các git diff liên quan và tạo các liên kết nội bộ (`[[link]]`) giữa các log dựa trên quan hệ nguyên nhân kết quả của chúng.
 ```
 
 Dành cho người dùng là con người khi xem log với tùy chọn `--human`:
@@ -243,7 +298,7 @@ l-log search ./logs/example.csv "truy vấn" --human
 l-log tags ./logs/example.csv tag1 tag2 --human
 
 # Thêm một mục log mới
-l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề"
+l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Mô tả vấn đề" --solution="Mô tả giải pháp" --tradeoff="Giải thích sự đánh đổi" --spec-decisions="Giải thích quyết định thiết kế ngoài đặc tả"
 ```
 
 ## 🐳 Trình trực quan hóa cho con người
@@ -326,7 +381,7 @@ bun cli tags error api
 
 ```bash
 # Thêm một mục log mới
-bun cli add "Fix bug" --tags=bug,fix --problem="Mô tả lỗi" --solution="Đã sửa lỗi"
+bun cli add "Fix bug" --tags=bug,fix --problem="Mô tả lỗi" --solution="Đã sửa lỗi" --tradeoff="Giải thích sự đánh đổi" --spec-decisions="Giải thích quyết định thiết kế ngoài đặc tả"
 # kết quả mong đợi: Log entry added successfully
 
 # Hiển thị trợ giúp

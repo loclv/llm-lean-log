@@ -126,6 +126,9 @@ export function searchLogs(entries: LogEntry[], query: string): LogEntry[] {
 			entry.solution?.toLowerCase().includes(lowerQuery) ||
 			entry.files?.toLowerCase().includes(lowerQuery) ||
 			entry["tech-stack"]?.toLowerCase().includes(lowerQuery) ||
+			entry.tradeoff?.toLowerCase().includes(lowerQuery) ||
+			entry["spec-decisions"]?.toLowerCase().includes(lowerQuery) ||
+			entry["should-know"]?.toLowerCase().includes(lowerQuery) ||
 			entry.cause?.toLowerCase().includes(lowerQuery)
 		);
 	});

@@ -11,7 +11,7 @@ stats,--human,Show log statistics
 view <index>,"--last,--human",View detailed entry at index
 search <query>,--human,Search logs by name/problem/solution
 tags <tag1> [tag2],--human,Filter logs by tags
-add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>,--diff|--no-diff",Add a new log entry
+add <name>,"--tags=<tags>,--problem=<text>,--solution=<text>,--tradeoff=<text>,--spec-decisions=<text>,--should-know=<text>,--action=<text>,--files=<files>,--tech-stack=<tech>,--model=<name>,--cause=<text>,--causeIds=<ids>,--effectIds=<ids>,--created-at=<time>,--updated-at=<time>,--created-by-agent=<name>,--diff|--no-diff",Add a new log entry
 g-rule|global-rule,,Add global agent rule in ~/.agents/rules/l-log-rules.md
 rule|local-rule,,Add local agent rule in .agents/rules/llm-lean-log.md
 help|-h|--help,--human,Show this help message
@@ -58,6 +58,9 @@ Commands:
     --tags=<tags> | Comma-separated tags, wrap with double quotes if multiple tags
     --problem=<text> | Problem description
     --solution=<text> | Solution description
+    --tradeoff=<text> | Tradeoff description
+    --spec-decisions=<text> | Decisions made that were not in the spec
+    --should-know=<text> | Important assumptions/context developers should know
     --action=<text> | Action taken
     --files=<files> | Comma-separated files paths, wrap with double quotes if multiple files
     --tech-stack=<tech> | Comma-separated tech stack, wrap with double quotes if multiple tech stack
@@ -107,7 +110,7 @@ trigger: always_on
 
 Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
 
-\`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"\`
+\`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --tradeoff="<tradeoff>" --spec-decisions="<spec-decisions>" --should-know="<should-know>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"\`
 
 Note: \`--last-commit-short-sha\` is optional and will be auto-populated by the CLI if not provided.
 

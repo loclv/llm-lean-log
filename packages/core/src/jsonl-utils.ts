@@ -53,7 +53,10 @@ export function jsonlToLogEntries(jsonl: string): LogEntry[] {
  * @param filePath - Path to the JSONL file
  * @param entries - Array of log entries
  */
-export async function saveLogsToJSONL(filePath: string, entries: LogEntry[]): Promise<void> {
+export async function saveLogsToJSONL(
+	filePath: string,
+	entries: LogEntry[],
+): Promise<void> {
 	try {
 		const jsonlContent = logEntriesToJSONL(entries);
 		await Bun.write(filePath, jsonlContent);

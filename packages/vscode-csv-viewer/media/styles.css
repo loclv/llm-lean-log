@@ -258,6 +258,18 @@ body {
 	color: var(--warning);
 }
 
+.log-section-label.tradeoff {
+	color: #eab308;
+}
+
+.log-section-label.spec-decisions {
+	color: #eab308;
+}
+
+.log-section-label.should-know {
+	color: #06b6d4;
+}
+
 .log-section-label.action {
 	color: var(--info);
 }

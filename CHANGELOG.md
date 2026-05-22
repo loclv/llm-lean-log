@@ -1,6 +1,7 @@
 # Changelog - llm-lean-log
 
 This project is a monorepo containing multiple packages. For detailed changes, please see the individual package changelogs:
+
 - [`llm-lean-log-core`](./packages/core/CHANGELOG.md)
 - [`llm-lean-log-cli`](./packages/cli/CHANGELOG.md)
 - [`l-log-vis`](./packages/visualizer/CHANGELOG.md)

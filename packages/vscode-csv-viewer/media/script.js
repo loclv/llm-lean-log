@@ -149,6 +149,9 @@ function filterAndRender() {
 			log.name?.toLowerCase().includes(searchTerm) ||
 			log.problem?.toLowerCase().includes(searchTerm) ||
 			log.solution?.toLowerCase().includes(searchTerm) ||
+			log.tradeoff?.toLowerCase().includes(searchTerm) ||
+			log["spec-decisions"]?.toLowerCase().includes(searchTerm) ||
+			log["should-know"]?.toLowerCase().includes(searchTerm) ||
 			log.tags?.toLowerCase().includes(searchTerm) ||
 			log.files?.toLowerCase().includes(searchTerm) ||
 			log["tech-stack"]?.toLowerCase().includes(searchTerm) ||
@@ -212,6 +215,48 @@ function createLogCard(log, index) {
 						Cause
 					</div>
 					<p>${escapeHtml(log.cause)}</p>
+				</div>
+			`
+					: ""
+			}
+
+			${
+				log.tradeoff
+					? `
+				<div class="log-section">
+					<div class="log-section-label tradeoff">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-2.24 1-3 1s-2.13-.35-3-1Z"></path><path d="m2 16 3-8 3 8c-.87.65-2.24 1-3 1s-2.13-.35-3-1Z"></path><path d="M7 21h10"></path><path d="M12 3v18"></path><path d="M3 7h18"></path></svg>
+						Tradeoff
+					</div>
+					<p>${escapeHtml(log.tradeoff)}</p>
+				</div>
+			`
+					: ""
+			}
+
+			${
+				log["spec-decisions"]
+					? `
+				<div class="log-section">
+					<div class="log-section-label spec-decisions">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+						Spec Decisions
+					</div>
+					<p>${escapeHtml(log["spec-decisions"])}</p>
+				</div>
+			`
+					: ""
+			}
+
+			${
+				log["should-know"]
+					? `
+				<div class="log-section">
+					<div class="log-section-label should-know">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+						Should Know
+					</div>
+					<p>${escapeHtml(log["should-know"])}</p>
 				</div>
 			`
 					: ""

@@ -19,6 +19,12 @@ export interface LogEntry {
 	files?: string;
 	/** List of technologies that were used (optional). */
 	"tech-stack"?: string;
+	/** Description of trade-off made during development/implementation (optional). */
+	tradeoff?: string;
+	/** Decisions made that weren't in the spec (optional). */
+	"spec-decisions"?: string;
+	/** Important assumptions/context developers should know when working on this code (optional). */
+	"should-know"?: string;
 	/** Cause log of the problem (optional). Example: you choose to use X instead of Y, to do Z */
 	cause?: string;
 	/** Cause log ID of the log (optional). Wrap with double quotes if multiple cause log IDs. Format: comma separated list of other log IDs */

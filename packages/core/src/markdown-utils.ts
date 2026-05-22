@@ -23,9 +23,7 @@ export function formatLogEntryForMarkdown(
 	allEntries: LogEntry[] = [],
 	diff?: string,
 ): string {
-	const tags = entry.tags
-		? entry.tags.split(",").map((t) => t.trim())
-		: [];
+	const tags = entry.tags ? entry.tags.split(",").map((t) => t.trim()) : [];
 	const techStack = entry["tech-stack"]
 		? entry["tech-stack"].split(",").map((t) => t.trim())
 		: [];
@@ -52,6 +50,21 @@ export function formatLogEntryForMarkdown(
 	if (entry.solution) {
 		content += "## Solution\n";
 		content += `${entry.solution}\n\n`;
+	}
+
+	if (entry.tradeoff) {
+		content += "## Tradeoff\n";
+		content += `${entry.tradeoff}\n\n`;
+	}
+
+	if (entry["spec-decisions"]) {
+		content += "## Spec Decisions\n";
+		content += `${entry["spec-decisions"]}\n\n`;
+	}
+
+	if (entry["should-know"]) {
+		content += "## Should Know\n";
+		content += `${entry["should-know"]}\n\n`;
 	}
 
 	if (entry.action) {
@@ -121,7 +134,9 @@ export function formatLogEntryForMarkdown(
  * @returns Filename (without .md extension)
  */
 export function getMarkdownFilename(entry: LogEntry): string {
-	const date = entry["created-at"] ? entry["created-at"].split("T")[0] : "no-date";
+	const date = entry["created-at"]
+		? entry["created-at"].split("T")[0]
+		: "no-date";
 	const sanitizedName = sanitizeFilename(entry.name);
 	return `${date}-${sanitizedName}`;
 }

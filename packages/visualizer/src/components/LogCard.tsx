@@ -8,9 +8,11 @@ import {
 	Cpu,
 	FileCode,
 	GitBranch,
+	HelpCircle,
 	Info,
 	Layers,
 	MessageSquare,
+	Scale,
 	Tag,
 } from "lucide-react";
 import type React from "react";
@@ -142,6 +144,70 @@ export const LogCard: React.FC<LogCardProps> = ({ entry, index }) => {
 									}}
 								>
 									{entry.cause}
+								</p>
+							</div>
+						)}
+
+						{entry.tradeoff && (
+							<div className="flex flex-col gap-2">
+								<div
+									className="flex items-center gap-2"
+									style={{ color: "#eab308" }}
+								>
+									<Scale size={16} />
+									<strong style={{ fontSize: "0.875rem" }}>Tradeoff</strong>
+								</div>
+								<p
+									style={{
+										color: "var(--text-secondary)",
+										fontSize: "0.925rem",
+									}}
+								>
+									{entry.tradeoff}
+								</p>
+							</div>
+						)}
+
+						{entry["spec-decisions"] && (
+							<div className="flex flex-col gap-2">
+								<div
+									className="flex items-center gap-2"
+									style={{ color: "#eab308" }}
+								>
+									<HelpCircle size={16} />
+									<strong style={{ fontSize: "0.875rem" }}>
+										Spec Decisions
+									</strong>
+								</div>
+								<p
+									style={{
+										color: "var(--text-secondary)",
+										fontSize: "0.925rem",
+									}}
+								>
+									{entry["spec-decisions"]}
+								</p>
+							</div>
+						)}
+
+						{entry["should-know"] && (
+							<div className="flex flex-col gap-2">
+								<div
+									className="flex items-center gap-2"
+									style={{ color: "#06b6d4" }}
+								>
+									<Info size={16} />
+									<strong style={{ fontSize: "0.875rem" }}>
+										Should Know
+									</strong>
+								</div>
+								<p
+									style={{
+										color: "var(--text-secondary)",
+										fontSize: "0.925rem",
+									}}
+								>
+									{entry["should-know"]}
 								</p>
 							</div>
 						)}

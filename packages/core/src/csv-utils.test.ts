@@ -22,6 +22,9 @@ describe("csv-utils", () => {
 		action: "ts`console.log(1)`",
 		files: "src/index.ts",
 		"tech-stack": "typescript",
+		tradeoff: "Fast vs complete",
+		"spec-decisions": "Fast vs complete spec decision",
+		"should-know": "Fast vs complete should know info",
 		"created-at": "2024-01-01T00:00:00.000Z",
 		"updated-at": "2024-01-01T00:00:00.000Z",
 		model: "gpt-4",
@@ -50,9 +53,9 @@ describe("csv-utils", () => {
 				"created-at": "2024-01-01",
 			};
 			const row = logEntryToCSVRow(entry);
-			// CSV order: id,name,tags,problem,solution,action,files,tech-stack,causeIds,effectIds,created-at,updated-at,model,created-by-agent
+			// CSV order: id,name,tags,problem,solution,action,files,tech-stack,tradeoff,spec-decisions,should-know,cause,causeIds,effectIds,last-commit-short-sha,created-at,updated-at,model,created-by-agent
 			expect(row).toBe(
-				'test-escape,"Test, ""quoted""",,Test problem,,,,,,,,,2024-01-01,,,',
+				'test-escape,"Test, ""quoted""",,Test problem,,,,,,,,,,,,2024-01-01,,,',
 			);
 		});
 
@@ -65,7 +68,7 @@ describe("csv-utils", () => {
 			};
 			const row = logEntryToCSVRow(entry);
 			expect(row).toBe(
-				'test-newline,Multi-line,,"Line 1\nLine 2",,,,,,,,,2024-01-01,,,',
+				'test-newline,Multi-line,,"Line 1\nLine 2",,,,,,,,,,,,2024-01-01,,,',
 			);
 		});
 
@@ -80,6 +83,9 @@ describe("csv-utils", () => {
 				"ts`console.log(1)`",
 				"src/index.ts",
 				"typescript",
+				"Fast vs complete", // tradeoff
+				"Fast vs complete spec decision", // spec-decisions
+				"Fast vs complete should know info", // should-know
 				"", // cause
 				"", // causeIds
 				"", // effectIds
@@ -99,7 +105,7 @@ describe("csv-utils", () => {
 	describe("csvRowToLogEntry", () => {
 		it("should parse a simple row string", () => {
 			const entry = csvRowToLogEntry(
-				"test-id,Entry 1,,Prob 1,,,,,,,,,2024-01-01,,,",
+				"test-id,Entry 1,,Prob 1,,,,,,,,,,,,2024-01-01,,,",
 			);
 			expect(entry?.name).toBe("Entry 1");
 			expect(entry?.problem).toBe("Prob 1");
@@ -108,7 +114,7 @@ describe("csv-utils", () => {
 
 		it("should parse quoted fields with commas", () => {
 			const testRow =
-				'test-id2,"Name, with comma",,"Prob, with comma",,,,,,,,2024-01-01,,,';
+				'test-id2,"Name, with comma",,"Prob, with comma",,,,,,,,,,,2024-01-01,,,';
 			const entry = csvRowToLogEntry(testRow);
 			expect(entry?.name).toBe("Name, with comma");
 			expect(entry?.problem).toBe("Prob, with comma");
@@ -116,14 +122,14 @@ describe("csv-utils", () => {
 
 		it("should parse escaped quotes", () => {
 			const entry = csvRowToLogEntry(
-				'test-id3,"Name with ""quotes""",,Problem,,,,,,,,2024-01-01,,,',
+				'test-id3,"Name with ""quotes""",,Problem,,,,,,,,,,,2024-01-01,,,',
 			);
 			expect(entry?.name).toBe('Name with "quotes"');
 		});
 
 		it("should parse multiple escaped quotes and maintain them correctly", () => {
 			const entry = csvRowToLogEntry(
-				'test-id4,"""quote1"" and ""quote2""",,Problem,,,,,,,,2024-01-01,,,',
+				'test-id4,"""quote1"" and ""quote2""",,Problem,,,,,,,,,,,2024-01-01,,,',
 			);
 			expect(entry?.name).toBe('"quote1" and "quote2"');
 		});
@@ -141,7 +147,7 @@ describe("csv-utils", () => {
 
 		it("should trim values during parsing", () => {
 			const entry = csvRowToLogEntry(
-				"  test-id  ,  Name 1  , , Problem 1 , , , , , , , , , 2024-01-01 , , , ",
+				"  test-id  ,  Name 1  , , Problem 1 , , , , , , , , , , , , 2024-01-01 , , , ",
 			);
 			expect(entry?.name).toBe("Name 1");
 			expect(entry?.problem).toBe("Problem 1");
@@ -185,9 +191,9 @@ describe("csv-utils", () => {
 
 		it("should preserve existing id and created-at when provided", () => {
 			const existingId = "existing-id-123";
-			// Fields: id(0),name(1),tags(2),problem(3),solution(4),action(5),files(6),tech-stack(7),cause(8),causeIds(9),effectIds(10),last-commit-short-sha(11),created-at(12),updated-at(13),model(14),created-by-agent(15)
+			// Fields: id(0),name(1),tags(2),problem(3),solution(4),action(5),files(6),tech-stack(7),tradeoff(8),spec-decisions(9),should-know(10),cause(11),causeIds(12),effectIds(13),last-commit-short-sha(14),created-at(15),updated-at(16),model(17),created-by-agent(18)
 			const entry = csvRowToLogEntry(
-				`${existingId},Name 1,,Problem 1,,,,,,,,,2024-01-01T00:00:00.000Z,updated,model,agent`,
+				`${existingId},Name 1,,Problem 1,,,,,,,,,,,,2024-01-01T00:00:00.000Z,updated,model,agent`,
 			);
 			expect(entry?.id).toBe(existingId);
 			expect(entry?.["created-at"]).toBe("2024-01-01T00:00:00.000Z");
@@ -208,8 +214,8 @@ describe("csv-utils", () => {
 			const lines = csv.split("\n");
 			expect(lines).toHaveLength(3);
 			expect(lines[0]).toBe(CSV_HEADERS.join(","));
-			expect(lines[1]).toBe("e1,E1,,P1,,,,,,,,,D1,,,");
-			expect(lines[2]).toBe("e2,E2,,P2,,,,,,,,,D2,,,");
+			expect(lines[1]).toBe("e1,E1,,P1,,,,,,,,,,,,D1,,,");
+			expect(lines[2]).toBe("e2,E2,,P2,,,,,,,,,,,,D2,,,");
 		});
 
 		it("should handle empty array", () => {
@@ -285,6 +291,9 @@ describe("csv-utils", () => {
 					action: "A1",
 					files: "F1",
 					"tech-stack": "TS1",
+					tradeoff: "T1",
+					"spec-decisions": "SD1",
+					"should-know": "SK1",
 					cause: "C1",
 					causeIds: "CI1",
 					effectIds: "EI1",
@@ -311,7 +320,7 @@ describe("csv-utils", () => {
 		it("should parse a simple CSV string", () => {
 			const csv = [
 				CSV_HEADERS.join(","),
-				"id1,Entry 1,tag1,prob1,sol1,act1,file1,stack1,,,,,2024-01-01,2024-01-01,m1,true",
+				"id1,Entry 1,tag1,prob1,sol1,act1,file1,stack1,trade1,specdec1,sk1,,,,2024-01-01,2024-01-01,m1,true",
 			].join("\n");
 
 			const entries = csvToLogEntries(csv);
@@ -319,6 +328,9 @@ describe("csv-utils", () => {
 			expect(entries[0].name).toBe("Entry 1");
 			expect(entries[0].tags).toBe("tag1");
 			expect(entries[0].problem).toBe("prob1");
+			expect(entries[0].tradeoff).toBe("trade1");
+			expect(entries[0]["spec-decisions"]).toBe("specdec1");
+			expect(entries[0]["should-know"]).toBe("sk1");
 			expect(entries[0]["created-at"]).toBe("2024-01-01");
 		});
 

@@ -42,6 +42,9 @@ describe("markdown-utils", () => {
 				"tech-stack": "typescript, bun",
 				problem: "Code is messy",
 				solution: "Cleaned it up",
+				tradeoff: "Simplicity vs generic features",
+				"spec-decisions": "Include spec decisions",
+				"should-know": "Include should know details",
 				"created-at": "2026-05-08T12:00:00Z",
 				model: "gpt-4",
 			};
@@ -55,6 +58,9 @@ describe("markdown-utils", () => {
 			expect(output).toContain("# Refactor core");
 			expect(output).toContain("## Problem\nCode is messy");
 			expect(output).toContain("## Solution\nCleaned it up");
+			expect(output).toContain("## Tradeoff\nSimplicity vs generic features");
+			expect(output).toContain("## Spec Decisions\nInclude spec decisions");
+			expect(output).toContain("## Should Know\nInclude should know details");
 		});
 
 		it("should handle linking between entries", () => {

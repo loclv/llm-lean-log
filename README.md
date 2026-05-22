@@ -37,14 +37,18 @@ You can use this tool to:
 
 ## 🍓 Ask AI agent (LLMs) to write a log
 
-Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-log-cli` CLI tool globally.
+Before you ask AI agent (LLMs) to write a log, make sure to install `llm-lean-log-cli` CLI tool (Node version) or `bl-log` CLI tool (Bun version) globally.
 
 ```bash
+# Node version
 bun add -g llm-lean-log-cli
+
+# Or Bun version (optimized for Bun runtime, with bin name bl-log)
+bun add -g bl-log
 ```
 
 Ask LLMs to write a log by prompt:
->use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
+>use `l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --solution="Solution description" --tradeoff="Tradeoff description" --spec-decisions="Spec Decisions description" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` CLI tool to save last chat logs / talk above
 
 Or simpler for user but less efficient for LLMs:
 >use l-log CLI to save chat log above
@@ -94,16 +98,17 @@ trigger: always_on
 
 # Common rules for LLM agent
 
-Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) with the following format:
+Whenever you finish a task or change codes, always log your work using the l-log bash command (llm-lean-log-cli package) or bl-log (bl-log package) with the following format:
 
-`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"`
+`l-log add ./logs/chat.csv "<Task Name>" --tags="<tags>" --problem="<problem>" --solution="<solution>" --tradeoff="<tradeoff>" --spec-decisions="<spec-decisions>" --action="<action>" --files="<files>" --tech-stack="<tech>" --cause="<cause>" --created-by-agent="<agent-name>"`
+
 
 Note: `--last-commit-short-sha` is optional and will be auto-populated by the CLI if not provided.
 
 Before run:
 
-- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli`.
-- If need, run CLI help command: `l-log -h` for more information.
+- Install the l-log CLI if not already installed: `bun add -g llm-lean-log-cli` (or `bun add -g bl-log`).
+- If need, run CLI help command: `l-log -h` or `bl-log -h` for more information.
 - log path: `./logs/chat.csv`.
 
 ```
@@ -145,6 +150,8 @@ For MCP memory, please use `l-log-mcp-server` package. More information in [pack
   - `tags`: tags to categorize the log, comma separated, wrap with double quotes if multiple tags. Example: `"error,api,auth"`. (optional)
   - `problem`: description of the problem, context of the log. (required)
   - `solution`: description of the solution, method to fix the problem. (optional)
+  - `tradeoff`: description of the tradeoff, pros and cons or why this option was selected. (optional)
+  - `spec-decisions`: decisions made during implementation that were not defined in the original specification. (optional)
   - `action`: run command, action (web search, etc.) that was taken to fix the problem. (optional)
 
     - running command format: `text {language}`\`code-block\``
@@ -229,7 +236,7 @@ User want to view `git diff` from log:
 
 ## 💻 Usage
 
-`llm-lean-log-cli`'s bin name is `l-log`.
+`llm-lean-log-cli`'s bin name is `l-log`. `bl-log`'s bin name is `bl-log` (which functions identically to `l-log` but is optimized for the Bun runtime).
 For LLMs viewing logs (no need `--human` option, output is CSV format (+ auto-hide Metadata columns if empty)):
 
 ```bash
@@ -272,13 +279,13 @@ l-log search ./logs/example.csv "Database"
 l-log tags ./logs/example.csv error api
 
 # Add a new log entry (auto-saves git diff by default)
-l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --solution="Solution description" --tradeoff="Tradeoff explanation" --spec-decisions="Spec Decisions explanation"
 
 # Add a new log entry without saving git diff
-l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --no-diff
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --solution="Solution description" --tradeoff="Tradeoff explanation" --spec-decisions="Spec Decisions explanation" --no-diff
 
 # Add a new log entry and explicitly save git diff (default behavior)
-l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --diff
+l-log add ./logs/chat.csv "Fix bug" --tags=bug,fix --problem="Problem description" --solution="Solution description" --tradeoff="Tradeoff explanation" --spec-decisions="Spec Decisions explanation" --diff
 
 # Export logs to Markdown files (Obsidian style)
 l-log export md ./logs/chat.csv --vault=./my-vault
@@ -309,7 +316,7 @@ l-log search ./logs/example.csv "query" --human
 l-log tags ./logs/example.csv tag1 tag2 --human
 
 # Add a new log entry, if not specify log file, it will use `./logs/example.csv` log file
-l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description"
+l-log add ./logs/example.csv "Fix bug" --tags=bug,fix --problem="Problem description" --solution="Solution description" --tradeoff="Tradeoff explanation" --spec-decisions="Spec Decisions explanation"
 ```
 
 ## 🐳 Visualizer for humans

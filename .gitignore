@@ -9,10 +9,10 @@ build
 
 # code coverage
 coverage
-*.lcov
 
 logs/diff
 *.log
+diff/
 
 # dot-env environment variable files
 .env
@@ -26,3 +26,5 @@ logs/diff
 
 # Finder (MacOS) folder config
 .DS_Store
+
+.antigravitycli

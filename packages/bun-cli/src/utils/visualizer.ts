@@ -210,6 +210,33 @@ export function visualizeTable(
 			);
 		}
 
+		// Tradeoff
+		if (entry.tradeoff && !compact) {
+			const text = truncate(entry.tradeoff, maxWidth);
+			lines.push(
+				colorize("  Tradeoff: ", "yellow", useColors) +
+					(useHighlight ? highlightText(text, useColors) : text),
+			);
+		}
+
+		// Spec Decisions
+		if (entry["spec-decisions"] && !compact) {
+			const text = truncate(entry["spec-decisions"], maxWidth);
+			lines.push(
+				colorize("  Spec Decisions: ", "yellow", useColors) +
+					(useHighlight ? highlightText(text, useColors) : text),
+			);
+		}
+
+		// Should Know
+		if (entry["should-know"] && !compact) {
+			const text = truncate(entry["should-know"], maxWidth);
+			lines.push(
+				colorize("  Should Know: ", "cyan", useColors) +
+					(useHighlight ? highlightText(text, useColors) : text),
+			);
+		}
+
 		// Action
 		if (entry.action && !compact) {
 			const text = truncate(entry.action, maxWidth);
@@ -312,6 +339,34 @@ export function visualizeEntry(
 		lines.push(colorize("Solution:", "green", useColors));
 		lines.push(
 			useHighlight ? highlightText(entry.solution, useColors) : entry.solution,
+		);
+		lines.push("");
+	}
+
+	if (entry.tradeoff) {
+		lines.push(colorize("Tradeoff:", "yellow", useColors));
+		lines.push(
+			useHighlight ? highlightText(entry.tradeoff, useColors) : entry.tradeoff,
+		);
+		lines.push("");
+	}
+
+	if (entry["spec-decisions"]) {
+		lines.push(colorize("Spec Decisions:", "yellow", useColors));
+		lines.push(
+			useHighlight
+				? highlightText(entry["spec-decisions"], useColors)
+				: entry["spec-decisions"],
+		);
+		lines.push("");
+	}
+
+	if (entry["should-know"]) {
+		lines.push(colorize("Should Know:", "cyan", useColors));
+		lines.push(
+			useHighlight
+				? highlightText(entry["should-know"], useColors)
+				: entry["should-know"],
 		);
 		lines.push("");
 	}

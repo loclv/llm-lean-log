@@ -77,7 +77,9 @@ describe("jsonl-utils", () => {
 
 		it("should throw error for invalid JSON", () => {
 			const invalidJsonl = "invalid json\n" + JSON.stringify(mockEntry);
-			expect(() => jsonlToLogEntries(invalidJsonl)).toThrow("Invalid JSONL line");
+			expect(() => jsonlToLogEntries(invalidJsonl)).toThrow(
+				"Invalid JSONL line",
+			);
 		});
 	});
 
@@ -122,7 +124,9 @@ describe("jsonl-utils", () => {
 
 		it("should throw error when loading non-existent file", async () => {
 			const nonExistentFile = "/tmp/non-existent.jsonl";
-			expect(loadLogsFromJSONL(nonExistentFile)).rejects.toThrow("JSONL file not found");
+			expect(loadLogsFromJSONL(nonExistentFile)).rejects.toThrow(
+				"JSONL file not found",
+			);
 		});
 	});
 

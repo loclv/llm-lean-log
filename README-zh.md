@@ -27,14 +27,18 @@
 
 ## 🍓 让AI代理（LLM）写日志
 
-在让AI代理（LLM）写日志之前，请确保全局安装 `llm-lean-log-cli` 命令行工具。
+在让AI代理（LLM）写日志之前，请确保已全局安装 `llm-lean-log-cli` 命令行工具（Node版）或 `bl-log` 命令行工具（Bun版）。
 
 ```bash
+# Node版
 bun add -g llm-lean-log-cli
+
+# 或Bun版（专为Bun运行时优化，命令名称为 bl-log）
+bun add -g bl-log
 ```
 
 通过提示词让LLM写日志：
->使用 `l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --solution="解决方案" --action="行动" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` 命令行工具保存上面的聊天记录
+>使用 `l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --solution="解决方案" --tradeoff="权衡描述" --spec-decisions="规格外决策描述" --action="行动" --files="file1.ts,src/file2.ts" --tech-stack="elysia,drizzle,sqlite" --causeIds="uuid1,uuid2" --created-by-agent="agent-name"` 命令行工具保存上面的聊天记录
 
 或者对用户来说更简单但对LLM效率较低的方式：
 >使用 l-log CLI 保存上面的聊天记录
@@ -54,17 +58,52 @@ bun add -g llm-lean-log-cli
 
 ## 📚 为代理添加写日志规则
 
-例如，您可以将此规则添加到您的LLM代理配置文件中（例如 `.agents/rules/common.md`）：
+您可以使用命令行工具轻松地将代理规则添加到您的项目或全局配置中。
+
+### 添加本地规则
+这会将规则添加到当前工作区中的 `.agents/rules/llm-lean-log.md`。
+```bash
+l-log rule
+```
+
+### 添加全局规则
+这会将规则添加到全局的 `~/.agents/rules/l-log-rules.md`。
+```bash
+l-log g-rule
+```
+
+或者，您可以手动将此规则添加到您的LLM代理配置文件中（例如 `.agents/rules/common.md`）：
 
 ```bash
 # 创建文件
 touch .agents/rules/common.md
 ```
 
-复制 [.agents/rules/common.md](.agents/rules/common.md) 的内容。
-更改规则中的 `logs/chat.csv` 文件路径。
+将以下内容添加到该文件中：
 
-如果LLMs忘记写日志或者不知道应该写日志时，可以提示LLMs写日志：
+```text
+---
+trigger: always_on
+---
+
+# LLM代理的通用规则
+
+每当您完成任务或修改代码时，请始终使用 l-log bash命令（llm-lean-log-cli包）或 bl-log（bl-log包）记录您的工作，格式如下：
+
+`l-log add ./logs/chat.csv "<任务名称>" --tags="<标签>" --problem="<问题>" --solution="<解决方案>" --tradeoff="<权衡>" --spec-decisions="<规格外决策>" --action="<操作>" --files="<文件>" --tech-stack="<技术栈>" --cause="<原因>" --created-by-agent="<代理名称>"`
+
+注意：如果未提供 `--last-commit-short-sha`，它将由CLI工具自动填充。
+
+在运行之前：
+
+- 如果尚未安装，请安装 l-log CLI：`bun add -g llm-lean-log-cli`（或 `bun add -g bl-log`）。
+- 如有需要，请运行CLI帮助命令：`l-log -h` 或 `bl-log -h` 获取更多信息。
+- 日志路径：`./logs/chat.csv`。
+
+```
+您可以将 `logs/chat.csv` 文件路径更改为您想要的任何路径。
+
+如果 LLM 忘记了日志或者在回复用户时不知道应该写日志，您可以通过以下提示要求 LLM 重新编写日志：
 >use l-log
 
 ## 🌵 MCP Memory
@@ -100,6 +139,8 @@ touch .agents/rules/common.md
   - `tags`: 用于分类日志的标签，逗号分隔。示例：`error,api,auth`。（可选）
   - `problem`: 问题描述，日志上下文。（必需）
   - `solution`: 解决方案描述，解决问题的方法。（可选）
+  - `tradeoff`: 权衡描述，优缺点或为什么选择该方案的考量。（可选）
+  - `spec-decisions`: 在实现过程中做出但未在原始规格说明中定义的决策。（可选）
   - `action`: 运行命令，采取的行动（网络搜索等）来解决问题。（可选）
     - 运行命令格式：`text {language}`\`code-block\``
       - 行值示例：
@@ -177,7 +218,7 @@ bun add -g llm-lean-log-cli
 
 ## 💻 使用方法
 
-`llm-lean-log-cli` 的二进制名称是 `l-log`。
+`llm-lean-log-cli` 的命令名称是 `l-log`。`bl-log` 的命令名称是 `bl-log`（其功能与 `l-log` 完全相同，但专为Bun运行时优化）。
 对于LLM查看日志（不需要 `--human` 选项，输出是CSV格式（+ 如果元数据列为空则自动隐藏））：
 
 ```bash
@@ -219,8 +260,22 @@ l-log search ./logs/example.csv "Database"
 # 按标签过滤，输出是CSV格式
 l-log tags ./logs/example.csv error api
 
-# 添加新的日志条目
-l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述"
+# 添加新的日志条目（默认自动保存 git diff）
+l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --solution="解决方案" --tradeoff="权衡描述" --spec-decisions="规格外决策描述"
+
+# 添加新的日志条目但不保存 git diff
+l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --solution="解决方案" --tradeoff="权衡描述" --spec-decisions="规格外决策描述" --no-diff
+
+# 添加新的日志条目并显式保存 git diff（默认行为）
+l-log add ./logs/chat.csv "修复错误" --tags=bug,fix --problem="问题描述" --solution="解决方案" --tradeoff="权衡描述" --spec-decisions="规格外决策描述" --diff
+
+# 导出日志到 Markdown 文件（Obsidian 样式）
+l-log export md ./logs/chat.csv --vault=./my-vault
+
+# 导出日志为 JSONL 格式
+l-log export jsonl ./logs/chat.csv --out=logs.jsonl
+
+> 💡 export 命令会自动包含关联的 git diff，并根据日志之间的因果关系创建内部链接 (`[[链接]]`)。
 ```
 
 对于人类用户使用 `--human` 选项查看日志：
@@ -242,8 +297,8 @@ l-log search ./logs/example.csv "query" --human
 # 按标签过滤
 l-log tags ./logs/example.csv tag1 tag2 --human
 
-# 添加新的日志条目，如果不指定日志文件，则使用 `./logs/example.csv` 日志文件
-l-log add ./logs/example.csv "修复错误" --tags=bug,fix --problem="问题描述"
+# 添加新的日志条目
+l-log add ./logs/example.csv "修复错误" --tags=bug,fix --problem="问题描述" --solution="解决方案" --tradeoff="权衡描述" --spec-decisions="规格外决策描述"
 ```
 
 ## 🐳 人类的可视化工具
@@ -326,7 +381,7 @@ bun cli tags error api
 
 ```bash
 # 添加新的日志条目
-bun cli add "修复错误" --tags=bug,fix --problem="错误描述" --solution="修复了问题"
+bun cli add "修复错误" --tags=bug,fix --problem="错误描述" --solution="修复了问题" --tradeoff="权衡描述" --spec-decisions="规格外决策描述"
 # 预期: 日志条目添加成功
 
 # 显示帮助

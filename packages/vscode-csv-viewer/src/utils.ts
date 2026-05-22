@@ -30,6 +30,9 @@ export const parseCsvContent = (csvContent: string): LogEntry[] => {
 					| "created-at"
 					| "tags"
 					| "solution"
+					| "tradeoff"
+					| "spec-decisions"
+					| "should-know"
 					| "action"
 					| "files"
 					| "tech-stack"
@@ -51,6 +54,9 @@ export const parseCsvContent = (csvContent: string): LogEntry[] => {
 					// Optional fields
 					tags: row.tags?.trim() || undefined,
 					solution: row.solution?.trim() || undefined,
+					tradeoff: row.tradeoff?.trim() || undefined,
+					"spec-decisions": row["spec-decisions"]?.trim() || undefined,
+					"should-know": row["should-know"]?.trim() || undefined,
 					action: row.action?.trim() || undefined,
 					files: row.files?.trim() || undefined,
 					"tech-stack": row["tech-stack"]?.trim() || undefined,

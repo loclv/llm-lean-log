@@ -7,6 +7,7 @@ describe("MCP Handlers", () => {
 	const testLogPath = path.resolve(process.cwd(), "mocks/test-handlers.csv");
 
 	const setup = () => {
+		fs.mkdirSync(path.dirname(testLogPath), { recursive: true });
 		fs.writeFileSync(
 			testLogPath,
 			"name,problem,solution,tags,created-at\nTask 1,Prob 1,Sol 1,tag1,2024-01-01\nTask 2,Prob 2,Sol 2,tag2,2024-01-02\n",
